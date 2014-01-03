@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.1415926-2.4-0.9998 (TeX Live 2012/Debian) (format=xelatex 2014.1.2)  2 JAN 2014 22:23
+This is XeTeX, Version 3.1415926-2.4-0.9998 (TeX Live 2012/Debian) (format=xelatex 2014.1.2)  3 JAN 2014 15:09
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1848,6 +1848,11 @@ File: cert.pdf Graphic file (type QTm)
 <use  "cert.pdf"  page1> [1
 
 ] (./acknowledgementsCH.tex
+File: watermark.pdf Graphic file (type QTm)
+ <use  "watermark.pdf" >
+[2
+
+]) (./guide.tex
 Underfull \hbox (badness 10000) in paragraph at lines 2--4
 
  []
@@ -1867,15 +1872,13 @@ Underfull \hbox (badness 10000) in paragraph at lines 21--22
 
  []
 
-File: watermark.pdf Graphic file (type QTm)
-<use  "watermark.pdf" > [2
 
-]
 Underfull \hbox (badness 10000) in paragraph at lines 28--29
 
  []
 
-
+File: watermark.pdf Graphic file (type QTm)
+<use  "watermark.pdf" > [3]
 Underfull \hbox (badness 10000) in paragraph at lines 40--41
 
  []
@@ -1888,13 +1891,11 @@ Underfull \hbox (badness 10000) in paragraph at lines 40--41
 * Try to use \setCJKmonofont[...]{...} to define it.
 *************************************************
 File: watermark.pdf Graphic file (type QTm)
-<use  "watermark.pdf" > [3]
-Overfull \hbox (5.28056pt too wide) in paragraph at lines 78--79
-\EU1/BiauKai.ttf(0)/m/n/12 而 編 譯 時 則 需 要 對 有 附 參 考 文 
-獻 的[][]\EU1/TimesNewRoman(0)/m/n/12 introduction.tex[][]\EU1/BiauKai.ttf(0)
-/m/n/12 、| [][]\EU1/TimesNewRoman(0)/m/n/12 THM.tex[][]\EU1/BiauKai.ttf(0)/m/
-n/12 和[][]\EU1/TimesNewRoman(0)/m/n/12 EXP.tex[][]\EU1/BiauKai.ttf(0)/m/n/12 
-各
+<use  "watermark.pdf" > [4]
+Overfull \hbox (14.279pt too wide) in paragraph at lines 73--74
+\EU1/BiauKai.ttf(0)/m/n/12 最 後 記 得 在 每 個 有 附 參 考 文 獻 
+的 章 節 加 上 產 生 參 考 文 獻 的 指 令，| 即 在[][]\EU1/Tim
+esNewRoman(0)/m/n/12 introduction.tex[][]\EU1/BiauKai.ttf(0)/m/n/12 、|
  []
 
 
@@ -1903,239 +1904,124 @@ Underfull \hbox (badness 10000) in paragraph at lines 85--86
  []
 
 File: watermark.pdf Graphic file (type QTm)
-<use  "watermark.pdf" > [4]
+<use  "watermark.pdf" > [5]
 File: watermark.pdf Graphic file (type QTm)
- <use  "watermark.pdf" > [5]
-Overfull \hbox (11.01845pt too wide) in paragraph at lines 132--132
- []\EU1/CourierNew(0)/m/n/12 %----------- Input your Figure chapter here  -----
------- 
- []
-
-
-Overfull \hbox (49.4247pt too wide) in paragraph at lines 139--139
+ <use  "watermark.pdf" > [6]
+Overfull \hbox (23.92747pt too wide) in paragraph at lines 139--139
  []\EU1/CourierNew(0)/m/n/12 \renewcommand{\thefigure} {\arabic{chapter}. \arab
 ic{figure}} 
  []
 
 
-Overfull \hbox (35.02235pt too wide) in paragraph at lines 140--140
+Overfull \hbox (9.52513pt too wide) in paragraph at lines 140--140
  []\EU1/CourierNew(0)/m/n/12 \renewcommand{\thetable} {\arabic{chapter}. \arabi
 c{table}}[] 
  []
 
 
-Overfull \hbox (35.02235pt too wide) in paragraph at lines 145--145
+Overfull \hbox (9.52513pt too wide) in paragraph at lines 145--145
  []\EU1/CourierNew(0)/m/n/12 \renewcommand{\thefigure} {\Alph{chapter}. \arabic
 {figure}} 
  []
 
 
-Overfull \hbox (20.62001pt too wide) in paragraph at lines 146--146
- []\EU1/CourierNew(0)/m/n/12 \renewcommand{\thetable} {\Alph{chapter}. \arabic{
-table}}[] 
+Overfull \hbox (59.93333pt too wide) in paragraph at lines 165--165
+ []\EU1/CourierNew(0)/m/n/12 \RequirePackage[top=3cm,left=3cm,bottom=2cm,right=
+3cm] {geometry} 
  []
 
 File: watermark.pdf Graphic file (type QTm)
-<use  "watermark.pdf" > [6]
-Overfull \hbox (13.41884pt too wide) in paragraph at lines 165--165
- []\EU1/CourierNew(0)/m/n/12 \RequirePackage[top=3cm,left=3cm,bottom=2cm,right=
-3cm]
- []
-
-
+<use  "watermark.pdf" > [7]
 Underfull \hbox (badness 10000) in paragraph at lines 167--172
 
  []
 
+) (./abstractCH.tex
 File: watermark.pdf Graphic file (type QTm)
-<use  "watermark.pdf" > [7]) (./abstractCH.tex
+ <use  "watermark.pdf" > [8]
 File: watermark.pdf Graphic file (type QTm)
- <use  "watermark.pdf" > [8
+ <use  "watermark.pdf" >
+[9
 
-])
-(./abstractEN.tex
+]) (./abstractEN.tex
 File: watermark.pdf Graphic file (type QTm)
- <use  "watermark.pdf" > [9
+ <use  "watermark.pdf" > [10
 
-]) (./thesis.toc
-File: watermark.pdf Graphic file (type QTm)
-
-<use  "watermark.pdf" > [10
-
-])
+]) (./thesis.toc)
 \tf@toc=\write5
 \openout5 = `thesis.toc'.
 
 File: watermark.pdf Graphic file (type QTm)
- <use  "watermark.pdf" > [11] (./thesis.lof)
+
+<use  "watermark.pdf" > [11
+
+] (./thesis.lof)
 \tf@lof=\write6
 \openout6 = `thesis.lof'.
 
 File: watermark.pdf Graphic file (type QTm)
+ <use  "watermark.pdf" > [12
 
-<use  "watermark.pdf" > [12
-
-] (./thesis.lot)
+]
+(./thesis.lot)
 \tf@lot=\write7
 \openout7 = `thesis.lot'.
 
 File: watermark.pdf Graphic file (type QTm)
  <use  "watermark.pdf" > [13
 
-]
-(./start.tex
+] (./introduction.tex
 Chapter 1.
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <24.88> on input line 1.
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <20.74> on input line 1.
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <17.28> on input line 1.
-LaTeX Font Info:    Font shape `EU1/TimesNewRoman(0)/m/sl' in size <12> not ava
-ilable
-(Font)              Font shape `EU1/TimesNewRoman(0)/m/it' tried instead on inp
-ut line 7.
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 13.
+) (./previousworks.tex
 File: watermark.pdf Graphic file (type QTm)
-<use  "watermark.pdf" > [1
+ <use  "watermark.pdf" > [1
 
 
 ]
-File: fig/tiger.jpeg Graphic file (type QTm)
- <use  "fig/tiger.jpeg" >
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 140.
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 140.
-
-Underfull \hbox (badness 10000) in paragraph at lines 140--140
-[][]\l_fontspec_font Path of <APP_intermediates>: <ANDROID_ROOT>/ out/ target/ 
-common/ obj/ APPS/ APP-
- []
-
-File: watermark.pdf Graphic file (type QTm)
-<use  "watermark.pdf" > [2]
-File: watermark.pdf Graphic file (type QTm)
- <use  "watermark.pdf" > [3]
-(/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
-File: lstlang1.sty 2004/09/05 1.3 listings language file
-)
-(/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
-File: lstlang1.sty 2004/09/05 1.3 listings language file
-)
-(/usr/share/texlive/texmf-dist/tex/latex/listings/lstmisc.sty
-File: lstmisc.sty 2007/02/22 1.4 (Carsten Heinz)
-)
-Missing character: There is no ˊ in font Courier New/ICU!
-Missing character: There is no ˋ in font Courier New/ICU!
-Missing character: There is no ˊ in font Courier New/ICU!
-Missing character: There is no ˋ in font Courier New/ICU!
-
-(/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
-File: lstlang1.sty 2004/09/05 1.3 listings language file
-)
-File: watermark.pdf Graphic file (type QTm)
-
-<use  "watermark.pdf" > [4]) (./introduction.tex
-File: watermark.pdf Graphic file (type QTm)
- <use  "watermark.pdf" >
-[5]
-File: watermark.pdf Graphic file (type QTm)
- <use  "watermark.pdf" > [6]
 Chapter 2.
-) (./THM.tex
+) (./proposed.tex
 File: watermark.pdf Graphic file (type QTm)
- <use  "watermark.pdf" > [7
+ <use  "watermark.pdf" > [2
 
 ]
 Chapter 3.
-Invalid UTF-8 byte or sequence at line 8 replaced by U+FFFD.
-Invalid UTF-8 byte or sequence at line 8 replaced by U+FFFD.
-Invalid UTF-8 byte or sequence at line 8 replaced by U+FFFD.
-Invalid UTF-8 byte or sequence at line 8 replaced by U+FFFD.
-Invalid UTF-8 byte or sequence at line 8 replaced by U+FFFD.
-Invalid UTF-8 byte or sequence at line 8 replaced by U+FFFD.
-Invalid UTF-8 byte or sequence at line 8 replaced by U+FFFD.
-Invalid UTF-8 byte or sequence at line 8 replaced by U+FFFD.
-Invalid UTF-8 byte or sequence at line 8 replaced by U+FFFD.
-File: THM/bulk.eps Graphic file (type eps)
-<THM/bulk.eps>
+) (./corpus.tex
 File: watermark.pdf Graphic file (type QTm)
- <use  "watermark.pdf" > [8
+ <use  "watermark.pdf" > [3
 
 ]
-
-LaTeX Font Warning: Font shape `TS1/TimesNewRoman(0)/bx/n' undefined
-(Font)              using `TS1/TimesNewRoman(0)/m/n' instead on input line 23.
-
-File: watermark.pdf Graphic file (type QTm)
-<use  "watermark.pdf" > [9]
-Overfull \hbox (2.38515pt too wide) in paragraph at lines 53--54
-[]\EU1/TimesNewRoman(0)/m/n/12 Surface plasmon polaritons (SPPs) are eigenmodes
- of transverse magnetic (TM) waves,
- []
-
-
-Overfull \hbox (3.57187pt too wide) in paragraph at lines 53--54
-\EU1/TimesNewRoman(0)/m/n/12 which coupling the electromagnetic fields to oscil
-lations of the conductor's electron plasma,
- []
-
-File: watermark.pdf Graphic file (type QTm)
-<use  "watermark.pdf" > [10]
-File: THM/SPPdisp.eps Graphic file (type eps)
- <THM/SPPdisp.eps>
-File: THM/grating.eps Graphic file (type eps)
- <THM/grating.eps>
-File: watermark.pdf Graphic file (type QTm)
-
-<use  "watermark.pdf" > [11]) (./EXP.tex
-File: watermark.pdf Graphic file (type QTm)
- <use  "watermark.pdf" > [12]
 Chapter 4.
-File: EXP/afm1.eps Graphic file (type eps)
-<EXP/afm1.eps>
-File: EXP/afm2.eps Graphic file (type eps)
- <EXP/afm2.eps>
-Overfull \hbox (17.66235pt too wide) in paragraph at lines 14--15
- [][] 
- []
-
+) (./exp.tex
 File: watermark.pdf Graphic file (type QTm)
-<use  "watermark.pdf" > [13
+ <use  "watermark.pdf" > [4
 
 ]
-File: EXP/afm3.eps Graphic file (type eps)
- <EXP/afm3.eps>
+Chapter 5.
+) (./conclusion.tex
 File: watermark.pdf Graphic file (type QTm)
- <use  "watermark.pdf" > [14]
-File: watermark.pdf Graphic file (type QTm)
+ <use  "watermark.pdf" > [5
 
-<use  "watermark.pdf" > [15]
+]
+Chapter 6.
+)
 File: watermark.pdf Graphic file (type QTm)
- <use  "watermark.pdf" > [16]
-File: EXP/SEM.eps Graphic file (type eps)
- <EXP/SEM.eps>
-File: watermark.pdf Graphic file (type QTm)
+ <use  "watermark.pdf" > [6
 
-<use  "watermark.pdf" > [17]
-File: watermark.pdf Graphic file (type QTm)
- <use  "watermark.pdf" > [18])
-File: watermark.pdf Graphic file (type QTm)
+] (./thesis.bbl
 
-<use  "watermark.pdf" > [19] (./thesis.bbl)
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 206.
+LaTeX Warning: Empty `thebibliography' environment on input line 3.
+
+)
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 212.
 File: watermark.pdf Graphic file (type QTm)
- <use  "watermark.pdf" > [20
+ <use  "watermark.pdf" > [7
 
 
 ]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 206.
-
-(./thesis.aux)
-Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 206.
-Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 206.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 212.
+ (./thesis.aux)
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 212.
+Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 212.
 
 
 LaTeX Font Warning: Size substitutions with differences
@@ -2144,15 +2030,15 @@ LaTeX Font Warning: Size substitutions with differences
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 206.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 212.
  ) 
 Here is how much of TeX's memory you used:
- 29276 strings out of 495693
- 543034 string characters out of 3187767
- 720349 words of memory out of 3000000
- 31853 multiletter control sequences out of 15000+200000
- 63040 words of font info for 137 fonts, out of 3000000 for 9000
+ 28940 strings out of 495693
+ 538270 string characters out of 3187767
+ 662575 words of memory out of 3000000
+ 31567 multiletter control sequences out of 15000+200000
+ 26320 words of font info for 81 fonts, out of 3000000 for 9000
  14 hyphenation exceptions out of 8191
- 48i,18n,97p,1412b,1190s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 43i,18n,74p,1412b,823s stack positions out of 5000i,500n,10000p,200000b,50000s
 
-Output written on thesis.pdf (35 pages).
+Output written on thesis.pdf (22 pages).
