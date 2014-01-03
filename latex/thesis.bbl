@@ -1,0 +1,30 @@
+\begin{thebibliography}{1}
+
+\bibitem{maier2007plasmonics}
+S.A. Maier.
+\newblock {\em Plasmonics: fundamentals and applications}.
+\newblock Springer Verlag, 2007.
+
+\bibitem{kittel1976introduction}
+C.~Kittel and P.~McEuen.
+\newblock {\em Introduction to solid state physics}, volume~7.
+\newblock Wiley New York, 1976.
+
+\bibitem{raether1988surface}
+H.~Raether.
+\newblock {\em Surface plasmons}.
+\newblock Springer-Verlag Berlin, 1988.
+
+\bibitem{bennig1988atomic}
+G.K. Bennig.
+\newblock Atomic force microscope and method for imaging surfaces with atomic
+  resolution, February~9 1988.
+\newblock US Patent 4,724,318.
+
+\bibitem{von1938elektronen}
+M.~Von~Ardenne.
+\newblock Das elektronen-rastermikroskop.
+\newblock {\em Zeitschrift f{\"u}r Physik A Hadrons and Nuclei},
+  109(9):553--572, 1938.
+
+\end{thebibliography}
