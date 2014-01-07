@@ -52,6 +52,7 @@
 %Easy addition of wallpapers (background images) to LaTeX documents, including tiling.
 \usepackage{pdfpages}
 %Include PDF documents in LaTeX.
+\usepackage{appendix}
 \usepackage{pst-fractal,pst-exa}
 % The package will draw the Julia and Mandelbrot sets, the Sierpinski triangle, Koch flake, and Apollonius Circle as well as fractal trees (which need not be balanced) with a variety of different parameters (including varying numbers of iterations).
 
@@ -147,10 +148,10 @@
 %----------- includepdf by using package pdfpages -----------
 \addcontentsline{toc}{chapter}{口試委員會審定書}
 \includepdf[pages={1}]{cert.pdf}
+%TODO: NTUEE Certification Document
 
 \onehalfspacing
 \input{acknowledgementsCH}
-\input{guide}
 \input{abstractCH}
 \doublespacing
 \input{abstractEN}
@@ -195,6 +196,9 @@
 %\input{AppendixA} 
 %or %chapter cite  == \include
 %\include{AppendixA}
+\begin{appendices}
+\input{guide}
+\end{appendices}
 
 \backmatter
 

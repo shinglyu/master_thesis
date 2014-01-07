@@ -1,1 +1,96 @@
 \chapter{Proposed Method}
+%TODO: START COPY-PASTE
+\subsection{Overview}
+   %input output only melodic constrins
+   %flow chart
+An overview of the purposed system is shown in figure \ref{fig:flow}. The input of the system includes: A record-score database and a MIDI score input to be performed. This scores must be monophonic and contains only one musical phrase. The database entry is also a monophonic score plus a human recording of the same phrase. The output is a expressive MIDI, which is the expressive version of the input score. All the phrasing is done by human user. 
+%TODO: flow chart
+After the score is given, the training samples in the database will be ranked by the melodic similarity with the given score. A proportion of most similar samples will be assigned to be the training set to train the model for this given score. The training set and the given score is then send to the feature extraction module get features, which will be discussed in detail later. The features from the training set is used to learn a expression model, by which we can transform the features from the given score to expressive MIDI output. 
+
+The system is not intend to add fixed expression to all pieces. Rather it is intended to perform music according to the style which the user wants. This kind of user interactivity can be achieved in two ways: first, the user can choose the training dataset. The dataset is organized by tags, example of tags are like performer, mood, emotion, genre, style, etc. So the user can select a subset of training sample by selecting tags. Second, the phrasing is given by the user. Since phrasing controls the overall structural interpretation of a music piece, and form a breathing feeling in music, user is given direct control over the performance.
+
+
+   \subsection{Features}
+      There are two kinds of features to be extracted: score features and performance features. Score features are information in the notation. Performance features are extracted from the human-recorded performances (MIDI). The goal of our model is to map score features to performance features. Therefore the system can understand how the music will be like given the score. Both features are at the note level, i.e. each note will have its own features.
+      \subsubsection{Score Features}
+      Score features includes:
+      \begin{description}
+         \item [Relative position in a phrase:]
+            The relative position of a note in the phrase. From 0\% to 100\%. This feature can catch the musical hint of the opening and closing of a phrase.  
+         \item [Relative pitch:]
+            The pitch (in semitone) of a note relative to the pitch range of the phrase. For a phrase of $n$ notes with pitch $P_1, P_2, \dots, P_n$, $$RP = \frac{P_i -min(P_1, P_2, \dots, P_n) }{max(P_1, P_2, \dots, P_n)-min(P_1, P_2, \dots, P_n) }$$  Where $P_i$ is the pitch of note at position $t$
+
+         \item [Interval from the previous note:] The direction of melody movement. Measured in semitone. $$IP = P_{i} - P_{i-1} $$ See figure \ref{fig:interval} for example.
+         \item [Interval to the next note:] The direction of melody movement. $$IN = P_{i+1} - P_i$$ See figure \ref{fig:interval} for example.
+         
+      \begin{figure}[htbp]
+         \begin{center}
+            \includegraphics[width=0.4\textwidth]{fig/interval_arrow}
+         \end{center}
+         \caption{Interval from/to neighbor notes}
+         \label{fig:interval}
+      \end{figure}
+
+         
+         \item [Note duration:] The duration of a note in beats.
+         \item [Relative Duration with the previous note:] The duration of a note divided by the duration of its previous note. For a phrase of $n$ notes with duration $D_1, D_2, \dots, D_n$, $$RDP = \frac{D_i}{D_{i-1}} $$ See figure \ref{fig:duration} for example.
+         \item [Relative duration with the next note:] The duration of a note divided by duration of its next note. $$RDN = \frac{D_i}{D_{i+1}} $$ See figure \ref{fig:duration} for example.
+
+      \begin{figure}[htbp]
+         \begin{center}
+            \includegraphics[width=0.4\textwidth]{fig/duration}
+         \end{center}
+         \caption{Duration from/to neighbor notes}
+         \label{fig:duration}
+      \end{figure}
+   \item [Metric position:] The position of a note in a measure, measured by the beat unit defined by the time signature. For example, a $^4_4$ time signature will have a beat unit of a quarter note. So if the measure consists of four quarter notes, each of them will have metric position of 1, 2, 3 and 4. See figure \ref{fig:metrical}.
+
+   \begin{figure}[htbp]
+      \begin{center}
+         \includegraphics[width=0.4\textwidth]{fig/metrical}
+      \end{center}
+      \caption{Metric position}
+      \label{fig:metrical}
+   \end{figure}
+      \end{description}
+
+      \subsubsection{Performance Features}
+      Performance features includes:
+      \begin{description}
+         \item [Relative onset time bias:] 
+            The onset time of a recording will not be exactly as the ones indicated on the score. Given a fixed tempo (beats/second), the score timing of each note can be calculated as tempo $\times$ (beats from the start of phrase)  . The relative onset time bias is the difference of onset timing between the performance and the score, divided by the total length of the phrase. Namely,
+            $$ ROB = \frac{O_i^{perf} - O_i^{score}  }{length(phrase)}$$ Where $O_i^{perf}$ is the onset time of note $i$ in the performance, $O_i^{score}$ is the onset time of note $i$ in the score. 
+         \item [Relative loudness:] The loudness of a note divided by the maximum loudness in the phrase. Measured by MIDI velocity level.
+            $$ RL = \frac{L_i}{max(L_1, L_2, \dots, L_n)}$$
+
+         \item [Relative duration:]
+            The actual duration of note divided by the total length of the phrase.
+            $$ RD = \frac{ D_i^{perf}}{length(phrase)}$$
+      \end{description}
+   \subsection{Melodic Similarity and Sample Selection}
+   Once a score is given to the system for playing, all the samples in the database will be ranked by the melodic similarity with the given score. Here we use the melodic distance function provided by the MIDI Toolbox\cite{Eerola2004}, which is defined as follows: 
+   \begin{enumerate}
+      \item Melodic contour is calculated by connecting each note's pitch, forming a piece-wise linear contour.
+      \item Subtract the contour by it's mean to preserve only the relative part.
+      \item If the two phrases has different length, re-sample both phrases with fixed intervals so both of the phrase will have contour vector of the same length.
+      \item The L1 norm (a.k.a Taxicab distance) of these two contour vector is the similarity measure. 
+   \end{enumerate}
+   The reason I choose melodic contour is because it yields best results in finding melodic similarity, which is shown in \cite{Hoffmann-engl2005}.
+
+   After the ranking is finished, a proportion of most similar phrases will be chosen to be the training sample for this phrase. This proportion can be assigned by the user. Too many samples will result in a sample set that is too diverse and create a model that is too general; on the other hand, too few samples will be hard to learn for machine learning methods and error-prone to noises in individual samples. By choosing an approach percentage, it can help reduce the diversity of training samples while providing enough samples for learning. This approach is very intuitive, because a human will learn how to play a phrase by listening to others play the same or similar phrases. It is not likely that one will learn by listening to somethings that are very different from what she wants to learn.
+      \subsubsection{Normalizing Onset Timing}
+      %TODO: 4 onset diffs
+   \subsection{Learning Phrase Models}
+   In the learning stage, the features extracted in the previous stage is feed into a machine learning algorithm to produce a phrase model. The learing module has a input/output interface that is independent of the underlying algorithm, so different algorithm can be implemented without changing the overall structure of the system.
+
+   The input of the learing module is a json file containing a list of training samples. Each sample contains the extracted score and performance features. The learning algorithm can then do any pre-processing on the features, such as aggregation or quantization. The output of this module is the algorithm specific model description. For example, a linear regression algorithm will output the regression parameters. The algorithm is requried to produce a model file containing the model description, but the systme doesn't care about the internal format of the model description file, it will simply feed this model file to the generation module in the generation stage. So the developer of the learing module has to implemnt methods to write and read the model file themselves.
+
+   In the early stage of this research, linear regression is used. The results of linear regression is shown in \cite{TODO:wocmat}. In this thesis, Structural Support Vector Machine\cite{TODO:svm-hmm} is the algorithm of choice. The detail of Structural SVM will be in the next Chapter.
+   %TODO: SVM-HMM
+   \subsection{Generation}
+      After the model for a input phrase is generated, we can than use the score features and model coefficients to calculated the performance parameters. These performance parameters will then be applied to the input score.
+      
+      Some post-processing will be made for each performance parameters: The first time bias will be reduced if it is too negative and create a negative onset time for the first note. Loudness will be shift and shrink to a predefined range. The default is 80~127 MIDI loudness level. This will ensure the loudness in the output will be in acceptable range. 
+ So after we input an input score, its score features will be extracted. These score features combined with regression model will be used to calculate performance features. The result will be an expressive MIDI output. Ready to be played by hardware or software synthesizer.  
+   
+%TODO:END COPY-PASTE

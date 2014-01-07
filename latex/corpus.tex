@@ -1,1 +1,29 @@
 \chapter{Corpus}
+Since this research is based on a learning algorithm, a good expressive performance corpus is essential to its success. In this chapter, we will discuss what makes a good corpus and how to produce it. 
+
+A expressive performance corpus is a set of performance samples. Each sample consists of a score and a recording. The score is simply the music score being played, which contains notational information; and the recording is a digital or audio recording of a human musician playing the said score. With the two elements, a learning algorithm can learn how the music notation is translated into real performance. These two elements can come in many format, in the next sections we will discuss the pros and cons of some possible candidate.
+
+\section{Score}
+There are many way to represent a music score in machine-readable format, such as MusicXML\cite{TODO:musicxml}, LilyPond\cite{TODO:lilypond}, Finale, Sibelius, ABC, MuseData, and Humdrum. For more information, please check out \cite{TODO: Beyond MIDI: THe Handbook of Musical Codes}. For research purpose, proprietary format like Finale and Sibelius is abandoned because of their limited support from open source tools. MusicXML is based on XML (eXtensible Markup Language), it can express most music notations and metadata. LilyPond is a \LaTex-like language for music typesetting. ABC, MuseData and Humdrum are based on ASCII codes and each defines their unique representation for music score. 
+%TODO: guitar pro?
+Other formats such as image files (scanned or typesetted by computer) or PDF files are an alternative, but they are not an option for direct computer analysis. MIDI can also be shown as music score in some music notation software, but MIDI is design as control signals for digital music equipments, so it lacks some music notations. Furthermore, the model of low-level music instrument control signals doesn't fit well with music notation, so it is not considered a good way to representation for music score.
+
+In this research, we use MusicXML as the main vehicle for music score, because of the following reasons: first, it covers most music notations and metadata need for this research. Second, it is supported in most music notation software, including the one used in this research -- MuseScore. Finally, the music21 toolbox can convert many other formats into MusicXML without problem.
+
+
+\section{Recording}
+%TODO: MIDI vs Audio
+A recording of expressive performance can be in MIDI or audio.
+
+\section{Practical Considerations}
+%TODO: Poly and Mono
+%TODO: Matching and error model
+%TODO: fixed tempo with variable note or tempo change
+
+\section{Existing Corpora} 
+%TODO: Markalov and Japan
+\section{Corpus Used}
+%TODO: music libraries, score sources
+%TODO: Recording method
+%TODO: post-processing
+
