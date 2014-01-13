@@ -1,18 +1,25 @@
 \chapter{Proposed Method}
 %TODO: START COPY-PASTE
-\subsection{Overview}
+\section{Overview}
    %input output only melodic constrins
    %flow chart
-An overview of the purposed system is shown in figure \ref{fig:flow}. The input of the system includes: A record-score database and a MIDI score input to be performed. This scores must be monophonic and contains only one musical phrase. The database entry is also a monophonic score plus a human recording of the same phrase. The output is a expressive MIDI, which is the expressive version of the input score. All the phrasing is done by human user. 
-%TODO: flow chart
-After the score is given, the training samples in the database will be ranked by the melodic similarity with the given score. A proportion of most similar samples will be assigned to be the training set to train the model for this given score. The training set and the given score is then send to the feature extraction module get features, which will be discussed in detail later. The features from the training set is used to learn a expression model, by which we can transform the features from the given score to expressive MIDI output. 
+      \begin{figure*}[tp]
+         \begin{center}
+            \includegraphics[width=\textwidth]{fig/sys_arch}
+         \end{center}
+         \caption{System Architecture} 
+         \label{fig:flow}
+      \end{figure*}
+The high-level archtecture of the purposed system is shown in figure \ref{fig:flow}. The system is has two phases, the upper half of the figure is the learning phase, while the lower half is the generating phase.  In the training phase, score and expressive performance recording pairs are feed in, their features will be extracted and used as the input for the learning algorithm.  The learning algorithm will produce a learned model, which can be used to generate expressive performance hereafter. In the generating phase, a score is taken as input, and it's score features are extracted. The generation module ("Applying Model" box) then use the extracted features and the learned model to produce the preformance features for the score. The performance features can be viewed as the instruction for expression. With these features, an expressive MIDI performance for the input score can easily be generated.  
+%TODO: refer to feature exction and corpus chapter
 
 The system is not intend to add fixed expression to all pieces. Rather it is intended to perform music according to the style which the user wants. This kind of user interactivity can be achieved in two ways: first, the user can choose the training dataset. The dataset is organized by tags, example of tags are like performer, mood, emotion, genre, style, etc. So the user can select a subset of training sample by selecting tags. Second, the phrasing is given by the user. Since phrasing controls the overall structural interpretation of a music piece, and form a breathing feeling in music, user is given direct control over the performance.
 
+There are still some constrains for the system now. The scores must be monophonic and contains only one musical phrase. One has to manully label the phrasing for any scores used. The learning algorith, namely structural suppor vector machine, can only perform offline learning, so the learning phase can only work in a non-realtime scenario. The generating phase can work much faster though, it can procude expressive music almost instantely after loading the score. All the scores are loaded in batch, the systme currently don't accept streaming input.
 
-   \subsection{Features}
-      There are two kinds of features to be extracted: score features and performance features. Score features are information in the notation. Performance features are extracted from the human-recorded performances (MIDI). The goal of our model is to map score features to performance features. Therefore the system can understand how the music will be like given the score. Both features are at the note level, i.e. each note will have its own features.
-      \subsubsection{Score Features}
+   \section{Features}
+   The system is trying to mimic the process of human performance: the musican reads the explict and implict cues from the score and transform them into musical expressions. So the features can be categorized into two category: score features and performance features.  Score features are information contained in the score. Performance features corresponds to the musical expression. The basic time unit for both features are a note. 
+      \subsection{Score Features}
       Score features includes:
       \begin{description}
          \item [Relative position in a phrase:]
@@ -23,7 +30,7 @@ The system is not intend to add fixed expression to all pieces. Rather it is int
          \item [Interval from the previous note:] The direction of melody movement. Measured in semitone. $$IP = P_{i} - P_{i-1} $$ See figure \ref{fig:interval} for example.
          \item [Interval to the next note:] The direction of melody movement. $$IN = P_{i+1} - P_i$$ See figure \ref{fig:interval} for example.
          
-      \begin{figure}[htbp]
+      \begin{figure}[tp]
          \begin{center}
             \includegraphics[width=0.4\textwidth]{fig/interval_arrow}
          \end{center}
@@ -36,7 +43,7 @@ The system is not intend to add fixed expression to all pieces. Rather it is int
          \item [Relative Duration with the previous note:] The duration of a note divided by the duration of its previous note. For a phrase of $n$ notes with duration $D_1, D_2, \dots, D_n$, $$RDP = \frac{D_i}{D_{i-1}} $$ See figure \ref{fig:duration} for example.
          \item [Relative duration with the next note:] The duration of a note divided by duration of its next note. $$RDN = \frac{D_i}{D_{i+1}} $$ See figure \ref{fig:duration} for example.
 
-      \begin{figure}[htbp]
+      \begin{figure}[tp]
          \begin{center}
             \includegraphics[width=0.4\textwidth]{fig/duration}
          \end{center}
@@ -45,7 +52,7 @@ The system is not intend to add fixed expression to all pieces. Rather it is int
       \end{figure}
    \item [Metric position:] The position of a note in a measure, measured by the beat unit defined by the time signature. For example, a $^4_4$ time signature will have a beat unit of a quarter note. So if the measure consists of four quarter notes, each of them will have metric position of 1, 2, 3 and 4. See figure \ref{fig:metrical}.
 
-   \begin{figure}[htbp]
+   \begin{figure}[tp]
       \begin{center}
          \includegraphics[width=0.4\textwidth]{fig/metrical}
       \end{center}
@@ -54,7 +61,7 @@ The system is not intend to add fixed expression to all pieces. Rather it is int
    \end{figure}
       \end{description}
 
-      \subsubsection{Performance Features}
+      \subsection{Performance Features}
       Performance features includes:
       \begin{description}
          \item [Relative onset time bias:] 
@@ -67,7 +74,7 @@ The system is not intend to add fixed expression to all pieces. Rather it is int
             The actual duration of note divided by the total length of the phrase.
             $$ RD = \frac{ D_i^{perf}}{length(phrase)}$$
       \end{description}
-   \subsection{Melodic Similarity and Sample Selection}
+   \section{Melodic Similarity and Sample Selection}
    Once a score is given to the system for playing, all the samples in the database will be ranked by the melodic similarity with the given score. Here we use the melodic distance function provided by the MIDI Toolbox\cite{Eerola2004}, which is defined as follows: 
    \begin{enumerate}
       \item Melodic contour is calculated by connecting each note's pitch, forming a piece-wise linear contour.
@@ -77,17 +84,17 @@ The system is not intend to add fixed expression to all pieces. Rather it is int
    \end{enumerate}
    The reason I choose melodic contour is because it yields best results in finding melodic similarity, which is shown in \cite{Hoffmann-engl2005}.
 
-   After the ranking is finished, a proportion of most similar phrases will be chosen to be the training sample for this phrase. This proportion can be assigned by the user. Too many samples will result in a sample set that is too diverse and create a model that is too general; on the other hand, too few samples will be hard to learn for machine learning methods and error-prone to noises in individual samples. By choosing an approach percentage, it can help reduce the diversity of training samples while providing enough samples for learning. This approach is very intuitive, because a human will learn how to play a phrase by listening to others play the same or similar phrases. It is not likely that one will learn by listening to somethings that are very different from what she wants to learn.
-      \subsubsection{Normalizing Onset Timing}
+   \subsection{Normalizing Onset Timing}
       %TODO: 4 onset diffs
-   \subsection{Learning Phrase Models}
-   In the learning stage, the features extracted in the previous stage is feed into a machine learning algorithm to produce a phrase model. The learing module has a input/output interface that is independent of the underlying algorithm, so different algorithm can be implemented without changing the overall structure of the system.
+   \section{Learning Phase}
+   In the learning phase, the features extracted in the previous stage is feed into a machine learning algorithm to produce a phrase model. The learing module has a input/output interface that is independent of the underlying algorithm, so different algorithm can be implemented without changing the overall structure of the system.
 
+   %TODO: orthogonal extraction, caching
    The input of the learing module is a json file containing a list of training samples. Each sample contains the extracted score and performance features. The learning algorithm can then do any pre-processing on the features, such as aggregation or quantization. The output of this module is the algorithm specific model description. For example, a linear regression algorithm will output the regression parameters. The algorithm is requried to produce a model file containing the model description, but the systme doesn't care about the internal format of the model description file, it will simply feed this model file to the generation module in the generation stage. So the developer of the learing module has to implemnt methods to write and read the model file themselves.
 
    In the early stage of this research, linear regression is used. The results of linear regression is shown in \cite{TODO:wocmat}. In this thesis, Structural Support Vector Machine\cite{TODO:svm-hmm} is the algorithm of choice. The detail of Structural SVM will be in the next Chapter.
    %TODO: SVM-HMM
-   \subsection{Generation}
+   \section{Generating Phase}
       After the model for a input phrase is generated, we can than use the score features and model coefficients to calculated the performance parameters. These performance parameters will then be applied to the input score.
       
       Some post-processing will be made for each performance parameters: The first time bias will be reduced if it is too negative and create a negative onset time for the first note. Loudness will be shift and shrink to a predefined range. The default is 80~127 MIDI loudness level. This will ensure the loudness in the output will be in acceptable range. 

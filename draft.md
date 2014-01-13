@@ -285,3 +285,9 @@ Computer Expressive Music Performance using Structural Support Vector Machine
 ## Conclusion
 ## Future Works
 ##Appendix
+
+
+#Phases:
+1. Review code and rewrite
+2. Check verb tenses
+3. Insert references
