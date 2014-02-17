@@ -61,6 +61,7 @@ There are still some constrains for the system now. The scores must be monophoni
    \end{figure}
       \end{description}
 
+      %TODO: link to narmour group
       \subsection{Performance Features}
       Performance features includes:
       \begin{description}
@@ -74,30 +75,51 @@ There are still some constrains for the system now. The scores must be monophoni
             The actual duration of note divided by the total length of the phrase.
             $$ RD = \frac{ D_i^{perf}}{length(phrase)}$$
       \end{description}
-   \section{Melodic Similarity and Sample Selection}
-   Once a score is given to the system for playing, all the samples in the database will be ranked by the melodic similarity with the given score. Here we use the melodic distance function provided by the MIDI Toolbox\cite{Eerola2004}, which is defined as follows: 
-   \begin{enumerate}
-      \item Melodic contour is calculated by connecting each note's pitch, forming a piece-wise linear contour.
-      \item Subtract the contour by it's mean to preserve only the relative part.
-      \item If the two phrases has different length, re-sample both phrases with fixed intervals so both of the phrase will have contour vector of the same length.
-      \item The L1 norm (a.k.a Taxicab distance) of these two contour vector is the similarity measure. 
-   \end{enumerate}
-   The reason I choose melodic contour is because it yields best results in finding melodic similarity, which is shown in \cite{Hoffmann-engl2005}.
+   % \section{Melodic Similarity and Sample Selection}
+   % Once a score is given to the system for playing, all the samples in the database will be ranked by the melodic similarity with the given score. Here we use the melodic distance function provided by the MIDI Toolbox\cite{Eerola2004}, which is defined as follows: 
+   % \begin{enumerate}
+   %    \item Melodic contour is calculated by connecting each note's pitch, forming a piece-wise linear contour.
+   %    \item Subtract the contour by it's mean to preserve only the relative part.
+   %    \item If the two phrases has different length, re-sample both phrases with fixed intervals so both of the phrase will have contour vector of the same length.
+   %    \item The L1 norm (a.k.a Taxicab distance) of these two contour vector is the similarity measure. 
+   % \end{enumerate}
+   % The reason I choose melodic contour is because it yields best results in finding melodic similarity, which is shown in \cite{Hoffmann-engl2005}.
 
+      %TODO: not included features: e.g. notation
    \subsection{Normalizing Onset Timing}
+   The relative onset timing bias feature must be normalized to get meaningful result. For example, a phrase is played very fast by the performer, say, the played length is only 70\% of the notation. If the first note is aligned, the onset timing bias will grow linearly until the end of the phrase, the last note will have a onset timing bias of about 30\% of the phrase. But from the definition of this feature, the timing bias should be roughly less than half of  a note's length, and it's mean should be around zero. This 30\% value will introduce a relative large value in the training corpus, and thus there may be very large output value from the generation phase. If the model predict that a note should be played early or later for 30\% of the phrase length, the melody will be messed up. 
+
+   There are four possible type of normalization: the first note can either be aligned at onset, or not aligned at all. The last note can be aligned at onset, or aligned at note off event.  The incentive for not aligning the first note is that the performer may intend to use an early start or delayed start as an expression, if the first note is aligned by it's onset, the first note in every phrase will have a onset timing bias feature of value zero. In other words, the early/delayed start expression is lost. %But each normalization method are equally reasonable theoretically, so we need to use empirical data to verify them. The experiment is explained in section \ref{TODO:experiment}. The experiment result showed that [TODO: result]
+   But experiments shows that none of these methods can fit all training samples. One may get good result by using one method on part of the corpus, but may result in large bias when applying it to the rest of the corpus. Since none of the methods can fit all, we take a different approach: let the program find the best fitting ratio for normalization. To achieve this goal, we first have to define how ``fit'' two phrases are, or how to define the distance between phrase. If the onset time of all the notes in a phrase are concatenated into a vector, the $l^2$-norm of the tow vectors can be treated as the distance. Note that the two vectors must have the same size, because the recordings are required to match note-to-note with the score. So the problem becomes how to find a optimal scaling ratio such that the scaled recording has the minimum distance from the score. The Brent's method\cite{TODO:brent1973} is used to find the optimal ratio. To speed up the optimization and prevent extreme values, we imposed a range of $[initial_guess \times 0.5 , initial_guess \times 2]$ to the optimizer. The $initial_guess$ is used as a rough estimate of the ratio, calculated by aligning the first and last onset of the phrase. Than we assume the actual ratio will not be smaller than half of $initial_guess$ and not larger than twice of $initial_guess$. The two numbers 0.5 and 2 are arbitrary chosen, but most of the empirical data suggest is valid most of the time. 
+
+
+   %TODO:Automatic onset timing normalization
+   %TODO:Define the distance
+   %TODO:SciPy optimization method
+
+
       %TODO: 4 onset diffs
    \section{Learning Phase}
-   In the learning phase, the features extracted in the previous stage is feed into a machine learning algorithm to produce a phrase model. The learing module has a input/output interface that is independent of the underlying algorithm, so different algorithm can be implemented without changing the overall structure of the system.
+   In the learning phase, the features extracted in the previous stage is feed into a machine learning algorithm to produce a phrase model. The learning module has a input/output interface that is independent of the underlying algorithm, so different algorithm can be implemented without changing the overall structure of the system.
 
-   %TODO: orthogonal extraction, caching
-   The input of the learing module is a json file containing a list of training samples. Each sample contains the extracted score and performance features. The learning algorithm can then do any pre-processing on the features, such as aggregation or quantization. The output of this module is the algorithm specific model description. For example, a linear regression algorithm will output the regression parameters. The algorithm is requried to produce a model file containing the model description, but the systme doesn't care about the internal format of the model description file, it will simply feed this model file to the generation module in the generation stage. So the developer of the learing module has to implemnt methods to write and read the model file themselves.
+%TODO: sample loader
+   A training sample is loaded with the sample loader module, since a training sample is consisted of a score and a recording, the sample loader finds the two files given the sample name, and load them into \texttt{music21.Stream} object. The music21 library will convert the musicXML and MIDI format into a python Object hierarchy that is easy to access and manipulate by python code. The loaded score are then handed to the feature extractor module.
 
-   In the early stage of this research, linear regression is used. The results of linear regression is shown in \cite{TODO:wocmat}. In this thesis, Structural Support Vector Machine\cite{TODO:svm-hmm} is the algorithm of choice. The detail of Structural SVM will be in the next Chapter.
+   In  order to keep the system architecture simple, the feature extractors should be as independent as possible, so the features can add or remove individual feature without breaking the system, and the features can be extracted in parallel. To achieve this, each feature must implement a common feature extractor interface, and feature extractors can't communicate with each other. 
+
+   But sometimes a feature is based on other features, for example, the "relative duration with the previous note" is calculated based on the "duration" feature. But since they can't share informations, the "relative duration" feature extractor must call the "duration" feature extractor during its execution. To avoid redundant calling of feature extractors, we implemented a caching mechanism. Say, the "duration" feature had been extracted for a training sample, it's value will be cached during this execution session; when the "relative duration" extractor calls the "duration" extractor again, the value is retrieved from cache without re-calculation.  This method can speed up the execution while keeping the system complexity low.
+
+   The the extracted features are aggregated into a json file, which will serve as the input for the learning algorithm. Each sample contains the extracted score and performance features. The learning algorithm can then do any pre-processing on the features, such as aggregation or quantization. The output of this module is the algorithm specific model description. For example, a linear regression algorithm will output the regression parameters. The algorithm is required to produce a model file containing the model description, but the system doesn't care about the internal format of the model description file, it will simply feed this model file to the generation module in the generation stage. So the developer of the learning module has to implement methods to write and read the model file themselves.
+
+   In the early stage of this research, linear regression is used. The results of linear regression is shown in \cite{Lyu2012}. In this thesis, Structural Support Vector Machine\cite{Joachims2009} is used instead. The detail of Structural SVM will be in the next Chapter.
    %TODO: SVM-HMM
    \section{Generating Phase}
       After the model for a input phrase is generated, we can than use the score features and model coefficients to calculated the performance parameters. These performance parameters will then be applied to the input score.
       
+      %TODO: no post-processing now
+      %TODO: scaleable post-processing?
       Some post-processing will be made for each performance parameters: The first time bias will be reduced if it is too negative and create a negative onset time for the first note. Loudness will be shift and shrink to a predefined range. The default is 80~127 MIDI loudness level. This will ensure the loudness in the output will be in acceptable range. 
+      
  So after we input an input score, its score features will be extracted. These score features combined with regression model will be used to calculate performance features. The result will be an expressive MIDI output. Ready to be played by hardware or software synthesizer.  
    
 %TODO:END COPY-PASTE

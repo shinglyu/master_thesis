@@ -1,1 +1,26 @@
 \chapter{Experiments and Results}
+\section{Onset Timing Normalization Selection}
+\subsection{Experiment Design}
+In section \ref{TODO:feature section}, four nomalization method is proposed. To see which one is most robust, we validated them with emprical data. A robust normalization method should produce a mean-reverse sequence, not a monotonic increase or decrease sequence. Four types of nomalization method is applied to every samples in the corpus, the result is shown in Figure \ref{fig:normalize_result} A regression analysis was applied to the result to see if there are clear trend in the normalized value.
+\subsection{Results}
+
+\section{Parameter Selection}
+\subsection{Experiment Design}
+Structural Support Vector Machine has some parameters that needed to be adjusted. We will leave the others to the defaults and change the SVM C trad-off parameter in this experiment. Since three models are learned for three performance features, we have three parameters to adjust. 
+%TODO default parameters
+
+[TODO: phrases count] phrases from [TODO:song counts] songs are used for training. Every first, fifth, and tenth phrases from each song is not included in the training sample, but used as testing samples. A three-by-three grid is layed out for three C parameters, each C takes the value of the powers of tenfrom [TODO: Cs] $10^{-5}$ to $10^4$, so [TODO: num of experiment] paramenters are tested. Then the result is validated
+\begin{enumerate}
+	\item Are all the output samples successfuly generated? (Generation may fail if the performance features are unreasonable, for example, negative onset timeing.)
+	\item Is the order of the notes preserved? Sometimes the first note is delayed too long and the second note is played too early, so the order is swaped.
+	\item Are there any extreme parameters that makes the expressive performance unnatural?
+\end{enumerate}
+
+The first two criterias are checked by python scripts, the last one is done by manual inspection.
+
+
+\subsection{Results}
+\section{Turing Test}
+\subsection{Experiment Design}
+
+\subsection{Results}

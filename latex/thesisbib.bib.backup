@@ -1,0 +1,57 @@
+@inproceedings{Good2001,
+author = {Good, Michael},
+booktitle = {XML Conference hosted by IDEAlliance},
+doi = {10.1.1.118.5431},
+file = {:home/a108210/Dropbox/mendeley sync/2001\_MusicXML An Internet-Friendly Format for Sheet Music\_Good.pdf:pdf},
+title = {{MusicXML: An Internet-Friendly Format for Sheet Music}},
+url = {http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.118.5431},
+year = {2001}
+}
+@misc{Joachims2008,
+annote = {cornell lib },
+author = {Joachims, Thorsten},
+title = {{SVM\^{}hmm: Sequence Tagging with Structural Support Vector Machines}},
+url = {http://www.cs.cornell.edu/people/tj/svm\_light/svm\_hmm.html},
+year = {2008}
+}
+@article{Joachims2009,
+annote = {SVM-HMM original paper},
+author = {Joachims, Thorsten and Finley, Thomas and Yu, CNJ},
+doi = {10.1007/s10994-009-5108-8},
+file = {:home/a108210/Dropbox/mendeley sync/2009\_Cutting-plane training of structural SVMs\_Joachims, Finley, Yu.pdf:pdf},
+issn = {0885-6125},
+journal = {Machine Learning},
+keywords = {structural svms,structured output predic-,support vector machines,tion,training algorithms},
+month = may,
+number = {1},
+pages = {27--59},
+title = {{Cutting-plane training of structural SVMs}},
+url = {http://www.springerlink.com/index/10.1007/s10994-009-5108-8 http://link.springer.com/article/10.1007/s10994-009-5108-8},
+volume = {77},
+year = {2009}
+}
+@book{Selfridge-Field1997,
+abstract = {"This volume, likely to become a standard reference work, describes an extraordinary number of approaches to the representation of musical information for purposes of computer processing. It is a considerable achievement, for it sorts and orders work in a confusing and sometimes embattled field, analyzing each encoding method in logical sequence and in light of the specific purposes for which it was designed." -- Raymond Erickson, Dean of Arts and Humanities, Queens College, CUNY; author of "DARMS: A Reference Manual" The establishment of the Musical Instrument Digital Interface (MIDI) in the late 1980s allowed hobbyists and musicians to experiment with sound control in ways that previously had been possible only in research studios. MIDI is now the most prevalent representation of music, but what it represents is based on hardware control protocols for sound synthesis. Programs that support sound input for graphics output necessarily span a gamut of representational categories. What is most likely to be lost is any sense of the musical work. Thus, for those involved in pedagogy, analysis, simulation, notation, and music theory, the nature of the representation matters a great deal. An understanding of the data requirements of different applications is fundamental to the creation of interchange codes. The contributors to "Beyond MIDI" present a broad range of schemes, illustrating a wide variety of approaches to music representation. Generally, each chapter describes the history and intended purposes of the code, a description of the representation of the primary attributes of music (pitch, duration, articulation, ornamentation, dynamics, andtimbre), a description of the file organization, some mention of existing data in the format, resources for further information, and at least one encoded example. The book also shows how intended applications influence the kinds of musical information that are encoded. Contributors: David Bainbridge, Ulf Berggren, Roger D. Boyle, Donald Byrd, David Cooper, Edmund Correia, Jr., David Cottle, Tim Crawford, J. Stephen Dydo, Brent A. Field, Roger Firman, John Gibson, Cindy Grande, Lippold Haken, Thomas Hall, David Halperin, Philip Hazel, Walter B. Hewlett, John Howard, David Huron, Werner Icking, David Jaffe, Bettye Krolick, Max V. Mathews, Toshiaki Matsushima, Steven R. Newcomb, Kia-Chuan Ng, Kjell E. Nordli, Sile O'Modhrain, Perry Roland, Helmut Schaffrath, Bill Schottstaedt, Eleanor Selfrdige-Field, Peer Sitter, Donald Sloan, Leland Smith, Andranick Tanguiane, Lynn M. Trowbridge, Frans Wiering.},
+author = {Selfridge-Field, Eleanor},
+isbn = {0262193949},
+publisher = {MIT Press},
+title = {{Beyond MIDI: The Handbook of Musical Codes}},
+url = {http://books.google.com.tw/books/about/Beyond\_MIDI.html?id=Xm3J9DG9EFcC\&pgis=1},
+year = {1997}
+}
+@misc{KernScores,
+title = {{KernScores}},
+url = {http://kern.ccarh.org/},
+howpublished= {http://kern.ccarh.org/}
+}
+@misc{LilyPond,
+title = {{LilyPond}},
+url = {http://www.lilypond.org},
+howpublished = {http://www.lilypond.org}
+}
+@inproceedings{Lyu2012,
+author = {Lyu, Shing Hermes and Jeng, Shyh-kang},
+booktitle = {workshop on Computer Music and Audio Technology},
+title = {{COMPUTER EXPRESSIVE MUSIC PERFORMANCE BY PHRASE-WISE MODELING}},
+year = {2012}
+}

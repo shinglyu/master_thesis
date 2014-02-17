@@ -1,1 +1,211 @@
 \chapter{Previous Works}
+Researches on computer expressive music performance lags computer composition by almost a quarter of a century, starting around the end of the 1980s \cite{THEBOOK}. Early work includes the KTH system \cite{THEBOOK}. Reviewing computer expressive performance systems is a hard task, because there are exists large difference in the goals they wants to achieve, which makes evaluation and comparison difficult. To make things worse, although there is a contest called RenCon \cite{RenCon} in which researches compete their performances, there is no training and benchmarking corpus available, so if a system has never entered the contest and doesn't make its source code available, there is no way to compare them.
+
+In this chapter, we will follow the categories summarized in \cite{THEBOOK}. Readers are suggest to refer to \cite{THEBOOK} because they gives very detailed discussion on all the systems. First we will discuss the various goals of computer expressive performance. Second, systems will be reviewed by their methods used. Finally, we will highlight some systems with special features.
+
+\section{Goals}
+The general goal of a computer expressive performance system is to generate expressive music, as opposed to the robotic and nu-human sound of rendered MIDI or other digital score format. But the definition of ``expressive'' is ambiguous. The following are the most popular goals a computer expressive performance system wants to achieve:
+\begin{enumerate}
+   \item Reproduce human performance.
+   \item Perform music notations in a non-robotic way.
+   \item Accompany a human performer.
+   \item Validate musicological models of expressive performance.
+   \item Directly render computer composed music works.
+\end{enumerate}
+
+%TODO:discuss the goals
+Systems that are designed to reproduce human performance usually has a certain performer in mind, like the Zenph re-performance CD \cite{zenph} which will reproduce the performance style of Rachimaninov, it can even use Rachimaninov's style to perform pieces the musician never played in his lifetime. 
+
+Some systems try to perform music notations in a non-robotic way, without a certain style in mind. These systems has been employed in music typesetting softwares, like Sibelius \cite{sibelius}, to play the typesetted notation. 
+
+Accompaniment systems try to render expressive music that act as an accompaniment for human performer. This kind of systems has great value in music education. The challenge is that the system must be able to track the progress of a huamn performance, which is itself another established topic called score following. And the rendering must be done in real-time, which is uncommon in the field of computer expressive music performance.
+
+The next goal is to validate musicological models. Musicologist may develop theories on music performance expressivity, and wants to validate them by experiments. These system focus more on the specific features that the theory tries to explain, so may not cover every aspect of performance.
+
+Finally, some systems combines computer composition with performance. The benefit of this approach is that the performance module can understand the intention of the composition without the need to interpret them from the notation. These systems usually has their own data structure to represent music, which can contain more information than traditional music notation, but the resulting performance system is not backward compatible.
+
+The goals discussed above imply different level of musical creativity. Huamn performance reproduction requires mimicry over creativity, on the other hand, system that plays its own composition can have a large range of creativity to explore. The methods employed also limits the ability of creativity, which will be discussed in the next section.
+
+\section{Methods}
+flute
+Dispite the difference between goals of different expressive performance systems. All of them needs some way to create and apply performance knowledge on unexpressive music. The performance can come from predefined rules or being learned. 
+
+Using rules to generate expressive music is the earliest approach tried. Director Musices \cite{17} being one of the early works that is still a living project now.  Most of the above systems focus on expressive attributes like note onset, note duration and loudness. But Hermode Tuning System \cite{29} focus more on intonation, thus it can generate expressions that requires string instruments techniques. Pop-E \cite {TODO:pope} is also a rule-based system which can generate polyphonic music, using its syncronization algorithm to syncronize voices. Computational Music Emotion Rule System \cite{31} pust more emphasis on rules that express human emotions.  Other systmes like Hierarchical Parabola System \cite{17}\cite{18}\cite{19}\cite{20}, Composer Pulse System\cite{21,22}, Bach Fugue System\cite{23}, Trumpet Synthesis System \cite{24, 25} and Rubato \cite{26, 27} are also some systems that use rules to generate expressive performance. Rule-based systems are effective and don't require a long training period before use. But some of the performance nuance may be hard to describe in rules, so there is a natural limit on how complex the rule-based system can be. Lack of creativity is also a problem for rule-based approach.
+
+Another approach is to acquire performance knowledge by learning. Many machine learning methods have been applied to expressive performance problem. One of the easiest form is to use linear regression, systems like Music Interpretation System \cite{32,33,34} and CaRo \cite{35,36,37} both uses linear regression to learn performance knowledge. But assuming the expressive performance as a linear system is clearly not true. So Music Interpretation System use try to solve it by using AND operations on linear regression results to achieve non-linearity. But still linear regression is too simple for this highly non-linear problem.
+
+Many other learning algorithms have been tested with success: ANN Piano \cite{38} and Emotional flute \cite{39} uses artificial neural network. ESP Piano \cite{55} and Music Plus One \cite{52,53,54} uses Statistical Graphical Models, although the later one focus more on accompaniment task rather than rendering notation. KCCA Piano System \cite{57} uses kernel regression. And Drumming System \cite{82} tried different mapping models that generates drum patterns.
+
+Evolutionary computation has also been applied, genetic programming is used in Genetic Prgramming Jazz Sax \cite{88}. Other examples include the Sequential Covering Algorithm Genetic Algorithm\cite{59}, Generative Performance Genetic Algorithm \cite{89} and Multi-Agent System with Imitation \cite{60, 93}. Evolutionary computation takes long training time, and the results are unpredictable. But unpredictable also means there are more room for performance creativity, so these system can create unconventional but interesting performances.
+
+%TODO: case
+Another approach is to use case-based reasoning to generate performance. SaxEx\cite{40,41,42} use fuzzy rules based on emotions to generate Jazz saxophone performance. Kagurame \cite{43,44} style (Baroque, Romantic, Classic etc.) instead of emotion. Ha-Hi-Hun \cite{45} takes a more ambitions approach, it's goal is to generate a piece X in the style of and expressive performance example of another piece Y. Another series of researches done by Widmer at el. called PLCG \cite{TODO:plcg} uses data-mining to find rules for expressive performance. It's successor Phrase-decompoisition/PLCG \cite{pdplcg} added hierarchiacal phrase structures support to the original PLCG system. And the latest research in the series called DISTALL \cite{distall} added hierarchical rules to the original one.
+
+%TODO: composition + performance
+Most of the of the performance systems discussed above takes digitalized traditional musical notation (MusicXML etc.) or neutral audio as input. They have to figures out the expressive intention of the composer by musical analysis or assigned by the user. But the last category of computer expressive performance we will discuss here has a great advantage over the previous ones, by combining computer composition and performance, the performance part of the system can directly understand the intention of the compoisition. Ossia \cite{TODO:ossia} and pMIMACS \cite{TODO:pmimacs} are two examples of this category.
+   This approach provides great possibility for creativity, but they can only play their own compoisition, which is rather limited.
+
+\section{Special Features}
+
+Most expressive performance systems generates piano performance, because it's relativly easy to collect samples for piano. Even if no instrument is specified, the final performance will often be rendered using piano timbre. Some systmes generates music in other instruments, such as saxophone\cite{TODO:saxophone}, trumpet\cite{TODO:trumpet}, flute \cite{TODO:flute} and drums \cite{TODO:drum}. These systems reqires additional model for the instruments, as a result, they can produce expressions that requires instrumental skills.
+
+The genre of music that a system plays is also a special feature one might have. For systems that doesn't specify the genre, usually western tonal music will be the genre of choice. Composers like Mozart, Chopin and so on well accepted by the public, their scores and literatures are easily accessable. However, both saxophone-based works choose Jazz music, because saxophone is an iconic instrument in Jazz performance. The Bach Fugue System \cite{23}, obviously, focus on fugue works composed by bach.
+
+%TODO: list polyphonic works
+The ability to perform polyphonic music is also a rare feature of computer expressive performance systems. Performing polyphonic music requires syncronization between voices, while allowing each voice to have their own expression. Pop-E\cite{TODO:pop-e} use a syncronization mechniasm to acheive polyphonic performance. Bach Fugue System \cite{23} is created using the polyphonic rules in music theory about fugue, so it's inherently able to play polyphonic fugue. KCCA Piano System \cite{57}can generate homophonic music -- an upper melody with an accompnaiment -- which is common in piano music.   Music Plus One \cite{52,53,54} is a little bit different because it's a accompaniment system, it adapts non-expressive orchastral accompaiment track to user's performance. Other systems usually generates monophonic tracks only. 
+
+
+
+
+
+
+%Computer Expressive Music Performance
+%Peformance Knowledge
+%Rule based
+%Hierarchical parabola [18-20]
+%Director Musices [17]
+%30 Rules
+%Real-time: pDM
+%Composer pulse [21,22]
+%Pulse set
+%For composer
+%Bach fugue [23]
+%Polyphonic
+%Rubato [26, 27]
+%Mazolla
+%Operators
+%Hermode tuning [29]
+%Intonation
+%Commerical
+%Sibelius [30]
+%Commerical
+%Method unknown
+%Trumpet Synthesis [24, 25]
+%Trumpet
+%Pop-E
+%Polyphinc Sync
+%CMERS [31]
+%Emotion!
+%Learning
+%Training Input
+%Score+MIDI
+%Score analysis
+%Score+Audio
+%Tapping
+%Testing Input
+%Digital Score
+%Neutral Audio
+%Linear model
+%MIS[32-34]
+%Use AND to create non-linearity
+%CaRo[35-37
+%Mood
+%Work on Audio
+%Draw line in moodspace
+%ANN
+%ANN Piano [38]
+%Learn DM by ANN
+%Emotional flute [39]
+%Flute
+%Graphical Model
+%Music Plus One [52-54]
+%Basyan Believe Network
+%Accompinamnet
+%Transform neutral orchastral accompaniment
+%ESP piano [55]
+%HMM
+%Other Regression
+%Drumming
+%Drum
+%Learn from audio
+%ML mapping model
+%KCCA [57]
+%Kernel regression
+%Kernel canonical correlation anayalsis
+%Evolutionary
+%Genetic Programming Jazz Sax
+%Jazz
+%Saxphone
+%GP
+%Audio training
+%C4.5
+%M5Rules
+%Regression tree
+%Sequential covering algorithm GAs
+%Generative Performance GAs
+%Pulse sets
+%Multi-Agent System with imitation
+%Pulse sets
+%Case-based Reasoning
+%Kagurame [43. 44]
+%Style (Baroque, Romantic)
+%Hierarchy cases
+%Ha-Hi-Hun[45]
+%Natural Language Conditions
+%SaxEx [40-42]
+%Fuzzy Rule
+%Case based
+%Emotion
+%Jazz
+%Saxphone
+%PLCG series
+%1. PLCG
+%Widmer
+%Data mining large DB to get rules
+%sequential covering
+%cluster rules into avg rules
+%2. phrase-decompostion/PLCG
+%Includes hierarchical phrase structures (3 level)
+%3. DISTALL
+%hierarchical rules
+%Composition + Performance
+%Ossia
+%Compsition and performance combined
+%Recursive trees generated by GA
+%Own data structure
+%pMIMACS
+%Composition and Performance Combined
+%Goals
+%Reporduce certain human performance
+%Non-robotic music
+%Accompaniment
+%Modeling for musicoloy study
+%Directly play computer composition
+%Special Features
+%Instrument Models
+%General (Piano)
+%Piano
+%Trumpet
+%Trumpet synthesis [24,25]
+%Drums
+%Drumming [56]
+%Flute
+%Emotional flute [39]
+%Coperative composition+performance
+%Genre
+%Classical
+%Jazz
+%SaxEx [40-42]
+%bach fugue
+%Bach fugue [23]
+%Own composition
+%Polyphonic
+%Challenges
+%Synchronizaion
+%Popular Analysis Methods
+%GTTM
+%IR
+%Mayer
+%+ Perormance Context
+%Evaluation
+%Challenges
+%RenCon
+%Lack widely accepted corpus or banchmark
+%Different Goals
+%Different Level of automation
+%Criterias
+%Expressive
+%Creativity
+%Test status
+%Polyphinic
+%Popular score/perf features

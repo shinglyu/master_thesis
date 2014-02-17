@@ -1,4 +1,162 @@
 \chapter{Structural Support Vector Machine}
 
+\section{Background}
+In this thesis, we use structural support vector machine(structural SVM) as the learning algorithm. Unlike traditional SVM algorithm, which can only produce univariate prediction, structural SVM can produce strctural predictions like tree, sequence and hidden Markov model. Structural SVM with hidden Markov model output (SVM-HMM) is applied to part-of-speech problem with success. This fining lead us to the idea to use SVM-HMM for the expressive performance problem. The part-of-speech tagging problem shares the same concept with expressive performance problem. In part-of-speech tagging, one tries to identify the role by which the word plays in the sentence; while in expressive performance,  one tries to determine how a note should be played, accroding to it's role in the musical phrase. To illustrate this, consider a note which is the end of the phrase, which is noramlly forms a cadence, and a note which is only a embalishment. The first note will probably be played louder and sustain longer than the second note. With this similarity in mind, we believe SVM-HMM will be a good candidate for expressive performance.
+
+ \section{Theoratical Background}
+ %Ref: 20130420 slides
+
+ %TODO:discuss traditional SVM here?
+ The prediction problem in SVM can be described  as finding a function 
+ $$h: \mathcal{X \rightarrow Y}$$ with lowest prediction error. $\mathcal{X}$ is the input features space, and $\mathcal{Y}$ is the prediction space. In traditional SVM, elements in $\mathcal{Y}$ are labels (classfication) or real values (regression). But structural SVM extends the framework to generate structural output, such as tree, sequence, or hidden markov model, in this case.
+ To extend SVM to support structured output, the problem is modified to find a discriminant function $f: \mathcal{X} \times \mathcal{Y} \rightarrow \mathcal{R}$, in which the input/output paris are mapped to a real number score. To predict an output $y$ for an input $x$, one try to maximize $f$ over all $y \in \mathcal{Y}$. 
+
+ $h_{\mathbf{w}}(x) = \argmax_{y\in\mathcal{Y}} f_{\mathbf{w}}(x,y)$
+ 
+ Let $f_{\mathbf{w}}$ be a linear function of the form:
+
+ $$ f_{\mathbf{w}} = \mathbf{w}^{T}\Phi(x,y)$$
+ where $\mathbf{w}$ is the parameter vector, and $\Phi(x,y)$ is the kernel function relating input $x$ to output $y$. $\Phi$ can be defined to accomidate various kind of structures. 
+
+%           \item Prediction error (risk):
+%               $$R^\Delta_p(h) = \int_{\mathcal{X}\times\mathcal{Y}}\Delta(y, h(x)) dP(x,y)$$
+%               \begin{tabular}{ll}
+%                   where & $\Delta()$ is the loss function \footnote{Must satisfy $\Delta(x,x) = 0$, $\Delta(x,y) > 0$}\\
+%                   & P(x,y) is the joint distribution of $\mathcal{X}$ and $\mathcal{Y}$
+%               \end{tabular}
+
+%    \begin{frame}{Emperical Risk}
+%       \begin{itemize}
+%           \item Emperical Risk from training sample $S$:\footnote{Emperical Risk Minimization Priciple (Vapnik V (1998) Statistical Learning Theory. Wiley, Chichester, GB)}
+
+%               $$R^\Delta_S(h) = \frac{1}{n}\sum_{i=1}^{n}\Delta(y_i, h(x_i))$$
+%                   where  $\Delta()$ is the loss function 
+
+%           \item Classification SVM
+
+%                   $$\displaystyle \min_{\mathbf{w}, \xi_i \geq 0} \frac{1}{2}\mathbf{w}^T\mathbf{w} + \frac{C}{n} \sum_{i=1}^{n} \xi_i$$
+%                   s.t. $$\forall i\in {1,\cdots n}: y_i (\mathbf{w}^T x_i) \geq 1-\xi_i$$
+                  
+
+%           \item Learn a discriminant function $f:\mathcal{X} \times \mathcal{Y} \rightarrow \Re$ 
+%           \item Given $x$, maximizing $f$ over all $y \in \mathcal{Y}$
+%               $$h_\mathbf{w} (x) = \argmax_{y\in\mathcal{Y}} f_\mathbf{w} (x,y)$$
+%           \item 
+%               in which $$f_\mathbf{w} (x,y) = \mathbf{w}^T{\Psi}(x,y)$$
+%               \begin{tabular}{ll}
+%                   where & $\mathbf{w} \in \Re^N$ is a parameter vector\\
+%                         & $\Psi(x,y)$ is a feature vector relating $x$ and $y$
+%               \end{tabular}
+              
+
+ 
+% \section{Structural SVM}
+
+% \section{Theoretical Details}
+% %&=& &=& &=& &=& &=& &=& &=& &=& =
+%    \begin{frame}{Lowest Risk}
+%       \begin{itemize}
+%           \item Prediction error (risk):
+%               $$R^\Delta_p(h) = \int_{\mathcal{X}\times\mathcal{Y}}\Delta(y, h(x)) dP(x,y)$$
+%               \begin{tabular}{ll}
+%                   where & $\Delta()$ is the loss function \footnote{Must satisfy $\Delta(x,x) = 0$, $\Delta(x,y) > 0$}\\
+%                   & P(x,y) is the joint distribution of $\mathcal{X}$ and $\mathcal{Y}$
+%               \end{tabular}
+
+%           %\item Training sample: $(\mathbf{x}_1, \mathbf{y}_1), (\mathbf{x}_2, \mathbf{y}_2), \cdots$ where $y_i$'s may have structural relationship
+              
+%       \end{itemize}
+%    \end{frame}
+%    \begin{frame}{Emperical Risk}
+%       \begin{itemize}
+%           \item Emperical Risk from training sample $S$:\footnote{Emperical Risk Minimization Priciple (Vapnik V (1998) Statistical Learning Theory. Wiley, Chichester, GB)}
+
+%               $$R^\Delta_S(h) = \frac{1}{n}\sum_{i=1}^{n}\Delta(y_i, h(x_i))$$
+%                   where  $\Delta()$ is the loss function 
+
+%           %\item Training sample: $(\mathbf{x}_1, \mathbf{y}_1), (\mathbf{x}_2, \mathbf{y}_2), \cdots$ where $y_i$'s may have structural relationship
+              
+%       \end{itemize}
+%    \end{frame}
+
+%    \begin{frame}{Traditional SVM}
+%       \begin{itemize}
+%           \item Classification SVM
+
+%                   $$\displaystyle \min_{\mathbf{w}, \xi_i \geq 0} \frac{1}{2}\mathbf{w}^T\mathbf{w} + \frac{C}{n} \sum_{i=1}^{n} \xi_i$$
+%                   s.t. $$\forall i\in {1,\cdots n}: y_i (\mathbf{w}^T x_i) \geq 1-\xi_i$$
+                  
+
+              
+%       \end{itemize}
+%    \end{frame}
+
+%    \begin{frame}{Structural SVM}
+%       \begin{itemize}
+%           \item Extend SVM for structural output
+%           \item Learn a discriminant function $f:\mathcal{X} \times \mathcal{Y} \rightarrow \Re$ 
+%           \item Given $x$, maximizing $f$ over all $y \in \mathcal{Y}$
+%               $$h_\mathbf{w} (x) = \argmax_{y\in\mathcal{Y}} f_\mathbf{w} (x,y)$$
+%           \item 
+%               in which $$f_\mathbf{w} (x,y) = \mathbf{w}^T{\Psi}(x,y)$$
+%               \begin{tabular}{ll}
+%                   where & $\mathbf{w} \in \Re^N$ is a parameter vector\\
+%                         & $\Psi(x,y)$ is a feature vector relating $x$ and $y$
+%               \end{tabular}
+
+
+                  
+
+              
+%       \end{itemize}
+%    \end{frame}
+
+%    \begin{frame}{N-slack Formulations}
+%       \begin{itemize}
+%           \item margin-rescaling: change hinge, fixing slope
+%              $$\Delta_{MR}(y,h_\mathbf{w}) = \max_{\hat{y} \in \mathcal{Y}} \{ \Delta(y, \hat{y}) - \mathbf(x)^T {\Psi}(x,y) + \mathbf{w}^T{\Psi}(x,\hat{y}\} \geq \Delta(y,h_\mathbf{w}(x))$$
+%           \item slack-rescaling: fixing hinge, changing slope
+%              $$\Delta_{SR}(y,h_\mathbf{w}) = \max_{\hat{y} \in \mathcal{Y}} \{ \Delta(y, \hat{y}) (1 - \mathbf(x)^T {\Psi}(x,y) + \mathbf{w}^T{\Psi}(x,\hat{y} )\} \geq \Delta(y,h_\mathbf{w}(x))$$
+              
+%       \end{itemize}
+%    \end{frame}
+
+%    \begin{frame}{Optimization Problems}
+%       \begin{itemize}
+%           \item
+%                $$\displaystyle \min_{\mathbf{w}, \xi_i \geq 0} \frac{1}{2}\mathbf{w}^T\mathbf{w} + \frac{C}{n} \sum_{i=1}^{n} \xi_i$$
+%                s.t. for $i = 1\cdots n$
+%           \item n-slack structural SVM w/ margin-rescaling
+%                $$\forall \hat{y_i} \in \mathcal{Y}: \mathbf{w}^T[\Psi(x_i,y_i) - \Psi(x_i,\hat{y_i})] \geq \Delta(y_i, \hat{y_i}) - \xi_i $$
+
+%           \item n-slack structural SVM w/ slack-rescaling
+%                $$\forall \hat{y_i} \in \mathcal{Y}: \mathbf{w}^T[\Psi(x_i,y_i) - \Psi(x_i,\hat{y_i})] \geq 1 - \frac{\xi+i}{\Delta(y_i, \hat{y_i})}$$
+%       \end{itemize}
+%    \end{frame}
+
+%    \begin{frame}{1-Slack Formulation}
+%       \begin{itemize}
+%           \item
+%       \end{itemize}
+%    \end{frame}
+
+
+%TODO: theoratical background
+
+\section{Implementation}
+Thorsten Joachims from Cornell University created a good toolbox for SVM-HMM learning called $SVM^{hmm}$ \cite{Joachims2008}. According to the program's download page, the $SVM^{hmm}$ is an implementation of structural SVMs for sequence tagging \cite{TODO:altun2003} using the training algorithm described in \cite{TODO:tsoch2004, 2005} and \cite{TODO:Joachims et al. 2009}.The toolbox is contains two main program called \texttt{svm\_hmm\_learn} and \texttt{svm\_hmm\_classify}. The \texttt{svm\_hmm\_learn} takes a training file containing all the training sample. Each line in the training file is the featrues of a note, in the following format:
+\begin{lstlisting}
+	PERF qid:EXNUM FEAT1:FEAT1_VAL FEAT2:FEAT2_VAL ... #comment
+\end{lstlisting}
+\texttt{PERF} is the performance feature. The \texttt{EXNUM} after \texttt{qid:} identifies the phrases, all notes in a phrase will have the same \texttt{qid:EXNUM} identifier. Follwing the identifier are \texttt{feature name : feature value} pairs, separated by space. And anything after the \texttt{\#} is considered as comments.
+
+
+For architectural simplicity, one model is trained for each performance feature. The input for a model is all the score features, and the model will predict a single performance feature. 
+
+
+Because three performance features are used, three model file will be generated after running \texttt{svm\_hmm\_learn} on the 
+
+\subsection{Quantization}
+One problem exist for using SVM-HMM on expressive performance: some of the features are continuous, but SVM-HMM can only generate discrete output label. Therefore quantization is required. 
 %TODO: quantization
-%TODO: individual model for each score feature
+
