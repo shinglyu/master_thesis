@@ -3,20 +3,162 @@
 \section{Background}
 In this thesis, we use structural support vector machine(structural SVM) as the learning algorithm. Unlike traditional SVM algorithm, which can only produce univariate prediction, structural SVM can produce strctural predictions like tree, sequence and hidden Markov model. Structural SVM with hidden Markov model output (SVM-HMM) is applied to part-of-speech problem with success. This fining lead us to the idea to use SVM-HMM for the expressive performance problem. The part-of-speech tagging problem shares the same concept with expressive performance problem. In part-of-speech tagging, one tries to identify the role by which the word plays in the sentence; while in expressive performance,  one tries to determine how a note should be played, accroding to it's role in the musical phrase. To illustrate this, consider a note which is the end of the phrase, which is noramlly forms a cadence, and a note which is only a embalishment. The first note will probably be played louder and sustain longer than the second note. With this similarity in mind, we believe SVM-HMM will be a good candidate for expressive performance.
 
- \section{Theoratical Background}
- %Ref: 20130420 slides
+\section{Theoratical Background}
+%Ref: 20130420 slides
 
- %TODO:discuss traditional SVM here?
- The prediction problem in SVM can be described  as finding a function 
- $$h: \mathcal{X \rightarrow Y}$$ with lowest prediction error. $\mathcal{X}$ is the input features space, and $\mathcal{Y}$ is the prediction space. In traditional SVM, elements in $\mathcal{Y}$ are labels (classfication) or real values (regression). But structural SVM extends the framework to generate structural output, such as tree, sequence, or hidden markov model, in this case.
- To extend SVM to support structured output, the problem is modified to find a discriminant function $f: \mathcal{X} \times \mathcal{Y} \rightarrow \mathcal{R}$, in which the input/output paris are mapped to a real number score. To predict an output $y$ for an input $x$, one try to maximize $f$ over all $y \in \mathcal{Y}$. 
+%TODO:discuss traditional SVM here?
+The prediction problem in SVM can be described  as finding a function 
+$$h: \mathcal{X \rightarrow Y}$$ with lowest prediction error. $\mathcal{X}$ is the input features space, and $\mathcal{Y}$ is the prediction space. In traditional SVM, elements in $\mathcal{Y}$ are labels (classfication) or real values (regression). But structural SVM extends the framework to generate structural output, such as tree, sequence, or hidden markov model, in this case.
+To extend SVM to support structured output, the problem is modified to find a discriminant function $f: \mathcal{X} \times \mathcal{Y} \rightarrow \mathcal{R}$, in which the input/output paris are mapped to a real number score. To predict an output $y$ for an input $x$, one try to maximize $f$ over all $y \in \mathcal{Y}$. 
 
- $h_{\mathbf{w}}(x) = \argmax_{y\in\mathcal{Y}} f_{\mathbf{w}}(x,y)$
- 
- Let $f_{\mathbf{w}}$ be a linear function of the form:
+$h_{\mathbf{w}}(x) = \argmax_{y\in\mathcal{Y}} f_{\mathbf{w}}(x,y)$
 
- $$ f_{\mathbf{w}} = \mathbf{w}^{T}\Phi(x,y)$$
- where $\mathbf{w}$ is the parameter vector, and $\Phi(x,y)$ is the kernel function relating input $x$ to output $y$. $\Phi$ can be defined to accomidate various kind of structures. 
+Let $f_{\mathbf{w}}$ be a linear function of the form:
+
+$$ f_{\mathbf{w}} = \mathbf{w}^{T}\Psi(x,y)$$
+where $\mathbf{w}$ is the parameter vector, and $\Psi(x,y)$ is the kernel function relating input $x$ to output $y$. $\Psi$ can be defined to accomidate various kind of structures. 
+
+%emprical risk
+In order to apply SVM, we need a way to measure the accuracy of of a prediction, in other words, we have to define a loss function $\Delta:\mathcal{Y}\times\mathcal{Y}\rightarrow R$. A loss function has the following property:
+
+$$\Delta(y, y') \geq for y \neq y'$$
+$$\Delta(y, y) = 0 $$
+
+Also, the loss function is assumed to be bounded. Let's assume the input-output pair $(x,y)$ is drawn from a join distrution P(x,y), the prediction problem is to minimize the total loss:
+
+%TODO: total loss formula 2005 sec 2.1
+$$R_p^\Delta = \int_{\mathcal{X} \times \mathcal{Y}} \Delta (y, f(x))dP(x,y)$$
+
+Since we can't directly find the distribution $P$, we need to replace this total loss with a empirical loss, calculted from the observed training set of $(x_i, y_i)$ pairs.
+%TODO: emprical loss
+$$R_s^\Delta(f) = \frac{1}{n}\sum^n_{i=1}\Delta(y_i, f(x_i))$$
+
+With the definition of the loss function ready, we will demonstrate how to extend SVM to structural output, starting with a linear separable, and then extend it to soft-margin formulation. 
+
+A linear separable case can be expressed by a set of linear constrains
+%TODO: 2005 formula 4
+$$\forall i \in \{1,\cdots,n\}, \forall \hat{y_i}\in\mathcal{Y}: \mathbf{w}^T [\Psi(x_i, y_i) - \Psi(x_i, \hat{y_i})]\leq 0$$
+
+However, in the SVM context, we not only want a solution, but we want the solution to have the largest margin possible. So the above linear constrains will become this optimization problem
+%TODO: 2005 formula 4+
+$$
+\begin{aligned}
+& \max_{\gamma, \mathbf{w}:\|\mathbf{w}\| = 1} \gamma \\
+& s.t \; \forall i \in \{1,\cdots,n\}, \forall \hat{y_i} \in\mathcal{Y}: \mathbf{w}^T [\Psi(x_i, y_i) - \Psi(x_i, \hat{y_i})] \leq \gamma\\
+\end{aligned}
+$$
+
+, which is equivalent to the convex quadratic programming problem
+%TODO: 2005 formula 5,k 6
+$$
+\begin{aligned}
+   & \min_{\mathbf{w}, \xi_i \geq 0} \frac{1}{2}\mathbf{w}^T\mathbf{w} \\\
+    &s.t.\; \forall i \in \{1,\cdots,n\},\hat{y_i} \in \mathcal{Y}: \mathbf{w}^T[\Psi(x_i,y_i) - \Psi(x_i,\hat{y_i})] \geq 1\\
+\end{aligned}
+$$
+
+To address possible non-separable problems, slack variables can be introduced to penalize errors, and result in a soft-margin formalization.
+%TODO: 2005 formula SVM1
+$$
+\begin{aligned}
+   & \min_{\mathbf{w}, \xi_i \geq 0} \frac{1}{2}\mathbf{w}^T\mathbf{w} + \frac{C}{n}\sum^n_{i=1}\xi_i\\
+    &s.t.\; \forall i \in \{1,\cdots,n\},\hat{y_i} \in \mathcal{Y}: \mathbf{w}^T[\Psi(x_i,y_i) - \Psi(x_i,\hat{y_i})] \geq 1 - \xi_i \\
+\end{aligned}
+$$
+
+$C$ is the parameter for trade-off between low training error and large margin. The optimal $C$ varies between different problems, so experiment should be conducted to find the optimal $C$ for our problem.
+
+Intuitively, a constrain violation with larger loss should be penalize more than the one with smaller loss. So \cite{svm2005} proposed two possible way to take the loss function into account. The first way is to re-scale the slack variable by the inverse of the loss, so a high loss leads to smaller re-scaled slack variable. 
+%slack rescaling
+
+$$
+\begin{aligned}
+   & \min_{\mathbf{w}, \xi_i \geq 0} \frac{1}{2}\mathbf{w}^T\mathbf{w} + \frac{C}{n} \sum^n_{i=1}\xi_i\\
+    &s.t.\; \forall i \in \{1,\cdots,n\},\hat{y_i} \in \mathcal{Y}: \mathbf{w}^T[\Psi(x_i,y_i) - \Psi(x_i,\hat{y_i})] \geq 1 - \frac{\xi_i}{\Delta(y_i, \hat{y_i})} \\
+\end{aligned}
+$$
+
+The second way is to re-scale the margin, which yields 
+%margin-rescaling
+$$
+\begin{aligned}
+   & \min_{\mathbf{w}, \xi_i \geq 0} \frac{1}{2}\mathbf{w}^T\mathbf{w} + \frac{C}{n} \sum^n_{i=1}\xi_i\\
+    &s.t.\; \forall i \in \{1,\cdots,n\},\hat{y_i} \in \mathcal{Y}: \mathbf{w}^T[\Psi(x_i,y_i) - \Psi(x_i,\hat{y_i})] \geq \Delta(y_i, \hat{y_i}) - \xi_i\\
+%
+\end{aligned}
+$$
+
+But the above quadratic programming problem has a extreme large number ($O(n|\mathcal{Y}|)$) of constrains , which will take considerable time to solve. So \cite{svm2005} proposed a greedy algorithm to reduce the number of constrains. Initially, the solver starts with an empty working set with no constrains. Than the solver iteratively scans the training set to find the most violated constrains under the current solution. If a constrain violates by more than the desired precision, the constrain is added to the working set. And the solver re-calculate the solution under the new working set. The algorithm will terminate once no more constrain can be added under the desired precision.
+
+In a later work by Joachims et al.\cite{svm2009}, they created a new formulation and algorithm to further speed up the algorithm. Instead of using one slack variables each training sample, which results in a total of $n$ slack variables, they use a single slack variable for the $n$ training samples. The follwing formula is the 1-slack version of slack-rescaling structural SVM:
+%1-slack
+$$
+\begin{aligned}
+    & \min_{\mathbf{w}, \xi_i \geq 0} \frac{1}{2}\mathbf{w}^T\mathbf{w} + C \xi\\
+    &s.t.\; \forall i \in \{1,\cdots,n\},\hat{y_i} \in \mathcal{Y}: \mathbf{w}^T[\Psi(x_i,y_i) - \Psi(x_i,\hat{y_i})] \geq \frac{1}{n}\sum^n_{i=1}1 - \frac{\xi}{\Delta(y_i, \hat{y_i})} \\
+\end{aligned}
+$$
+
+And margin-rescaling structural SVM:
+
+$$
+\begin{aligned}
+    & \min_{\mathbf{w}, \xi_i \geq 0} \frac{1}{2}\mathbf{w}^T\mathbf{w} + C \xi\\
+    & s.t.\; \forall i \in \{1,\cdots,n\},\hat{y_i} \in \mathcal{Y}: \mathbf{w}^T[\Psi(x_i,y_i) - \Psi(x_i,\hat{y_i})] \geq \frac{1}{n}\sum^n_{i=1}\Delta(y_i, \hat{y_i}) - \xi \\
+\end{aligned}
+$$
+%                $$\min_{\mathbf{w}, \xi_i \geq 0} \frac{1}{2}\mathbf{w}^T\mathbf{w} + \frac{C}{n} \sum_{i=1}^{n} \xi_i$$
+%                s.t. for $i = 1\cdots n$
+%                $$\forall \hat{y_i} \in \mathcal{Y}: \mathbf{w}^T[\Psi(x_i,y_i) - \Psi(x_i,\hat{y_i})] \geq \Delta(y_i, \hat{y_i}) - \xi_i $$
+%
+%                $$\forall \hat{y_i} \in \mathcal{Y}: \mathbf{w}^T[\Psi(x_i,y_i) - \Psi(x_i,\hat{y_i})] \geq 1 - \frac{\xi+i}{\Delta(y_i, \hat{y_i})}$$
+Detailed proof on how the new formulation is equivalently general as the old one is given in the paper.
+
+With the framework described above, the only problem left is how to define the general loss function for Hidden Markov Model (HMM)? In \cite{hmm2003}, the authors proposed two types of features for a equal-length observation/label sequence pair $(x,y)$. The first is the interaction of a observation with a label, the other is the interaction between neighboring labels. 
+
+   \begin{figure*}[tp]
+      \begin{center}
+         \includegraphics[width=0.8\textwidth]{fig/TBDFigure}
+      \end{center}
+      \caption{Hidden Markov Model}
+      \label{fig:hmm}
+   \end{figure*}
+
+Formally, for some observed features $\Phi_r(x^s)$ of a note $x$ located in $s$th position of the phrase, and assume $\left[ \left[ y^t = \tau \right] \right]$ denotes the $t$th note is played at a velocity of $\tau$, the interaction of the two predicate can be written as 
+%TODO hmm 3 formula 4
+$$\phi^{st}_{r\sigma}(\mathbf{x}, \mathbf{y}) = \left[\left[y^t = \tau \right] \right]\Psi_r(x^s),\; 1\leq\gamma\leq d,\; \tau \in \Sigma $$
+
+And for interaction between labels, the feature can be written as
+%TODO hmm 3 formula 5
+$$\hat{\phi}^{st}_{r\sigma}(\mathbf{x}, \mathbf{y}) = \left[\left[y^s = \sigma \wedge y^t = \tau \right] \right],\; \sigma, \tau \in \Sigma $$
+
+By selecting a dependency order for the HMM model, we can restrict $s$'s and $t$'s. For example, for a first-order HMM, $s = t$ for the first feature, and $s = t-1$ for the second feature. The two features on the same time $t$ is then stacked into a vector $\Psi(x,y;t)$. The feature map for the whole sequence is simply the sum of all the feature vectors 
+
+%TODO hmm 3 formula 6
+$$\Phi(\mathbf{x}, \mathbf{y}) = \sum^T_{t=1}\Phi(\mathbf{x}, \mathbf{y};t)$$
+
+Finally, the distance between two feature maps depends on the number of common label segments and the inner product between the input features sequence with common labels.
+
+
+$$\langle\Phi(\mathbf{x}, \mathbf{y}), \Phi(\mathbf{\hat{x}}, \mathbf{\hat{y}})\rangle = \sum_{s,t}\left[\left[y^{s-1} = \hat{y}^{t-1}\wedge y^s = \hat{y}^t\right] \right] + \sum_{s,t}\left[\left[y^{s} = \hat{y}^{t}\right] \right]k(x^s, \hat{x}^t)$$
+
+
+To speed up the computation of $F$ for HMM, a Viterbi-like decoding algorithm is used.
+
+
+%TODO: how to define loss function for HMM?
+%(2003) section 3
+%ovserved output <--> tag
+%previous tag <--> this tag (1-order markov)
+% Psi = each note's above two property summed up
+%similarity = same prev tag <--> this tag sequence + same tag <--> observed output distance
+
+%Hard-margin one
+%Soft-margin one => introduce slack variable 
+%Example with large loss should be emphasized => slack rescaling
+%Margin can also be scaled => margin rescaling
+%There are too many constrains => greedy algo (2005), select a subset of constrains from the most violated constrains to solve
+%To speed up, n-slack variables are reduced to 1-slack variable (2009)
 
 %           \item Prediction error (risk):
 %               $$R^\Delta_p(h) = \int_{\mathcal{X}\times\mathcal{Y}}\Delta(y, h(x)) dP(x,y)$$
@@ -63,7 +205,7 @@ In this thesis, we use structural support vector machine(structural SVM) as the 
 %                   & P(x,y) is the joint distribution of $\mathcal{X}$ and $\mathcal{Y}$
 %               \end{tabular}
 
-%           %\item Training sample: $(\mathbf{x}_1, \mathbf{y}_1), (\mathbf{x}_2, \mathbf{y}_2), \cdots$ where $y_i$'s may have structural relationship
+%           %\item Training sample: $(x_1, y_1), (x_2, y_2), \cdots$ where $y_i$'s may have structural relationship
               
 %       \end{itemize}
 %    \end{frame}
@@ -74,7 +216,7 @@ In this thesis, we use structural support vector machine(structural SVM) as the 
 %               $$R^\Delta_S(h) = \frac{1}{n}\sum_{i=1}^{n}\Delta(y_i, h(x_i))$$
 %                   where  $\Delta()$ is the loss function 
 
-%           %\item Training sample: $(\mathbf{x}_1, \mathbf{y}_1), (\mathbf{x}_2, \mathbf{y}_2), \cdots$ where $y_i$'s may have structural relationship
+%           %\item Training sample: $(x_1, y_1), (x_2, y_2), \cdots$ where $y_i$'s may have structural relationship
               
 %       \end{itemize}
 %    \end{frame}
@@ -150,13 +292,22 @@ Thorsten Joachims from Cornell University created a good toolbox for SVM-HMM lea
 \end{lstlisting}
 \texttt{PERF} is the performance feature. The \texttt{EXNUM} after \texttt{qid:} identifies the phrases, all notes in a phrase will have the same \texttt{qid:EXNUM} identifier. Follwing the identifier are \texttt{feature name : feature value} pairs, separated by space. And anything after the \texttt{\#} is considered as comments.
 
+      \begin{figure*}[tp]
+         \begin{center}
+            \includegraphics[width=\textwidth]{fig/TBDFigure}
+         \end{center}
+         \caption{Example input file} 
+         \label{fig:expinput}
+      \end{figure*}
 
 For architectural simplicity, one model is trained for each performance feature. The input for a model is all the score features, and the model will predict a single performance feature. 
 
 
 Because three performance features are used, three model file will be generated after running \texttt{svm\_hmm\_learn} on the 
+\framebox{TODO: finish this section}
+
 
 \subsection{Quantization}
 One problem exist for using SVM-HMM on expressive performance: some of the features are continuous, but SVM-HMM can only generate discrete output label. Therefore quantization is required. 
 %TODO: quantization
-
+\framebox{TODO: finish quantization section}

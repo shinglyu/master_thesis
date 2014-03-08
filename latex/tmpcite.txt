@@ -1,0 +1,71 @@
+THM.tex:cite{kittel1976introduction}
+THM.tex:cite{raether1988surface}
+corpus.tex:cite{Good2001}
+corpus.tex:cite{LilyPond}
+corpus.tex:cite{Selfridge-Field1997}
+corpus.tex:cite{crestmuse}
+corpus.tex:cite{magaloff}
+corpus.tex:cite{magaloff extendedi}
+corpus.tex:cite{yqx}
+corpus.tex:cite{KernScores}
+previousworks.tex:cite{THEBOOK}
+previousworks.tex:cite{THEBOOK}
+previousworks.tex:cite{RenCon}
+previousworks.tex:cite{THEBOOK}
+previousworks.tex:cite{THEBOOK}
+previousworks.tex:cite{zenph}
+previousworks.tex:cite{sibelius}
+previousworks.tex:cite{17}
+previousworks.tex:cite{29}
+previousworks.tex:cite{31}
+previousworks.tex:cite{17}
+previousworks.tex:cite{18}
+previousworks.tex:cite{19}
+previousworks.tex:cite{20}
+previousworks.tex:cite{21,22}
+previousworks.tex:cite{23}
+previousworks.tex:cite{24, 25}
+previousworks.tex:cite{26, 27}
+previousworks.tex:cite{32,33,34}
+previousworks.tex:cite{35,36,37}
+previousworks.tex:cite{38}
+previousworks.tex:cite{39}
+previousworks.tex:cite{55}
+previousworks.tex:cite{52,53,54}
+previousworks.tex:cite{57}
+previousworks.tex:cite{82}
+previousworks.tex:cite{88}
+previousworks.tex:cite{59}
+previousworks.tex:cite{89}
+previousworks.tex:cite{60, 93}
+previousworks.tex:cite{40,41,42}
+previousworks.tex:cite{43,44}
+previousworks.tex:cite{45}
+previousworks.tex:cite{TODO:plcg}
+previousworks.tex:cite{pdplcg}
+previousworks.tex:cite{distall}
+previousworks.tex:cite{TODO:ossia}
+previousworks.tex:cite{TODO:pmimacs}
+previousworks.tex:cite{TODO:saxophone}
+previousworks.tex:cite{TODO:trumpet}
+previousworks.tex:cite{TODO:flute}
+previousworks.tex:cite{TODO:drum}
+previousworks.tex:cite{23}
+previousworks.tex:cite{TODO:pop-e}
+previousworks.tex:cite{23}
+previousworks.tex:cite{57}
+previousworks.tex:cite{52,53,54}
+proposed.tex:cite{Eerola2004}
+proposed.tex:cite{Hoffmann-engl2005}
+proposed.tex:cite{TODO:brent1973}
+proposed.tex:cite{Lyu2012}
+proposed.tex:cite{Joachims2009}
+svm_hmm.tex:cite{svm2005}
+svm_hmm.tex:cite{svm2005}
+svm_hmm.tex:cite{svm2009}
+svm_hmm.tex:cite{hmm2003}
+svm_hmm.tex:cite{Joachims2008}
+svm_hmm.tex:cite{TODO:altun2003}
+svm_hmm.tex:cite{TODO:tsoch2004, 2005}
+svm_hmm.tex:cite{TODO:Joachims et al. 2009}
+thesis.tex:cite{*}
