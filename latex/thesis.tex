@@ -129,6 +129,9 @@
 \usepackage [autostyle, english = american]{csquotes}
 \MakeOuterQuote{"}
 
+%Change Table of Contents Title
+\renewcommand*\contentsname{Table of Contents}
+
 \begin{document}
 
 %----------- hyphenation  -----------
@@ -177,8 +180,9 @@
 
 \input{introduction}
 \input{previousworks}
+\input{theoraticalbg}
 \input{proposed}
-\input{svm_hmm}
+%\input{svm_hmm}
 \input{corpus}
 \input{exp}
 \input{conclusion}
@@ -197,9 +201,14 @@
 %\include{main}
 %\include{conclusions}
 
+%---------- Input your reference here ---------
+\bibliographystyle{myieeetr}
+\addcontentsline{toc}{chapter}{\bibname}
+\nocite{*}
+\bibliography{thesisbib}
 
-\appendix
 %----------- Input your appendix here  -----------
+\appendix
 %\input{AppendixA} 
 %or %chapter cite  == \include
 %\include{AppendixA}
@@ -211,11 +220,6 @@
 \backmatter
 
 
-%---------- Input your reference here ---------
-\bibliographystyle{myieeetr}
-\addcontentsline{toc}{chapter}{\bibname}
-\nocite{*}
-\bibliography{thesisbib}
 
 %----------- Input your Figure chapter here  -----------
 %\input{EndFigTab} 

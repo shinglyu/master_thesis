@@ -1,9 +1,16 @@
-\chapter{Corpus}
+\chapter{Corpus Preparation}
 Since this research is based on a learning algorithm, a good expressive performance corpus is essential to its success. In this chapter, we will discuss what makes a good corpus and how to produce it. 
 
 A expressive performance corpus is a set of performance samples. Each sample consists of a score and a recording. The score is simply the music score being played, which contains notational information; and the recording is a digital or audio recording of a human musician playing the said score. With the two elements, a learning algorithm can learn how the music notation is translated into real performance. These two elements can come in many format, in the next sections we will discuss the pros and cons of some possible candidate.
+\section{Existing Corpora} 
+There exist very few public accessable corpus on the Internet. CrestMusePEDB\cite{crestmuse} (PEDB stands for "(Music) Performance Expression Database", created by Japan Science and Technology Agency's CREST program, is one of the example. They claimed to have the following data in their database: PEDB-SCR - score text information, PEDB-DEV - performance deviation data and PEDB-IDX - audio performance credit. The database is free to use via email request. But until the time this thesis is written, the author can not get any response from the database andministrators, so the quality and format of the data is unknown.
 
-\section{Score}
+Another example is the Magaloff Project\cite{magaloff} conducted by Flossmann et al., a joint effort from a few universities in Austria.  Russian pianist Nikita Magaloff recorded all works for solo piano by Frederic Chopin on a Bösendorfer SE, a computer-controlled grand piano. This corpus became the material for many subsequent researches \cite{magaloff extendedi}. Flossmann et al. also trained a expressive performance system call YQX\cite{yqx}, which won the 2008 RenCon contest, on this corpus. However, the corpus is not placed in the public domain. 
+
+Without any public corpus available, we must record our own corpus, which will be discussed in detail in the next section.
+
+
+\section{Score Representation}
 
 There are many way to represent a music score in machine-readable format, such as MusicXML\cite{Good2001}, LilyPond\cite{LilyPond}, Finale, Sibelius, ABC, MuseData, and Humdrum. For more information, please check out \cite{Selfridge-Field1997}. For research purpose, proprietary format like Finale and Sibelius is abandoned because of their limited support from open source tools. MusicXML is based on XML (eXtensible Markup Language), it can express most music notations and metadata. LilyPond is a \LaTeX-like language for music typesetting. ABC, MuseData and Humdrum are based on ASCII codes and each defines their unique representation for music score. 
 %TODO: guitar pro?
@@ -33,7 +40,7 @@ In this research, we use MusicXML as the main vehicle for music score, because o
    \label{fig:expxmlrend}
 \end{figure*}
 
-\section{Recording}
+\section{Recording Format}
 A recording of expressive performance can be in MIDI or audio such as PCM WAV. Although audio recording has higher fidelity than MIDI, it takes extra effort to be analyzed by computer. Since onset detection and pitch detection algorithms still can't achieve perfect accuracy, manually labeling each notes required, which will soon become impossible to do when the texture of music become polyphonic. On the other hand, a multichannel MIDI recording can provide exact timing, key pressure, and pitch for each note, but it lacks timber and envelope information, which makes it hard to analyze how the musician use instrument-specific skills. Considering the above arguments, MIDI is used in this research.
 
 A human musician can't play every note exactly on the beat, even if playing along with a metronome. There are two ways to record this behavior: first, record the exact note-on and note-off time, while keeping the tempo fixed; second, keep the notes on the beat, so the MIDI looks the same as the score. Then insert tempo-change event between each notes, so notes of the same length can be rendered differently because they have different tempo marker. The second method may look smart, because the score and performance can be stored in one MIDI file instead of two, but it would involve complex calculation when linearly scaling the tempo. Since tempos from different samples need to be normalized during feature extraction, the first method is superior  than the second.
@@ -50,13 +57,6 @@ A human musician can't play every note exactly on the beat, even if playing alon
    \label{fig:exprecording}
 \end{figure*}
 
-
-\section{Existing Corpora} 
-There exist very few public accessable corpus on the Internet. CrestMusePEDB\cite{crestmuse} (PEDB stands for "(Music) Performance Expression Database", created by Japan Science and Technology Agency's CREST program, is one of the example. They claimed to have the following data in their database: PEDB-SCR - score text information, PEDB-DEV - performance deviation data and PEDB-IDX - audio performance credit. The database is free to use via email request. But until the time this thesis is written, the author can not get any response from the database andministrators, so the quality and format of the data is unknown.
-
-Another example is the Magaloff Project\cite{magaloff} conducted by Flossmann et al., a joint effort from a few universities in Austria.  Russian pianist Nikita Magaloff recorded all works for solo piano by Frederic Chopin on a Bösendorfer SE, a computer-controlled grand piano. This corpus became the material for many subsequent researches \cite{magaloff extendedi}. Flossmann et al. also trained a expressive performance system call YQX\cite{yqx}, which won the 2008 RenCon contest, on this corpus. However, the corpus is not placed in the public domain. 
-
-Without any public corpus available, we must record our own corpus, which will be discussed in detail in the next section.
 
 \section{Specfication/Implementation}
 
@@ -92,7 +92,7 @@ To record the MIDI performances, we used a Yamaha MIDI keyboard with pressure se
 
 
 %TODO: corpus size, songs count, phrases count. reportie list
-The coupus used in this research is recorded by five graduate students, with a wide range of piano skill. A total of (TBD) movements of Clementi's Sonatina is recorded, which contains (TBD) phrases, equals to (TBD) notes. A full list of the works in the corpus is in Appendix \ref{appendix:corpus}.
+The coupus used in this research is recorded by five graduate students, with a wide range of piano skill. A total of (TBD) movements of Clementi's Sonatina is recorded, which contains (TBD) phrases, equals to (TBD) notes. 
 
 Because of the scope of the research, we didn't use all the information available, here are a few pieces of potentially useful information:
 \begin{enumerate}
@@ -100,3 +100,5 @@ Because of the scope of the research, we didn't use all the information availabl
    \item The gaps between phrases can be learned to create models for inter-phrase delay.
    \item Recordings with human error can make the system play more like human.
 \end{enumerate}
+
+\framebox{TODO: distribution of corpus}

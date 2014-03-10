@@ -19,6 +19,63 @@ There are still some constrains for the system now. The scores must be monophoni
 
 \framebox{TODO:Talk about how this chapters is layed out}
 
+   \section{Learning Performance Knowledge}
+   In the learning phase, the features extracted in the previous stage is feed into a machine learning algorithm to produce a phrase model. The learning module has a input/output interface that is independent of the underlying algorithm, so different algorithm can be implemented without changing the overall structure of the system.
+
+%TODO: sample loader
+   A training sample is loaded with the sample loader module, since a training sample is consisted of a score and a recording, the sample loader finds the two files given the sample name, and load them into \texttt{music21.Stream} object. The music21 library will convert the musicXML and MIDI format into a python Object hierarchy that is easy to access and manipulate by python code. The loaded score are then handed to the feature extractor module.
+
+   \subsection{Features Extraction}
+   In  order to keep the system architecture simple, the feature extractors should be as independent as possible, so the features can add or remove individual feature without breaking the system, and the features can be extracted in parallel. To achieve this, each feature must implement a common feature extractor interface, and feature extractors can't communicate with each other. 
+
+   But sometimes a feature is based on other features, for example, the "relative duration with the previous note" is calculated based on the "duration" feature. But since they can't share informations, the "relative duration" feature extractor must call the "duration" feature extractor during its execution. To avoid redundant calling of feature extractors, we implemented a caching mechanism. Say, the "duration" feature had been extracted for a training sample, it's value will be cached during this execution session; when the "relative duration" extractor calls the "duration" extractor again, the value is retrieved from cache without re-calculation.  This method can speed up the execution while keeping the system complexity low.
+
+   The the extracted features are aggregated into a json file, which will serve as the input for the learning algorithm. Each sample contains the extracted score and performance features. The learning algorithm can then do any pre-processing on the features, such as aggregation or quantization. The output of this module is the algorithm specific model description. For example, a linear regression algorithm will output the regression parameters. The algorithm is required to produce a model file containing the model description, but the system doesn't care about the internal format of the model description file, it will simply feed this model file to the generation module in the generation stage. So the developer of the learning module has to implement methods to write and read the model file themselves.
+
+   In the early stage of this research, linear regression is used. The results of linear regression is shown in \cite{Lyu2012}. In this thesis, Structural Support Vector Machine\cite{Joachims2009} is used instead. The detail of Structural SVM will be in the next Chapter.
+
+\subsection{Features Quantization}
+One problem exist for using SVM-HMM on expressive performance: some of the features are continuous, but SVM-HMM can only generate discrete output label. Therefore quantization is required. 
+%TODO: quantization
+\framebox{TODO: finish quantization section}
+   %TODO: SVM-HMM
+\subsection{SVM-HMM Learning}
+Thorsten Joachims from Cornell University created a good toolbox for SVM-HMM learning called $SVM^{hmm}$ \cite{Joachims2008}. According to the program's download page, the $SVM^{hmm}$ is an implementation of structural SVMs for sequence tagging \cite{TODO:altun2003} using the training algorithm described in \cite{TODO:tsoch2004, 2005} and \cite{TODO:Joachims et al. 2009}.The toolbox is contains two main program called \texttt{svm\_hmm\_learn} and \texttt{svm\_hmm\_classify}. The \texttt{svm\_hmm\_learn} takes a training file containing all the training sample. Each line in the training file is the featrues of a note, in the following format:
+\begin{lstlisting}
+	PERF qid:EXNUM FEAT1:FEAT1_VAL FEAT2:FEAT2_VAL ... #comment
+\end{lstlisting}
+\texttt{PERF} is the performance feature. The \texttt{EXNUM} after \texttt{qid:} identifies the phrases, all notes in a phrase will have the same \texttt{qid:EXNUM} identifier. Follwing the identifier are \texttt{feature name : feature value} pairs, separated by space. And anything after the \texttt{\#} is considered as comments.
+
+      \begin{figure*}[tp]
+         \begin{center}
+            \includegraphics[width=\textwidth]{fig/TBDFigure}
+         \end{center}
+         \caption{Example input file} 
+         \label{fig:expinput}
+      \end{figure*}
+
+For architectural simplicity, one model is trained for each performance feature. The input for a model is all the score features, and the model will predict a single performance feature. 
+
+
+Because three performance features are used, three model file will be generated after running \texttt{svm\_hmm\_learn} on the 
+\framebox{TODO: finish this section}
+
+   \section{Expressive Performance}
+   \subsection{Feature Extraction and SVM-HMM Generation}
+      After the model for a input phrase is generated, we can than use the score features and model coefficients to calculated the performance parameters. These performance parameters will then be applied to the input score.
+      
+      %TODO: no post-processing now
+      %TODO: scaleable post-processing?
+      Some post-processing will be made for each performance parameters: The first time bias will be reduced if it is too negative and create a negative onset time for the first note. Loudness will be shift and shrink to a predefined range. The default is 80~127 MIDI loudness level. This will ensure the loudness in the output will be in acceptable range. 
+      
+      \subsection{MIDI Generation}
+      \framebox{TODO:Expend this generation}
+ So after we input an input score, its score features will be extracted. These score features combined with regression model will be used to calculate performance features. The result will be an expressive MIDI output. Ready to be played by hardware or software synthesizer.  
+ \framebox{TODO:off-line vs on-line}
+ \framebox{TODO:Discuss timber and instrument specific techniques}
+ \framebox{TODO:Discuss timber and instrument specific techniques}
+   
+%TODO:END COPY-PASTE
    \section{Features}
    The system is trying to mimic the process of human performance: the musican reads the explict and implict cues from the score and transform them into musical expressions. So the features can be categorized into two category: score features and performance features.  Score features are information contained in the score. Performance features corresponds to the musical expression. The basic time unit for both features are a note. 
       \subsection{Score Features}
@@ -105,14 +162,6 @@ There are still some constrains for the system now. The scores must be monophoni
    % The reason I choose melodic contour is because it yields best results in finding melodic similarity, which is shown in \cite{Hoffmann-engl2005}.
 
       %TODO: not included features: e.g. notation
-
-   \begin{figure}[tp]
-      \begin{center}
-         \includegraphics[width=0.8\textwidth]{fig/TBDFigure}
-      \end{center}
-      \caption{Example Performance Features}
-      \label{fig:expPerfFeat}
-   \end{figure}
    \subsection{Normalizing Onset Timing}
 \begin{figure}[tp]
    \begin{center}
@@ -136,30 +185,3 @@ There are still some constrains for the system now. The scores must be monophoni
 
 
       %TODO: 4 onset diffs
-   \section{Learning Phase}
-   In the learning phase, the features extracted in the previous stage is feed into a machine learning algorithm to produce a phrase model. The learning module has a input/output interface that is independent of the underlying algorithm, so different algorithm can be implemented without changing the overall structure of the system.
-
-%TODO: sample loader
-   A training sample is loaded with the sample loader module, since a training sample is consisted of a score and a recording, the sample loader finds the two files given the sample name, and load them into \texttt{music21.Stream} object. The music21 library will convert the musicXML and MIDI format into a python Object hierarchy that is easy to access and manipulate by python code. The loaded score are then handed to the feature extractor module.
-
-   In  order to keep the system architecture simple, the feature extractors should be as independent as possible, so the features can add or remove individual feature without breaking the system, and the features can be extracted in parallel. To achieve this, each feature must implement a common feature extractor interface, and feature extractors can't communicate with each other. 
-
-   But sometimes a feature is based on other features, for example, the "relative duration with the previous note" is calculated based on the "duration" feature. But since they can't share informations, the "relative duration" feature extractor must call the "duration" feature extractor during its execution. To avoid redundant calling of feature extractors, we implemented a caching mechanism. Say, the "duration" feature had been extracted for a training sample, it's value will be cached during this execution session; when the "relative duration" extractor calls the "duration" extractor again, the value is retrieved from cache without re-calculation.  This method can speed up the execution while keeping the system complexity low.
-
-   The the extracted features are aggregated into a json file, which will serve as the input for the learning algorithm. Each sample contains the extracted score and performance features. The learning algorithm can then do any pre-processing on the features, such as aggregation or quantization. The output of this module is the algorithm specific model description. For example, a linear regression algorithm will output the regression parameters. The algorithm is required to produce a model file containing the model description, but the system doesn't care about the internal format of the model description file, it will simply feed this model file to the generation module in the generation stage. So the developer of the learning module has to implement methods to write and read the model file themselves.
-
-   In the early stage of this research, linear regression is used. The results of linear regression is shown in \cite{Lyu2012}. In this thesis, Structural Support Vector Machine\cite{Joachims2009} is used instead. The detail of Structural SVM will be in the next Chapter.
-   %TODO: SVM-HMM
-   \section{Generating Phase}
-      After the model for a input phrase is generated, we can than use the score features and model coefficients to calculated the performance parameters. These performance parameters will then be applied to the input score.
-      
-      %TODO: no post-processing now
-      %TODO: scaleable post-processing?
-      Some post-processing will be made for each performance parameters: The first time bias will be reduced if it is too negative and create a negative onset time for the first note. Loudness will be shift and shrink to a predefined range. The default is 80~127 MIDI loudness level. This will ensure the loudness in the output will be in acceptable range. 
-      
- So after we input an input score, its score features will be extracted. These score features combined with regression model will be used to calculate performance features. The result will be an expressive MIDI output. Ready to be played by hardware or software synthesizer.  
- \framebox{TODO:off-line vs on-line}
- \framebox{TODO:Discuss timber and instrument specific techniques}
- \framebox{TODO:Discuss timber and instrument specific techniques}
-   
-%TODO:END COPY-PASTE

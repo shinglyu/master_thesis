@@ -1,0 +1,15 @@
+Overview
+Learning Performance Knowledge
+   Feature Extraction
+   SVM-HMM Learning
+      Quantization
+Expressive Performance Generation
+   Feature Extraction and SVM-HMM Generation
+   MIDI Generation
+
+Features
+   Score Features
+   Performance Features
+      Onset Deviation Normalization
+
+
