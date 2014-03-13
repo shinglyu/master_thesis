@@ -5,62 +5,86 @@
    %flow chart
       \begin{figure*}[tp]
          \begin{center}
-            \includegraphics[width=\textwidth]{fig/sys_arch}
+            \includegraphics[width=\textwidth]{fig/high_lev_arch}
          \end{center}
-         \caption{System Architecture} 
+         \caption{High Level System Architecture} 
          \label{fig:flow}
       \end{figure*}
-The high-level archtecture of the purposed system is shown in figure \ref{fig:flow}. The system is has two phases, the upper half of the figure is the learning phase, while the lower half is the generating phase.  In the training phase, score and expressive performance recording pairs are feed in, their features will be extracted and used as the input for the learning algorithm.  The learning algorithm will produce a learned model, which can be used to generate expressive performance hereafter. In the generating phase, a score is taken as input, and it's score features are extracted. The generation module ("Applying Model" box) then use the extracted features and the learned model to produce the preformance features for the score. The performance features can be viewed as the instruction for expression. With these features, an expressive MIDI performance for the input score can easily be generated.  
+The high-level architecture of the purposed system is shown in figure \ref{fig:flow}. The system has two phases, the upper half of the figure is the learning phase, while the lower half is the performing phase.  In the training phase, score and expressive performance recording pairs are feed in, they will serve as training examples for the machine learning algorithm, namely structural support vector machine with hidden markov model output (a.k.a SVM-HMM). The learning algorithm will produce a performance knowledge model, which can be used to generate expressive performance hereafter. In the performing phase, a score will be given to the system for expressive performance. The SVM-HMM generation module will use the performance knowledge learned in the previous phase to produce expressive performance. The SVM-HMM output then go through a MIDI generator and MIDI synthsizer to produce audible performance.
 %TODO: refer to feature exction and corpus chapter
 
-The system is not intend to add fixed expression to all pieces. Rather it is intended to perform music according to the style which the user wants. This kind of user interactivity can be achieved in two ways: first, the user can choose the training dataset. The dataset is organized by tags, example of tags are like performer, mood, emotion, genre, style, etc. So the user can select a subset of training sample by selecting tags. Second, the phrasing is given by the user. Since phrasing controls the overall structural interpretation of a music piece, and form a breathing feeling in music, user is given direct control over the performance.
+The system is not intend to add fixed expression to all pieces. Rather it is intended to perform music according to the style which the user wants. This kind of user interactivity can be achieved in two ways: first, the user can choose the training corpus. A user can select a subset of training sample to produce unique models. For example, if the corpus contains only one performer's recordings, the learned model will very likely have a unique style of the performer. Second, the phrasing of a song is given by the user. Since phrasing controls the overall structural interpretation of a music piece, and form a breathing feeling in music, user is given direct control over the performance.
 
-There are still some constrains for the system now. The scores must be monophonic and contains only one musical phrase. One has to manully label the phrasing for any scores used. The learning algorith, namely structural suppor vector machine, can only perform offline learning, so the learning phase can only work in a non-realtime scenario. The generating phase can work much faster though, it can procude expressive music almost instantely after loading the score. All the scores are loaded in batch, the systme currently don't accept streaming input.
+There are still some constrains for the system now. The scores must be monophonic and contains only one musical phrase. One has to manually label the phrasing for any scores used. The learning algorithm, namely SVM-HMM, can only perform offline learning, so the learning phase can only work in a non-realtime scenario. The generating phase can work much faster though, it can produce expressive music almost instantaneously after loading the score. All the scores are loaded in batch, the system currently don't accept streaming input.
 
-\framebox{TODO:Talk about how this chapters is layed out}
+In the following sections, we will discuss the detail steps in the learning and performing phases, and some implementation detail used in each step. Since SVM-HMM learning requires features to be extracted from samples, we will discuss the features used in the end of this chapter.
 
-   \section{Learning Performance Knowledge}
-   In the learning phase, the features extracted in the previous stage is feed into a machine learning algorithm to produce a phrase model. The learning module has a input/output interface that is independent of the underlying algorithm, so different algorithm can be implemented without changing the overall structure of the system.
+\input{theoraticalbg}
+\section{Learning Performance Knowledge}
+
+\begin{figure*}[tp]
+   \begin{center}
+      \includegraphics[width=\textwidth]{fig/learn_arch}
+   \end{center}
+   \caption{Learning Phase Flow Chart} 
+   \label{fig:learnflow}
+\end{figure*}
+The main goal in the learning phase is to extract performance knowledge from training samples. Figure \ref{fig:learnflow} shows the internal structure of the learning phase.
+
+   Training samples are matched score and expressive performance pairs (their format and preparation process is discussed in Chapter \ref{chap:corpus}). The training samples are loaded as machine-readable format, and have their features extracted. Two types of features will be extracted from the samples, first, the information from the score only are called score features; second, the information of the expressive performance with respect to the score is called the performance features. In order to generate new expressive performance, we want to learn a prediction model by which we can predict the performance features given the score model. This process can be analogize to a human performer reading the explicit and implicit cues from the score, and perform the music with certain expressive expression. The learning part is done by a supervised learning algorithm. In this thesis, we choose Structural Support Vector Machine with Hidden Markov Model Output (SVM-HMM) as our learning algorithm.
+
+
+% The learning module has a input/output interface that is independent of the underlying algorithm, so different algorithm can be implemented without changing the overall structure of the system.
 
 %TODO: sample loader
-   A training sample is loaded with the sample loader module, since a training sample is consisted of a score and a recording, the sample loader finds the two files given the sample name, and load them into \texttt{music21.Stream} object. The music21 library will convert the musicXML and MIDI format into a python Object hierarchy that is easy to access and manipulate by python code. The loaded score are then handed to the feature extractor module.
+\subsection{Training Sample Loader}
+   A training sample is loaded with the sample loader module, since a training sample is consisted of a score (musicXML format) and an expressive recording (MIDI format), the sample loader finds the two files given the sample name, and load them into an intermediate representation (\texttt{music21.Stream} object provided by the \texttt{music21} library\cite{music21} from MIT). The music21 library will convert the musicXML and MIDI format into a python Object hierarchy that is easy to access and manipulate by python code. The loaded score are then handed to the feature extractor module. 
 
-   \subsection{Features Extraction}
-   In  order to keep the system architecture simple, the feature extractors should be as independent as possible, so the features can add or remove individual feature without breaking the system, and the features can be extracted in parallel. To achieve this, each feature must implement a common feature extractor interface, and feature extractors can't communicate with each other. 
+One caveat here is that the recording in MIDI may contain very subtle expression. But the music21 library will quantize the MIDI in the time axis by default, which will destroy the subtle onset and duration expression. And the music21 library don't handle the "ticks per quarter note" information in the MIDI header\cite{midispec}, so we must explicitly specify that this value, and disable quantization during MIDI loading.
 
-   But sometimes a feature is based on other features, for example, the "relative duration with the previous note" is calculated based on the "duration" feature. But since they can't share informations, the "relative duration" feature extractor must call the "duration" feature extractor during its execution. To avoid redundant calling of feature extractors, we implemented a caching mechanism. Say, the "duration" feature had been extracted for a training sample, it's value will be cached during this execution session; when the "relative duration" extractor calls the "duration" extractor again, the value is retrieved from cache without re-calculation.  This method can speed up the execution while keeping the system complexity low.
+\subsection{Features Extraction}
+   In  order to keep the system architecture simple, a feature extractor are designed to be independent to other feature extractors, so features can added or removed without affecting the rest of the system. And further more, this enables parallel processing during feature extraction. To achieve this, each feature must implement a common feature extractor interface, and feature extractors should not communicate with each other. 
 
-   The the extracted features are aggregated into a json file, which will serve as the input for the learning algorithm. Each sample contains the extracted score and performance features. The learning algorithm can then do any pre-processing on the features, such as aggregation or quantization. The output of this module is the algorithm specific model description. For example, a linear regression algorithm will output the regression parameters. The algorithm is required to produce a model file containing the model description, but the system doesn't care about the internal format of the model description file, it will simply feed this model file to the generation module in the generation stage. So the developer of the learning module has to implement methods to write and read the model file themselves.
+   But sometimes a feature inevitably depends on other features, for example, the "relative duration with the previous note" is calculated based on the "duration" feature. But since we want to avoid complex scheduling with dependency, the "duration" feature is extracted during the extraction of the "relative duration" feature, no matter if the "duration" feature is extracted prior of after the "relative duration". Therefore, the "duration" feature extracted has computed twice. To avoid redundant computation of the feature extractors, we implemented a caching mechanism. Say, the "duration" feature had been computed once, it's value will be cached during this execution session; when the "relative duration" extractor calls the "duration" extractor again, the value is retrieved from cache without re-calculation. This method can speed up the execution while keeping the system complexity low.
 
-   In the early stage of this research, linear regression is used. The results of linear regression is shown in \cite{Lyu2012}. In this thesis, Structural Support Vector Machine\cite{Joachims2009} is used instead. The detail of Structural SVM will be in the next Chapter.
+   The extracted features are aggregated and stored into a JavaScript Object Notation (JSON) file. By saving the features in a human-readable intermediate file, the researcher can easily look into the file to debug potential problems.%the learning module can then load this file as inpu.t. The learning algorithm can then do any pre-processing on the features, such as aggregation or quantization. The output of this module is the algorithm specific model description. For example, a linear regression algorithm will output the regression parameters. The algorithm is required to produce a model file containing the model description, but the system doesn't care about the internal format of the model description file, it will simply feed this model file to the generation module in the generation stage. So the developer of the learning module has to implement methods to write and read the model file themselves.
 
-\subsection{Features Quantization}
-One problem exist for using SVM-HMM on expressive performance: some of the features are continuous, but SVM-HMM can only generate discrete output label. Therefore quantization is required. 
-%TODO: quantization
-\framebox{TODO: finish quantization section}
-   %TODO: SVM-HMM
+   %In the early stage of this research, linear regression is used. The results of linear regression is shown in \cite{Lyu2012}. In this thesis, Structural Support Vector Machine\cite{Joachims2009} is used instead. The detail of Structural SVM will be in the next Chapter.
+
 \subsection{SVM-HMM Learning}
-Thorsten Joachims from Cornell University created a good toolbox for SVM-HMM learning called $SVM^{hmm}$ \cite{Joachims2008}. According to the program's download page, the $SVM^{hmm}$ is an implementation of structural SVMs for sequence tagging \cite{TODO:altun2003} using the training algorithm described in \cite{TODO:tsoch2004, 2005} and \cite{TODO:Joachims et al. 2009}.The toolbox is contains two main program called \texttt{svm\_hmm\_learn} and \texttt{svm\_hmm\_classify}. The \texttt{svm\_hmm\_learn} takes a training file containing all the training sample. Each line in the training file is the featrues of a note, in the following format:
+After all features are extracted, the next step is to learn performance knowledge from the features. In the early stage of this research, we have tried linear regression with limited success\cite{Lyu2012}. However, the assumption of linearity is an oversimplification. So we switch to Structural Support Vector Machine with Hidden Markov Model Output (SVM-HMM)\cite{svm2009, svm2005, svm2003}  as our supervised learning algorithm. 
+
+The SVM-HMM learning module loads the JSON file from the previous stage, and rearrange the features to fit the required input format of the SVM-HMM learner program. However, the features from the previous stage are real numbers, but SVM-HMM only takes discrete output, so quantization is required here. For each feature, the quantizer calculates the overall mean and standard deviation from all training samples. Then the quantizer divides the range between mean minus three standard deviations to mean plus three standard deviations into 1024 intervals. Feature values below mean minus three standard deviations are quantized to the lowest bin, while values larger than mean plus three standard deviations are quantized to the highest bin. The range of three standard deviation and 1024 intervals are chosen by experience, which can be modified to fit different corpus.
+
+The theoretical background of SVM-HMM is already described in Section \ref{sec:svm-hmm}, to implement the algorithm we leverage Thorsten Joachims's implementation called $SVM^{hmm}$ \cite{Joachims2008}. $SVM^{hmm}$ is an implementation of structural SVMs for sequence tagging \cite{svm2003} using the training algorithm described in \cite{svm2005} and \cite{svm2009}. The $SVM^{hmm}$ package contains a model training program called \texttt{svm\_hmm\_learn} and a model prediction program called \texttt{svm\_hmm\_classify}, which will be used in the performing phase. For structural simplicity, we train a separate model for each quantized performance feature, each model uses all the quantized score features to try to predict a single performance model. The\texttt{svm\_hmm\_learn} takes a training file describing those features. Each line represents features for a note, organized in the following format:
 \begin{lstlisting}
 	PERF qid:EXNUM FEAT1:FEAT1_VAL FEAT2:FEAT2_VAL ... #comment
 \end{lstlisting}
-\texttt{PERF} is the performance feature. The \texttt{EXNUM} after \texttt{qid:} identifies the phrases, all notes in a phrase will have the same \texttt{qid:EXNUM} identifier. Follwing the identifier are \texttt{feature name : feature value} pairs, separated by space. And anything after the \texttt{\#} is considered as comments.
+\texttt{PERF} is a quantized performance feature. The \texttt{EXNUM} after \texttt{qid:} identifies the phrases, all notes in a phrase will have the same \texttt{qid:EXNUM} identifier. Following the identifier are quantized score features, denote as \texttt{feature name : feature value}, separated by space. And anything after the \texttt{\#} is comments.  An example of the training file is shown in Figure \ref{fig:expinput}
 
-      \begin{figure*}[tp]
-         \begin{center}
-            \includegraphics[width=\textwidth]{fig/TBDFigure}
-         \end{center}
-         \caption{Example input file} 
-         \label{fig:expinput}
-      \end{figure*}
+\begin{figure*}[tp]
+   \begin{center}
+      \includegraphics[width=\textwidth]{fig/TBDFigure}
+   \end{center}
+   \caption{Example input file} 
+   \label{fig:expinput}
+\end{figure*}
 
-For architectural simplicity, one model is trained for each performance feature. The input for a model is all the score features, and the model will predict a single performance feature. 
+There are some key parameters need to be specified for the training process. First the $C$ parameter in SVM, which controls the trade-off between low training error and large margin. Larger C will result in lower training error, but the margin may be smaller. Second, the $\epsilon$ parameter controls the required precision for the constrains. The smaller the $\epsilon$, the precision will be higher, but may require more computation. Finally, for the HMM part, we need to specify the order of dependencies of transition states and emission states. In our case, transition dependency is set to one, which stands for first-order Markov property, and emission dependency is set to zero. Since we train separate models for each performance feature, each model can have their own set of parameters. The parameter selection process is done by experiment, which will be presented in Chapter \ref{chap:exp}
+
+Finally, the training program will output three model files (because we use three performance features). In the model file are binary representation of the SVM-HMM model parameters, such as the support vectors and other informations, which represents the performance knowledge learned.  Since it takes considerable time to train a model (depending on the amount of training samples and the power of the computer running the system), the system can only support offline learning. But the learning process only need to be run once. The performance knowledge model can be reused over and over again in the performing phase.
 
 
-Because three performance features are used, three model file will be generated after running \texttt{svm\_hmm\_learn} on the 
-\framebox{TODO: finish this section}
 
+\framebox{BOOKMARK}
    \section{Expressive Performance}
+\begin{figure*}[tp]
+   \begin{center}
+      \includegraphics[width=\textwidth]{fig/perf_arch}
+   \end{center}
+   \caption{Performing Phase Flow Chart} 
+   \label{fig:perfflow}
+\end{figure*}
    \subsection{Feature Extraction and SVM-HMM Generation}
       After the model for a input phrase is generated, we can than use the score features and model coefficients to calculated the performance parameters. These performance parameters will then be applied to the input score.
       
@@ -99,6 +123,7 @@ Because three performance features are used, three model file will be generated 
 
          
          \item [Note duration:] The duration of a note in beats.
+            \framebox{TODO: discuss how grace notes are handled, currently its duration is set to 0.0625 quarter note = 1/64 quarter note}
          \item [Relative Duration with the previous note:] The duration of a note divided by the duration of its previous note. For a phrase of $n$ notes with duration $D_1, D_2, \dots, D_n$, $$RDP = \frac{D_i}{D_{i-1}} $$ See figure \ref{fig:duration} for example.
          \item [Relative duration with the next note:] The duration of a note divided by duration of its next note. $$RDN = \frac{D_i}{D_{i+1}} $$ See figure \ref{fig:duration} for example.
 

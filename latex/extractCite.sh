@@ -1,1 +1,3 @@
-grep -o cite{[^}]*} *.tex
+#grep -o cite{[^}]*} *.tex
+grep "database entry" *.blg 
+

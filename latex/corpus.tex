@@ -1,5 +1,6 @@
 \chapter{Corpus Preparation}
-Since this research is based on a learning algorithm, a good expressive performance corpus is essential to its success. In this chapter, we will discuss what makes a good corpus and how to produce it. 
+\label{chap:corpus}
+Since this research is based on a supervised learning algorithm, a high-quality corpus is essential to our success. In this chapter, we will review the existing corpora, various formats and specifications of a corpus, and how we construct the corpus used in this reasarch.
 
 A expressive performance corpus is a set of performance samples. Each sample consists of a score and a recording. The score is simply the music score being played, which contains notational information; and the recording is a digital or audio recording of a human musician playing the said score. With the two elements, a learning algorithm can learn how the music notation is translated into real performance. These two elements can come in many format, in the next sections we will discuss the pros and cons of some possible candidate.
 \section{Existing Corpora} 
@@ -76,6 +77,8 @@ The digital score used is downloaded from KernScore website \cite{KernScores}. T
 To record the MIDI performances, we used a Yamaha MIDI keyboard with pressure sensitive keys. The Yamaha keyboard was connected to a MIDI-to-USB  converter so it acted as a USB MIDI device on our Linux computer. On the Linux computer the Rosegarden Digital Audio Workstation (DAW) is used to record the MIDI. The Rosegarden DAW also generated the metronome sound to help the performer maintain a steady speed. One may argue that the tempo variation is also a part of the expression, but if the performer plays freely, the tempo is hard to determine afterwards, which will make learning scaling the performance in time domain very hard. So the performers are asked to follow the speed of the metronome, but they can apply any level of rubato as they like. The performers were allowed to record multiple times and edit the recording until there were no mistakes. The human error model is not part of this research now, so no mistakes are allowed in the performances to keep the problem simple.
 
   After the MIDIs are recorded, some utility scripts we wrote are employed to  make sure each recording is matched note-to-note with the corresponding score; if not, we will manually correct those mistakes. For example, if the pitch was played wrongly, we will correct the pitch but keep the onset, duration  and intensity as is. The matched score and MIDI pair are then splat into phrases according to a phrasing file.  Each line in the phrasing file is the starting point of each phrase. The starting point is defined as the onset timing (in quarter notes) of the first note in a phrase in the score.  The phrasing is assigned by the researcher now for accuracy, but any phrasing algorithm can be applied.
+
+  \framebox{Discuss the pre-split check, split script, post-split check, corpus preparation scirpt, etc.}
 
   \framebox{TODO: discuss how to specify the phrase if the phrase start at 1/3 position}
 
