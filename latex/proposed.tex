@@ -54,13 +54,15 @@ One caveat here is that the recording in MIDI may contain very subtle expression
 \subsection{SVM-HMM Learning}
 After all features are extracted, the next step is to learn performance knowledge from the features. In the early stage of this research, we have tried linear regression with limited success\cite{Lyu2012}. However, the assumption of linearity is an oversimplification. So we switch to Structural Support Vector Machine with Hidden Markov Model Output (SVM-HMM)\cite{svm2009, svm2005, svm2003}  as our supervised learning algorithm. 
 
-The SVM-HMM learning module loads the JSON file from the previous stage, and rearrange the features to fit the required input format of the SVM-HMM learner program. However, the features from the previous stage are real numbers, but SVM-HMM only takes discrete output, so quantization is required here. For each feature, the quantizer calculates the overall mean and standard deviation from all training samples. Then the quantizer divides the range between mean minus three standard deviations to mean plus three standard deviations into 1024 intervals. Feature values below mean minus three standard deviations are quantized to the lowest bin, while values larger than mean plus three standard deviations are quantized to the highest bin. The range of three standard deviation and 1024 intervals are chosen by experience, which can be modified to fit different corpus.
+The SVM-HMM learning module loads the JSON file from the previous stage, and rearrange the features to fit the required input format of the SVM-HMM learner program. However, the features from the previous stage are real numbers, but SVM-HMM only takes discrete output, so quantization is required here. For each feature, the quantizer calculates the overall mean and standard deviation from all training samples. Then the quantizer divides the range between mean minus three standard deviations to mean plus three standard deviations into 1024 intervals. Feature values below mean minus three standard deviations are quantized to the lowest bin, while values larger than mean plus three standard deviations are quantized to the highest bin. The range of three standard deviation and 1024 intervals are chosen by experience, which can be modified to fit different corpus. The mean, standard deviation and number of intervals information are stored in a file for the performing phase to dequantize the output.
 
 The theoretical background of SVM-HMM is already described in Section \ref{sec:svm-hmm}, to implement the algorithm we leverage Thorsten Joachims's implementation called $SVM^{hmm}$ \cite{Joachims2008}. $SVM^{hmm}$ is an implementation of structural SVMs for sequence tagging \cite{svm2003} using the training algorithm described in \cite{svm2005} and \cite{svm2009}. The $SVM^{hmm}$ package contains a model training program called \texttt{svm\_hmm\_learn} and a model prediction program called \texttt{svm\_hmm\_classify}, which will be used in the performing phase. For structural simplicity, we train a separate model for each quantized performance feature, each model uses all the quantized score features to try to predict a single performance model. The\texttt{svm\_hmm\_learn} takes a training file describing those features. Each line represents features for a note, organized in the following format:
 \begin{lstlisting}
 	PERF qid:EXNUM FEAT1:FEAT1_VAL FEAT2:FEAT2_VAL ... #comment
 \end{lstlisting}
 \texttt{PERF} is a quantized performance feature. The \texttt{EXNUM} after \texttt{qid:} identifies the phrases, all notes in a phrase will have the same \texttt{qid:EXNUM} identifier. Following the identifier are quantized score features, denote as \texttt{feature name : feature value}, separated by space. And anything after the \texttt{\#} is comments.  An example of the training file is shown in Figure \ref{fig:expinput}
+
+\framebox{TODO: partial model}
 
 \begin{figure*}[tp]
    \begin{center}
@@ -78,28 +80,33 @@ Finally, the training program will output three model files (because we use thre
 
 \framebox{BOOKMARK}
    \section{Expressive Performance}
-\begin{figure*}[tp]
-   \begin{center}
-      \includegraphics[width=\textwidth]{fig/perf_arch}
-   \end{center}
-   \caption{Performing Phase Flow Chart} 
-   \label{fig:perfflow}
-\end{figure*}
-   \subsection{Feature Extraction and SVM-HMM Generation}
-      After the model for a input phrase is generated, we can than use the score features and model coefficients to calculated the performance parameters. These performance parameters will then be applied to the input score.
+   \begin{figure*}[tp]
+      \begin{center}
+         \includegraphics[width=\textwidth]{fig/perf_arch}
+      \end{center}
+      \caption{Performing Phase Flow Chart} 
+      \label{fig:perfflow}
+   \end{figure*}
+With the performance knowledge learned, we can start to perform music expressively. The performing pharse share the same sample loader and feature extractor module with the learning phase. But in the performing phase, the input is only a score file (musicXML containing a single phrase), which is loaded and has its score features extracted. The extracted score features are also stored into a JSON file for the SVM-HMM generation module to load. The performance knowledge model is also an input in this phase. The SVM-HMM generation module will use the learned model and the quantized score features to determine the performance features for the given score. An MIDI generation module will apply those performance features onto the musicXML score to produce a expressive MIDI file. The MIDI file itself is already a expressive performance, in order to listen to the sound, an software synthesizer is used to render the MIDI file into WAV or MP3 format.
+\framebox{BOOKMARK}
+\subsection{SVM-HMM Generation}
+As in the learning phase, the score features are stored in a JSON file. The SVM-HMM generation module first load this JSON file, and preform the same quantization as the learning phase. The quantized score features are then transformed into the same format as the training file, but the \texttt{PERF} fields are all set to zero, meaning that we don't know its value and wish the algorithm to predict it. The \texttt{svm\_hmm\_classify} program will take these inputs with the learned model file and predict the quantized labels of the performance features. If we already know the real performance feature value, say, we use part of the corpus as training set and the rest as testing set, the \texttt{PERF} can be set to the \enquote{answer} of the testing set, so the \texttt{svm\_hmm\_classify} program will calculate the accuracy of the prediction. 
+
       
-      %TODO: no post-processing now
-      %TODO: scaleable post-processing?
-      Some post-processing will be made for each performance parameters: The first time bias will be reduced if it is too negative and create a negative onset time for the first note. Loudness will be shift and shrink to a predefined range. The default is 80~127 MIDI loudness level. This will ensure the loudness in the output will be in acceptable range. 
-      
-      \subsection{MIDI Generation}
-      \framebox{TODO:Expend this generation}
- So after we input an input score, its score features will be extracted. These score features combined with regression model will be used to calculate performance features. The result will be an expressive MIDI output. Ready to be played by hardware or software synthesizer.  
- \framebox{TODO:off-line vs on-line}
- \framebox{TODO:Discuss timber and instrument specific techniques}
- \framebox{TODO:Discuss timber and instrument specific techniques}
+\subsection{MIDI Generation}
+      \framebox{de-quantize}
+  Since the output of the SVM-HMM learner is the quantized label for the performance feature, dequantization is required to turn those values back to real-valued performance features. The dequantizer will load the quantization parameters from the learning stage to understand the range and intervals used in the quantizer. Each quantization label is dequantized into the mean value of the interval it belongs.
+
+  The performance features are than applied onto the input score. For example, if a performance feature represents the note's duration should last for 1.2 times of its nominal value, the duration in the score is multiplied by 1.2. After all the performance features are applied, the expressive version of the score is stored in MIDI format using the \texttt{music21} library.
+
+\framebox{TODO:Dramatization/post processing}
+\subsection{Audio Synthesis}
+In order to actually hear the expressive performance, the MIDI file is then rendered by a MIDI synthesizer. Since the output is standard MIDI file, the user can choose any compatible software or hardware synthesizer. We choose \texttt{timidity++} software synthesizer for this job. The output is an WAV(Waveform Audio Format)file, which is then compressed into MP3 (MPEG-2 Audio Layer III) by \texttt{lame} audio encoder.
+
+Because sub-note-level expression is not the primary goal of this research, we choose to use standard MIDI synthesizer to render the music. The system can be extended to used more advanced physical model or musical instrument specific audio synthesizer. Sub-note level features, such as special techniques for violins, can be added to the features list and be learned by the SVM-HMM model.
    
-%TODO:END COPY-PASTE
+\framebox{TODO: phrase concatenation}
+\framebox{BOOKMARK}
    \section{Features}
    The system is trying to mimic the process of human performance: the musican reads the explict and implict cues from the score and transform them into musical expressions. So the features can be categorized into two category: score features and performance features.  Score features are information contained in the score. Performance features corresponds to the musical expression. The basic time unit for both features are a note. 
       \subsection{Score Features}
