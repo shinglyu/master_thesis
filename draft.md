@@ -36,6 +36,8 @@ Thesis Draft v0.2
 * 交大音樂所 金立群教授 古典音樂分析
 * 台大電機系 陳宏銘教授 電腦音樂
 * 台大資工系 張智星教授 電腦音樂
+* 王真儀教授 Dr. Jenyi Wang: jyw3.tw@yahoo.com.tw
+* 黃少亭教授
              
 
 -------------------------------------
@@ -46,6 +48,8 @@ Computer Expressive Music Performance using Structural Support Vector Machine
 #內容大綱
 
 ##謝詞
+錄音五位
+金立群介紹王真儀
 
 ## Introduction
 

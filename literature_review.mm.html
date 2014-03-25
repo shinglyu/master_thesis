@@ -1,0 +1,675 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>Computer Expressive Music Performance</title>
+<style type="text/css">
+    li { list-style: none;  margin: 0; }
+    p { margin: 0; }
+    span.foldopened { color: white; font-size: xx-small;
+    border-width: 1; font-family: monospace; padding: 0em 0.25em 0em 0.25em; background: #e0e0e0;
+    VISIBILITY: visible;
+    cursor:pointer; }
+
+
+    span.foldclosed { color: #666666; font-size: xx-small;
+    border-width: 1; font-family: monospace; padding: 0em 0.25em 0em 0.25em; background: #e0e0e0;
+    VISIBILITY: hidden;
+    cursor:pointer; }
+
+    span.foldspecial { color: #666666; font-size: xx-small; border-style: none solid solid none;
+    border-color: #CCCCCC; border-width: 1; font-family: sans-serif; padding: 0em 0.1em 0em 0.1em; background: #e0e0e0;
+    cursor:pointer; }
+
+    span.l { color: red; font-weight: bold; }
+
+    a.mapnode:link {text-decoration: none; color: black; }
+    a.mapnode:visited {text-decoration: none; color: black; }
+    a.mapnode:active {text-decoration: none; color: black; }
+    a.mapnode:hover {text-decoration: none; color: black; background: #eeeee0; }
+
+</style>
+<!-- ^ Position is not set to relative / absolute here because of Mozilla -->
+</head>
+<body>
+
+<script type="text/javascript">
+   // Here we implement folding. It works fine with MSIE5.5, MSIE6.0 and
+   // Mozilla 0.9.6.
+
+   if (document.layers) {
+      //Netscape 4 specific code
+      pre = 'document.';
+      post = ''; }
+   if (document.getElementById) {
+      //Netscape 6 specific code
+      pre = 'document.getElementById("';
+      post = '").style'; }
+   if (document.all) {
+      //IE4+ specific code
+      pre = 'document.all.';
+      post = '.style'; }
+
+function layer_exists(layer) {
+   try {
+      eval(pre + layer + post);
+      return true; }
+   catch (error) {
+      return false; }}
+
+function show_layer(layer) {
+   eval(pre + layer + post).position = 'relative'; 
+   eval(pre + layer + post).visibility = 'visible'; }
+
+function hide_layer(layer) {
+   eval(pre + layer + post).visibility = 'hidden';
+   eval(pre + layer + post).position = 'absolute'; }
+
+function hide_folder(folder) {
+    hide_folding_layer(folder)
+    show_layer('show'+folder);
+
+    scrollBy(0,0); // This is a work around to make it work in Browsers (Explorer, Mozilla)
+}
+
+function show_folder(folder) {
+    // Precondition: all subfolders are folded
+
+    show_layer('hide'+folder);
+    hide_layer('show'+folder);
+    show_layer('fold'+folder);
+
+    scrollBy(0,0); // This is a work around to make it work in Browsers (Explorer, Mozilla)
+
+    var i;
+    for (i=1; layer_exists('fold'+folder+'_'+i); ++i) {
+       show_layer('show'+folder+'_'+i); }
+}
+function show_folder_completely(folder) {
+    // Precondition: all subfolders are folded
+
+    show_layer('hide'+folder);
+    hide_layer('show'+folder);
+    show_layer('fold'+folder);
+
+    scrollBy(0,0); // This is a work around to make it work in Browsers (Explorer, Mozilla)
+
+    var i;
+    for (i=1; layer_exists('fold'+folder+'_'+i); ++i) {
+       show_folder_completely(folder+'_'+i); }
+}
+
+
+
+function hide_folding_layer(folder) {
+   var i;
+   for (i=1; layer_exists('fold'+folder+'_'+i); ++i) {
+       hide_folding_layer(folder+'_'+i); }
+
+   hide_layer('hide'+folder);
+   hide_layer('show'+folder);
+   hide_layer('fold'+folder);
+
+   scrollBy(0,0); // This is a work around to make it work in Browsers (Explorer, Mozilla)
+}
+
+function fold_document() {
+   var i;
+   var folder = '1';
+   for (i=1; layer_exists('fold'+folder+'_'+i); ++i) {
+       hide_folder(folder+'_'+i); }
+}
+
+function unfold_document() {
+   var i;
+   var folder = '1';
+   for (i=1; layer_exists('fold'+folder+'_'+i); ++i) {
+       show_folder_completely(folder+'_'+i); }
+}
+
+</script>
+<SPAN class="foldspecial" onclick="fold_document()">All +</SPAN>
+<SPAN class="foldspecial" onclick="unfold_document()">All -</SPAN>
+<p><span style="color: #000000;font-size: 166%;font-family: SansSerif, sans-serif; ">Computer Expressive Music Performance</span>
+<ul><li><span style="color: #0033ff;font-size: 150%;font-family: SansSerif, sans-serif; ">Peformance Knowledge</span>
+<ul><li><span style="color: #00b439;font-size: 133%;font-family: SansSerif, sans-serif; ">Rule based</span>
+<ul><li><span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; ">Hierarchical parabola [18-20]</span>
+
+</li>
+<li><span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; ">Director Musices [17]</span>
+<ul><li><span style="color: #111111;">30 Rules</span>
+
+</li>
+<li><span style="color: #111111;">Real-time: pDM</span>
+
+</li>
+
+</ul>
+</li>
+<li><span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; ">Composer pulse [21,22]</span>
+<ul><li><span style="color: #111111;">Pulse set</span>
+
+</li>
+<li><span style="color: #111111;">For composer</span>
+
+</li>
+
+</ul>
+</li>
+<li><span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; ">Bach fugue [23]</span>
+<ul><li><span style="color: #111111;">Polyphonic</span>
+
+</li>
+
+</ul>
+</li>
+<li><span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; ">Rubato [26, 27]</span>
+<ul><li><span style="color: #111111;">Mazolla</span>
+
+</li>
+<li><span style="color: #111111;">Operators</span>
+
+</li>
+
+</ul>
+</li>
+<li><span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; ">Hermode tuning [29]</span>
+<ul><li><span style="color: #111111;">Intonation</span>
+
+</li>
+<li><span style="color: #111111;">Commerical</span>
+
+</li>
+
+</ul>
+</li>
+<li><span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; ">Sibelius [30]</span>
+<ul><li><span style="color: #111111;">Commerical</span>
+
+</li>
+<li><span style="color: #111111;">Method unknown</span>
+
+</li>
+
+</ul>
+</li>
+<li><span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; ">Trumpet Synthesis [24, 25]</span>
+<ul><li><span style="color: #111111;">Trumpet</span>
+
+</li>
+
+</ul>
+</li>
+<li><span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; ">Pop-E</span>
+<ul><li><span style="color: #111111;">Polyphinc Sync</span>
+
+</li>
+
+</ul>
+</li>
+<li><span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; ">CMERS [31]</span>
+<ul><li><span style="color: #111111;">Emotion!</span>
+
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+<li><span style="color: #00b439;font-size: 133%;font-family: SansSerif, sans-serif; ">Learning</span>
+<ul><li><span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; ">Training Input</span>
+<ul><li><span style="color: #111111;">Score+MIDI</span>
+
+</li>
+<li><span style="color: #111111;">Score analysis</span>
+
+</li>
+<li><span style="color: #111111;">Score+Audio</span>
+
+</li>
+<li><span style="color: #111111;">Tapping</span>
+
+</li>
+
+</ul>
+</li>
+<li><span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; ">Testing Input</span>
+<ul><li><span style="color: #111111;">Digital Score</span>
+
+</li>
+<li><span style="color: #111111;">Neutral Audio</span>
+
+</li>
+
+</ul>
+</li>
+<li><span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; ">Linear model</span>
+<ul><li><span style="color: #111111;">MIS[32-34]</span>
+<ul><li><span style="color: #111111;">Use AND to create non-linearity</span>
+
+</li>
+
+</ul>
+</li>
+<li><span style="color: #111111;">CaRo[35-37</span>
+<ul><li><span style="color: #111111;">Mood</span>
+
+</li>
+<li><span style="color: #111111;">Work on Audio</span>
+
+</li>
+<li><span style="color: #111111;">Draw line in moodspace</span>
+
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+<li><span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; ">ANN</span>
+<ul><li><span style="color: #111111;">ANN Piano [38]</span>
+<ul><li><span style="color: #111111;">Learn DM by ANN</span>
+
+</li>
+
+</ul>
+</li>
+<li><span style="color: #111111;">Emotional flute [39]</span>
+<ul><li><span style="color: #111111;">Flute</span>
+
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+<li><span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; ">Graphical Model</span>
+<ul><li><span style="color: #111111;">Music Plus One [52-54]</span>
+<ul><li><span style="color: #111111;">Basyan Believe Network</span>
+
+</li>
+<li><span style="color: #111111;">Accompinamnet</span>
+
+</li>
+<li><span style="color: #111111;">Transform neutral orchastral accompaniment</span>
+
+</li>
+
+</ul>
+</li>
+<li><span style="color: #111111;">ESP piano [55]</span>
+<ul><li><span style="color: #111111;">HMM</span>
+
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+<li><span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; ">Other Regression</span>
+<ul><li><span style="color: #111111;">Drumming</span>
+<ul><li><span style="color: #111111;">Drum</span>
+
+</li>
+<li><span style="color: #111111;">Learn from audio</span>
+
+</li>
+<li><span style="color: #111111;">ML mapping model</span>
+
+</li>
+
+</ul>
+</li>
+<li><span style="color: #111111;">KCCA [57]</span>
+<ul><li><span style="color: #111111;">Kernel regression</span>
+
+</li>
+<li><span style="color: #111111;">Kernel canonical correlation anayalsis</span>
+
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+<li><span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; ">Evolutionary</span>
+<ul><li><span style="color: #111111;">Genetic Programming Jazz Sax</span>
+<ul><li><span style="color: #111111;">Jazz</span>
+
+</li>
+<li><span style="color: #111111;">Saxphone</span>
+
+</li>
+<li><span style="color: #111111;">GP</span>
+
+</li>
+<li><span style="color: #111111;">Audio training</span>
+
+</li>
+<li><span style="color: #111111;">C4.5</span>
+
+</li>
+<li><span style="color: #111111;">M5Rules</span>
+
+</li>
+<li><span style="color: #111111;">Regression tree</span>
+
+</li>
+
+</ul>
+</li>
+<li><span style="color: #111111;">Sequential covering algorithm GAs</span>
+
+</li>
+<li><span style="color: #111111;">Generative Performance GAs</span>
+<ul><li><span style="color: #111111;">Pulse sets</span>
+
+</li>
+
+</ul>
+</li>
+<li><span style="color: #111111;">Multi-Agent System with imitation</span>
+<ul><li><span style="color: #111111;">Pulse sets</span>
+
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+<li><span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; ">Case-based Reasoning</span>
+<ul><li><span style="color: #111111;font-family: SansSerif, sans-serif; ">Kagurame [43. 44]</span>
+<ul><li><span style="color: #111111;">Style (Baroque, Romantic)</span>
+
+</li>
+<li><span style="color: #111111;">Hierarchy cases</span>
+
+</li>
+
+</ul>
+</li>
+<li><span style="color: #111111;font-family: SansSerif, sans-serif; ">Ha-Hi-Hun[45]</span>
+<ul><li><span style="color: #111111;">Natural Language Conditions</span>
+
+</li>
+
+</ul>
+</li>
+<li><span style="color: #111111;font-family: SansSerif, sans-serif; ">SaxEx [40-42]</span>
+<ul><li><span style="color: #111111;">Fuzzy Rule</span>
+
+</li>
+<li><span style="color: #111111;">Case based</span>
+
+</li>
+<li><span style="color: #111111;">Emotion</span>
+
+</li>
+<li><span style="color: #111111;">Jazz</span>
+
+</li>
+<li><span style="color: #111111;">Saxphone</span>
+
+</li>
+
+</ul>
+</li>
+<li><span style="color: #111111;">PLCG series</span>
+<ul><li><span style="color: #111111;">1. PLCG</span>
+<ul><li><span style="color: #111111;">Widmer</span>
+
+</li>
+<li><span style="color: #111111;">Data mining large DB to get rules</span>
+
+</li>
+<li><span style="color: #111111;">sequential covering</span>
+
+</li>
+<li><span style="color: #111111;">cluster rules into avg rules</span>
+
+</li>
+
+</ul>
+</li>
+<li><span style="color: #111111;">2. phrase-decompostion/PLCG</span>
+<ul><li><span style="color: #111111;">Includes hierarchical phrase structures (3 level) </span>
+
+</li>
+
+</ul>
+</li>
+<li><span style="color: #111111;">3. DISTALL</span>
+<ul><li><span style="color: #111111;">hierarchical rules</span>
+
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+<li><span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; ">Composition + Performance</span>
+<ul><li><span style="color: #111111;">Ossia</span>
+<ul><li><span style="color: #111111;">Compsition and performance combined</span>
+
+</li>
+<li><span style="color: #111111;">Recursive trees generated by GA</span>
+
+</li>
+<li><span style="color: #111111;">Own data structure</span>
+
+</li>
+
+</ul>
+</li>
+<li><span style="color: #111111;">pMIMACS</span>
+<ul><li><span style="color: #111111;">Composition and Performance Combined</span>
+
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+<li><span style="color: #0033ff;font-size: 150%;font-family: SansSerif, sans-serif; ">Goals</span>
+<ul><li><span style="color: #00b439;font-size: 133%;font-family: SansSerif, sans-serif; ">Reporduce certain human performance</span>
+
+</li>
+<li><span style="color: #00b439;font-size: 133%;font-family: SansSerif, sans-serif; ">Non-robotic music</span>
+
+</li>
+<li><span style="color: #00b439;font-size: 133%;font-family: SansSerif, sans-serif; ">Accompaniment</span>
+
+</li>
+<li><span style="color: #00b439;font-size: 133%;font-family: SansSerif, sans-serif; ">Modeling for musicoloy study</span>
+
+</li>
+<li><span style="color: #00b439;font-size: 133%;font-family: SansSerif, sans-serif; ">Directly play computer composition</span>
+
+</li>
+
+</ul>
+</li>
+<li><span style="color: #0033ff;font-size: 150%;font-family: SansSerif, sans-serif; ">Special Features</span>
+<ul><li><span style="color: #00b439;font-size: 133%;font-family: SansSerif, sans-serif; ">Instrument Models</span>
+<ul><li><span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; ">General (Piano)</span>
+
+</li>
+<li><span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; ">Piano</span>
+
+</li>
+<li><span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; ">Trumpet</span>
+<ul><li><span style="color: #111111;">Trumpet synthesis [24,25]</span>
+
+</li>
+
+</ul>
+</li>
+<li><span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; ">Drums</span>
+<ul><li><span style="color: #111111;">Drumming [56]</span>
+
+</li>
+
+</ul>
+</li>
+<li><span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; ">Flute</span>
+<ul><li><span style="color: #111111;">Emotional flute [39]</span>
+
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+<li><span style="color: #00b439;font-size: 133%;font-family: SansSerif, sans-serif; ">Coperative composition+performance</span>
+
+</li>
+<li><span style="color: #00b439;font-size: 133%;font-family: SansSerif, sans-serif; ">Genre</span>
+<ul><li><span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; ">Classical</span>
+
+</li>
+<li><span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; ">Jazz</span>
+<ul><li><span style="color: #111111;">SaxEx [40-42]</span>
+
+</li>
+
+</ul>
+</li>
+<li><span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; ">bach fugue</span>
+<ul><li><span style="color: #111111;">Bach fugue [23]</span>
+
+</li>
+
+</ul>
+</li>
+<li><span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; ">Own composition</span>
+
+</li>
+
+</ul>
+</li>
+<li><span style="color: #00b439;font-size: 133%;font-family: SansSerif, sans-serif; ">Polyphonic</span>
+<ul><li><span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; ">Challenges</span>
+<ul><li><span style="color: #111111;">Synchronizaion</span>
+
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+<li><span style="color: #0033ff;font-size: 150%;font-family: SansSerif, sans-serif; ">Popular Analysis Methods</span>
+<ul><li><span style="color: #00b439;font-size: 133%;font-family: SansSerif, sans-serif; ">GTTM</span>
+
+</li>
+<li><span style="color: #00b439;font-size: 133%;font-family: SansSerif, sans-serif; ">IR</span>
+
+</li>
+<li><span style="color: #00b439;font-size: 133%;font-family: SansSerif, sans-serif; ">Mayer</span>
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_1" class="foldclosed" onClick="show_folder('1_1')" style="POSITION: absolute">+</span> <span id="hide1_1" class="foldopened" onClick="hide_folder('1_1')">-</span>
+<span style="color: #0033ff;font-size: 150%;font-family: SansSerif, sans-serif; ">Perormance Context</span>
+<ul id="fold1_1" style="POSITION: relative; VISIBILITY: visible;"><li><span style="color: #00b439;font-size: 133%;font-family: SansSerif, sans-serif; ">Conditions</span>
+
+</li>
+<li><span style="color: #00b439;font-size: 133%;font-family: SansSerif, sans-serif; ">Mood</span>
+<ul><li><span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; ">[17]</span>
+
+</li>
+<li><span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; ">[31]</span>
+
+</li>
+<li><span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; ">[35-37]</span>
+
+</li>
+<li><span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; ">[39]</span>
+
+</li>
+<li><span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; ">[40-42]</span>
+
+</li>
+
+</ul>
+</li>
+<li><span style="color: #00b439;font-size: 133%;font-family: SansSerif, sans-serif; ">Natural Language Conditions</span>
+
+</li>
+<li><span style="color: #00b439;font-size: 133%;font-family: SansSerif, sans-serif; ">Accompinament</span>
+<ul><li><span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; ">[52-54]</span>
+
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+<li><span style="color: #0033ff;font-size: 150%;font-family: SansSerif, sans-serif; ">Evaluation</span>
+<ul><li><span style="color: #00b439;font-size: 133%;font-family: SansSerif, sans-serif; ">Challenges</span>
+<ul><li><span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; ">RenCon</span>
+
+</li>
+<li><span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; ">Lack widely accepted corpus or banchmark</span>
+
+</li>
+<li><span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; ">Different Goals</span>
+
+</li>
+<li><span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; ">Different Level of automation</span>
+
+</li>
+
+</ul>
+</li>
+<li><span style="color: #00b439;font-size: 133%;font-family: SansSerif, sans-serif; ">Criterias</span>
+<ul><li><span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; ">Expressive</span>
+
+</li>
+<li><span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; ">Creativity</span>
+
+</li>
+<li><span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; ">Test status</span>
+
+</li>
+<li><span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; ">Polyphinic</span>
+
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+<li><span style="color: #0033ff;font-size: 150%;font-family: SansSerif, sans-serif; ">Popular score/perf features</span>
+
+</li>
+
+</ul><SCRIPT type="text/javascript">
+fold_document();
+</SCRIPT>
+</body>
+</html>

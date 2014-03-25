@@ -21,7 +21,7 @@ In the following sections, we will discuss the detail steps in the learning and 
 
 \input{theoraticalbg}
 \section{Learning Performance Knowledge}
-
+\label{sec:learn}
 \begin{figure*}[tp]
    \begin{center}
       \includegraphics[width=\textwidth]{fig/learn_arch}
@@ -29,7 +29,7 @@ In the following sections, we will discuss the detail steps in the learning and 
    \caption{Learning Phase Flow Chart} 
    \label{fig:learnflow}
 \end{figure*}
-The main goal in the learning phase is to extract performance knowledge from training samples. Figure \ref{fig:learnflow} shows the internal structure of the learning phase.
+The main goal in the learning phase is to extract performance knowledge from training samples. Fig. \ref{fig:learnflow} shows the internal structure of the learning phase.
 
    Training samples are matched score and expressive performance pairs (their format and preparation process is discussed in Chapter \ref{chap:corpus}). The training samples are loaded as machine-readable format, and have their features extracted. Two types of features will be extracted from the samples, first, the information from the score only are called score features; second, the information of the expressive performance with respect to the score is called the performance features. In order to generate new expressive performance, we want to learn a prediction model by which we can predict the performance features given the score model. This process can be analogize to a human performer reading the explicit and implicit cues from the score, and perform the music with certain expressive expression. The learning part is done by a supervised learning algorithm. In this thesis, we choose Structural Support Vector Machine with Hidden Markov Model Output (SVM-HMM) as our learning algorithm.
 
@@ -60,7 +60,7 @@ The theoretical background of SVM-HMM is already described in Section \ref{sec:s
 \begin{lstlisting}
 	PERF qid:EXNUM FEAT1:FEAT1_VAL FEAT2:FEAT2_VAL ... #comment
 \end{lstlisting}
-\texttt{PERF} is a quantized performance feature. The \texttt{EXNUM} after \texttt{qid:} identifies the phrases, all notes in a phrase will have the same \texttt{qid:EXNUM} identifier. Following the identifier are quantized score features, denote as \texttt{feature name : feature value}, separated by space. And anything after the \texttt{\#} is comments.  An example of the training file is shown in Figure \ref{fig:expinput}
+\texttt{PERF} is a quantized performance feature. The \texttt{EXNUM} after \texttt{qid:} identifies the phrases, all notes in a phrase will have the same \texttt{qid:EXNUM} identifier. Following the identifier are quantized score features, denote as \texttt{feature name : feature value}, separated by space. And anything after the \texttt{\#} is comments.  An example of the training file is shown in Fig. \ref{fig:expinput}
 
 \framebox{TODO: partial model}
 
@@ -78,7 +78,6 @@ Finally, the training program will output three model files (because we use thre
 
 
 
-\framebox{BOOKMARK}
    \section{Expressive Performance}
    \begin{figure*}[tp]
       \begin{center}
@@ -88,7 +87,6 @@ Finally, the training program will output three model files (because we use thre
       \label{fig:perfflow}
    \end{figure*}
 With the performance knowledge learned, we can start to perform music expressively. The performing pharse share the same sample loader and feature extractor module with the learning phase. But in the performing phase, the input is only a score file (musicXML containing a single phrase), which is loaded and has its score features extracted. The extracted score features are also stored into a JSON file for the SVM-HMM generation module to load. The performance knowledge model is also an input in this phase. The SVM-HMM generation module will use the learned model and the quantized score features to determine the performance features for the given score. An MIDI generation module will apply those performance features onto the musicXML score to produce a expressive MIDI file. The MIDI file itself is already a expressive performance, in order to listen to the sound, an software synthesizer is used to render the MIDI file into WAV or MP3 format.
-\framebox{BOOKMARK}
 \subsection{SVM-HMM Generation}
 As in the learning phase, the score features are stored in a JSON file. The SVM-HMM generation module first load this JSON file, and preform the same quantization as the learning phase. The quantized score features are then transformed into the same format as the training file, but the \texttt{PERF} fields are all set to zero, meaning that we don't know its value and wish the algorithm to predict it. The \texttt{svm\_hmm\_classify} program will take these inputs with the learned model file and predict the quantized labels of the performance features. If we already know the real performance feature value, say, we use part of the corpus as training set and the rest as testing set, the \texttt{PERF} can be set to the \enquote{answer} of the testing set, so the \texttt{svm\_hmm\_classify} program will calculate the accuracy of the prediction. 
 
@@ -106,19 +104,20 @@ In order to actually hear the expressive performance, the MIDI file is then rend
 Because sub-note-level expression is not the primary goal of this research, we choose to use standard MIDI synthesizer to render the music. The system can be extended to used more advanced physical model or musical instrument specific audio synthesizer. Sub-note level features, such as special techniques for violins, can be added to the features list and be learned by the SVM-HMM model.
    
 \framebox{TODO: phrase concatenation}
-\framebox{BOOKMARK}
-   \section{Features}
-   The system is trying to mimic the process of human performance: the musican reads the explict and implict cues from the score and transform them into musical expressions. So the features can be categorized into two category: score features and performance features.  Score features are information contained in the score. Performance features corresponds to the musical expression. The basic time unit for both features are a note. 
-      \subsection{Score Features}
+\section{Features}
+   %The system is trying to mimic the process of human performance: the musican reads the explict and implict cues from the score and transform them into musical expressions. So the features can be categorized into two category: score features and performance features.  Score features are information contained in the score. Performance features corresponds to the musical expression. The basic time unit for both features are a note. 
+   As mentioned in Section \ref{sec:learn}, there are two types of features, score features and performance features. We will present the features used in the system, and discuss the difficulties encountered.
+\subsection{Score Features}
+      Score features are musicological cues presented in the score. The purpose of score features are to simulate the high level information a performer may perceive when she reads the score. The basic time unit for the features are notes. Each note will have one of each features presented below.
       Score features includes:
       \begin{description}
          \item [Relative position in a phrase:]
-            The relative position of a note in the phrase. From 0\% to 100\%. This feature can catch the musical hint of the opening and closing of a phrase.  
+            The relative position of a note in the phrase, its value ranges from 0\% to 100\%. Since there are often salient musical expressions during the opening or closing of a phrase, this feature is used to capture the start or end of the phrase.
          \item [Relative pitch:]
-            The pitch (in semitone) of a note relative to the pitch range of the phrase. For a phrase of $n$ notes with pitch $P_1, P_2, \dots, P_n$, $$RP = \frac{P_i -min(P_1, P_2, \dots, P_n) }{max(P_1, P_2, \dots, P_n)-min(P_1, P_2, \dots, P_n) }$$  Where $P_i$ is the pitch of note at position $t$
+            The pitch of a note relative to the pitch range of the phrase, denoted by MIDI pitch number (resolution is down to semitone). For a phrase of $n$ notes with pitch $P_1, P_2, \dots, P_n$, $$RP = \frac{P_i -min(P_1, P_2, \dots, P_n) }{max(P_1, P_2, \dots, P_n)-min(P_1, P_2, \dots, P_n) }$$  Where $P_i$ is the pitch of note at position $t$
 
-         \item [Interval from the previous note:] The direction of melody movement. Measured in semitone. $$IP = P_{i} - P_{i-1} $$ See figure \ref{fig:interval} for example.
-         \item [Interval to the next note:] The direction of melody movement. $$IN = P_{i+1} - P_i$$ See figure \ref{fig:interval} for example.
+         \item [Interval from the previous note:] The interval between the current note and its previous note, in semitone. This represents the direction of the melodic line. $$IP = P_{i} - P_{i-1} $$ See Fig. \ref{fig:interval} for example.
+         \item [Interval to the next note:] The interval between the current note and its previous note, in semitone. $$IN = P_{i+1} - P_i$$ See figure \ref{fig:interval} for example.
          
       \begin{figure}[tp]
          \begin{center}
@@ -129,19 +128,23 @@ Because sub-note-level expression is not the primary goal of this research, we c
       \end{figure}
 
          
-         \item [Note duration:] The duration of a note in beats.
-            \framebox{TODO: discuss how grace notes are handled, currently its duration is set to 0.0625 quarter note = 1/64 quarter note}
+         \item [Note duration:] The duration of a note counted in number of quarter notes. 
+            
+            Although this feature may seem an obvious one, there are still a caveat: Grace notes, which represents ornaments, have zero duration in musicXML specification. The reason for this is that grace notes are considered very short ornaments that does not occupy solid beat position. But zero duration will easily cause divide-by-zero exception in the program, and it's hard to handle in math formulation. So we assigned a duration of 0.0625 quarter note to all grace notes, which is equivalent to the length of a sixty-fourth note. Sixty-fourth note is chosen because it's far shorter than all the notes in our corpus.
          \item [Relative Duration with the previous note:] The duration of a note divided by the duration of its previous note. For a phrase of $n$ notes with duration $D_1, D_2, \dots, D_n$, $$RDP = \frac{D_i}{D_{i-1}} $$ See figure \ref{fig:duration} for example.
+            This feature is intended to locate local change in temop, such as a series of rapid consecutive notes followed by a long note.
          \item [Relative duration with the next note:] The duration of a note divided by duration of its next note. $$RDN = \frac{D_i}{D_{i+1}} $$ See figure \ref{fig:duration} for example.
 
       \begin{figure}[tp]
          \begin{center}
             \includegraphics[width=0.4\textwidth]{fig/duration}
          \end{center}
-         \caption{Duration from/to neighbor notes}
+         \caption{Relative Duration with the previous/next note}
          \label{fig:duration}
       \end{figure}
-   \item [Metric position:] The position of a note in a measure, measured by the beat unit defined by the time signature. For example, a $^4_4$ time signature will have a beat unit of a quarter note. So if the measure consists of four quarter notes, each of them will have metric position of 1, 2, 3 and 4. See figure \ref{fig:metrical}.
+   \item [Metric position:] The position of a note in a measure, measured by the beat unit defined by the time signature. For example, a $^4_4$ time signature will have a beat unit of a quarter note. So if the measure consists of four quarter notes, each of them will have metric position of 1, 2, 3 and 4. Please refer to Fig. \ref{fig:metrical} for example.
+      
+      Metric position implies beat strength. In most tonal music, there exist a hierarchy of beat strength\cite{?Beat strength}. For example, in a measure of a $^4_4$ piece, the first note is usually the strongest, the third note is the second strongest, and the second and fourth notes are the least strong.
 
    \begin{figure}[tp]
       \begin{center}
@@ -160,25 +163,30 @@ Because sub-note-level expression is not the primary goal of this research, we c
       \caption{Example Score Features}
       \label{fig:expScoreFeat}
    \end{figure*}
-      \subsection{Performance Features}
+
+
+
+\subsection{Performance Features}
+   Performance features are the expressive expressions of a performance, which is what we want to learn and generate in this research. Performance features are extracted by comparing the expressive performance with the score.
       Performance features includes:
       \begin{description}
-         \item [Relative onset time bias:] 
-            The onset time of a recording will not be exactly as the ones indicated on the score. Given a fixed tempo (beats/second), the score timing of each note can be calculated as tempo $\times$ (beats from the start of phrase)  . The relative onset time bias is the difference of onset timing between the performance and the score, divided by the total length of the phrase. Namely,
-            $$ ROB = \frac{O_i^{perf} - O_i^{score}  }{length(phrase)}$$ Where $O_i^{perf}$ is the onset time of note $i$ in the performance, $O_i^{score}$ is the onset time of note $i$ in the score. 
-         \item [Relative loudness:] The loudness of a note divided by the maximum loudness in the phrase. Measured by MIDI velocity level.
+         \item [Relative onset time deviation:] 
+            The onset time of a natural human recording will not be exactly as the ones indicated on the score, this phenomenon is roughly corresponding to the music term \enquote{rubato}. Given a fixed tempo (beats per second), the score timing of each note can be calculated as tempo $\times$ (beats from the start of phrase). The relative onset time bias is the difference of onset timing between the performance and the score, divided by the total length of the phrase. Namely,
+            $$ ROB = \frac{O_i^{perf} - O_i^{score}  }{length(phrase)}$$ Where $O_i^{perf}$ is the onset time of note $i$ in the performance, $O_i^{score}$ is the onset time of note $i$ in the score.  
+
+            However, the above formula assumes the performance is played at the tempo assigned in the score. In the corpus we use, test subject can't always keep up with the speed of the score because of limited piano skill, or they may speed up or slow down certain sections as their expression. Therefore, the performance should be linearly scaled to avoid such problem, We will discuss this issue in Section \ref{sec:normalize}.
+         \item [Relative loudness:] The loudness of a note divided by the maximum loudness in the phrase. Measured by MIDI velocity level 0 through 127.
             $$ RL = \frac{L_i}{max(L_1, L_2, \dots, L_n)}$$
 
          \item [Relative duration:]
-            The actual duration of note divided by the total length of the phrase.
-            $$ RD = \frac{ D_i^{perf}}{length(phrase)}$$
+            The performed duration of note divided by the duration indicated in the score.
+            $$ RD = \frac{ D_i^{perf}}{D_i^{score}}$$
       \end{description}
 
 \begin{figure*}[tp]
    \begin{center}
-      %TODO:Figure:Example JSON code
+      %TODO:Fig.:Example JSON code
       \includegraphics[width=\textwidth]{fig/TBDFigure}
-
    \end{center}
    \caption{Example Performance Features}
    \label{fig:expPerfFeat}
@@ -194,26 +202,53 @@ Because sub-note-level expression is not the primary goal of this research, we c
    % The reason I choose melodic contour is because it yields best results in finding melodic similarity, which is shown in \cite{Hoffmann-engl2005}.
 
       %TODO: not included features: e.g. notation
-   \subsection{Normalizing Onset Timing}
+   \subsection{Normalizing Onset Deviation}
+   \label{sec:normalize}
 \begin{figure}[tp]
    \begin{center}
-      %TODO:Figure:Normalization Schemes
+      %TODO:Fig.:Normalization Schemes
+      \includegraphics[width=\textwidth]{fig/TBDFigure}
+
+   \end{center}
+   \caption{Problem with Onset Deviation }
+   \label{fig:normalizationprob}
+\end{figure}
+\begin{figure}[tp]
+   \begin{center}
+      %TODO:Fig.:Normalization Schemes
       \includegraphics[width=\textwidth]{fig/TBDFigure}
 
    \end{center}
    \caption{Normalization Schemes}
    \label{fig:normalization}
 \end{figure}
-   The relative onset timing bias feature must be normalized to get meaningful result. For example, a phrase is played very fast by the performer, say, the played length is only 70\% of the notation. If the first note is aligned, the onset timing bias will grow linearly until the end of the phrase, the last note will have a onset timing bias of about 30\% of the phrase. But from the definition of this feature, the timing bias should be roughly less than half of  a note's length, and it's mean should be around zero. This 30\% value will introduce a relative large value in the training corpus, and thus there may be very large output value from the generation phase. If the model predict that a note should be played early or later for 30\% of the phrase length, the melody will be messed up. 
+In previous section, we mentioned that the onset deviation feature has problems when performance is not exactly the same length as the score. Illustrated in Fig. \ref{fig:normalizationprob}, if the performance is played faster than expected, the deviation will grow larger and larger over time. For a long phrase, the onset deviation of the last notes may be over a dozen quarter notes. These kind of extreme values will cause erroneous predictions in the model: a note may be delayed for a very large deviation, causing it to be played after the next note, the swapped notes will destroy the melody.o
+ 
+In other words, the original definition of the onset deviation actually contains two type of deviation: a global deviation cause by difference in the tempo, and a local deviation cause by note-level expression. Since the intention of the onset deviation features is to catch the note-level expression, the performance must be linearly scaled to cancel the global deviation.
 
-   There are four possible type of normalization: the first note can either be aligned at onset, or not aligned at all. The last note can be aligned at onset, or aligned at note off event.  The incentive for not aligning the first note is that the performer may intend to use an early start or delayed start as an expression, if the first note is aligned by it's onset, the first note in every phrase will have a onset timing bias feature of value zero. In other words, the early/delayed start expression is lost. %But each normalization method are equally reasonable theoretically, so we need to use empirical data to verify them. The experiment is explained in section \ref{TODO:experiment}. The experiment result showed that [TODO: result]
-   But experiments shows that none of these methods can fit all training samples. One may get good result by using one method on part of the corpus, but may result in large bias when applying it to the rest of the corpus. Since none of the methods can fit all, we take a different approach: let the program find the best fitting ratio for normalization. To achieve this goal, we first have to define how "fit" two phrases are, or how to define the distance between phrase. If the onset time of all the notes in a phrase are concatenated into a vector, the $l^2$-norm of the tow vectors can be treated as the distance. Note that the two vectors must have the same size, because the recordings are required to match note-to-note with the score. So the problem becomes how to find a optimal scaling ratio such that the scaled recording has the minimum distance from the score. The Brent's method\cite{TODO:brent1973} is used to find the optimal ratio. To speed up the optimization and prevent extreme values, we imposed a range of $[initial_guess \times 0.5 , initial_guess \times 2]$ to the optimizer. The $initial_guess$ is used as a rough estimate of the ratio, calculated by aligning the first and last onset of the phrase. Than we assume the actual ratio will not be smaller than half of $initial_guess$ and not larger than twice of $initial_guess$. The two numbers 0.5 and 2 are arbitrary chosen, but most of the empirical data suggest is valid most of the time. 
-   \framebox{TODO: conclusion}
+%The relative onset deviation feature must be normalized to get meaningful result. For example, a phrase is played very fast by the performer, say, the played length is only 70\% of the notation. If the first note is aligned, the onset timing bias will grow linearly until the end of the phrase, the last note will have a onset timing bias of about 30\% of the phrase. But from the definition of this feature, the timing bias should be roughly less than half of  a note's length, and it's mean should be around zero. This 30\% value will introduce a relative large value in the training corpus, and thus there may be very large output value from the generation phase. If the model predict that a note should be played early or later for 30\% of the phrase length, the melody will be messed up. 
+
+   Initially, we tried four possible type of normalization methods : 
+   \begin{enumerate}
+      \item Align the onset of the first notes, align the onset of the last notes
+      \item Align the onset of the first notes, align the end of the last notes
+      \item Don't align the onset of the first notes, align the onset of the last notes
+      \item Don't align the onset of the first notes, align the end of the last notes
+   \end{enumerate}
+    The incentive for not aligning the first note is that the performer may intend to use an early start or delayed start as an expression, if the first note is aligned by it's onset, the first note in every phrase will have a onset timing bias feature of value zero. In other words, the early/delayed start expression is lost. %But each normalization method are equally reasonable theoretically, so we need to use empirical data to verify them. The experiment is explained in section \ref{TODO:experiment}. The experiment result showed that [TODO: result]
+
+   But empirical data shows that none of these methods can fit all training samples. One method may produce good result when trained with part of the corpus, but may not be suitable for the rest of the corpus. So we switch to a more dynamic approach: let the program find the best ratio for normalization. To achieve this goal, we first have to define how "fit" two phrases are. If the onset time of all the notes in a phrase are concatenated into a vector, the $l^2$-norm of the tow vectors can be treated as the distance. Note that the two vectors must have the same size, because the recordings are required to match note-to-note with the score. So the problem becomes how to find a optimal scaling ratio such that the scaled recording has the minimum distance from the score. The Brent's Method\cite{TODO:brent1973} is used to find the optimal ratio. To speed up the optimization and prevent unreasonable value, a search range of $[initial_guess \times 0.5 , initial_guess \times 2]$ is imposed on the optimizer. The $initial_guess$ is used as a rough estimate of the ratio, calculated by aligning the first and last onset of the phrase. Than we assume the actual ratio will not be smaller than half of $initial_guess$ and not larger than twice of $initial_guess$. The two numbers 0.5 and 2 are arbitrary chosen, but most of the empirical data suggest is valid most of the time. 
+
+   So we have defined a automatic method to dynamically adjust the normalization ratio to eliminate systematical error in the onset deviation feature. Comparing this method to not using any normalization (see Fig. \ref{fig:afternorm}), the method can produce vey low onset deviations, roughly centered around zero, while the result from not using any normalization will show a clear trend of increasing deviations.
+]
+\begin{figure}[tp]
+   \begin{center}
+      %TODO:Fig.:Normalization Schemes
+      \includegraphics[width=\textwidth]{fig/TBDFigure}
+
+   \end{center}
+   \caption{The Effect of Automatic Normalization on Onset Deviation feature}
+   \label{fig:afternorm}
+\end{figure}
 
 
-   %TODO:Automatic onset timing normalization
-   %TODO:Define the distance
-   %TODO:SciPy optimization method
-
-
-      %TODO: 4 onset diffs

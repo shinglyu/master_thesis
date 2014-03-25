@@ -1,0 +1,69 @@
+No.1 Sonatina in C major
+
+    I. Allegro 
+    II. Andante 
+    III. Vivace 
+
+No.2 Sonatina in G major
+
+    I. Allegretto 
+    II. Allegretto 
+    III. Allegro 
+
+No.3 Sonatina in C major
+
+    I. Spiritoso 
+    II. Un poco adagio 
+    III. Allegro 
+
+No.4 Sonatina in F major
+
+    I. Con spirito 
+    II. Andante con espressione 
+    III. Rondó: Allegro vivace 
+
+5. Sonatina in G major
+
+    I. Presto 
+    II. Allegretto moderato 
+    III. Rondó: Allegro molto 
+
+6. Sonatina in D major
+
+    I. Allegro con spirito 
+    II. Allegretto 
+
+
+../clementi_scores_v2.5/clementi_sonatina-36-1-1.score.xml	4/4 	N/A	
+
+../clementi_scores_v2.5/clementi_sonatina-36-1-2.score.xml	3/4 	N/A	
+
+../clementi_scores_v2.5/clementi_sonatina-36-1-3.score.xml	3/8 	N/A	
+
+../clementi_scores_v2.5/clementi_sonatina-36-2-1.score.xml	2/4 	N/A	
+
+../clementi_scores_v2.5/clementi_sonatina-36-2-2.score.xml	3/4 	N/A	
+
+../clementi_scores_v2.5/clementi_sonatina-36-2-3.score.xml	3/8 	N/A	
+
+../clementi_scores_v2.5/clementi_sonatina-36-3-1.score.xml	4/4 	N/A	
+
+../clementi_scores_v2.5/clementi_sonatina-36-3-2.score.xml	2/2 	N/A	
+
+../clementi_scores_v2.5/clementi_sonatina-36-3-3.score.xml	2/4 	N/A	
+
+../clementi_scores_v2.5/clementi_sonatina-36-4-1.score.xml	3/4 	N/A	
+
+../clementi_scores_v2.5/clementi_sonatina-36-4-2.score.xml	2/4 	N/A	
+
+../clementi_scores_v2.5/clementi_sonatina-36-4-3.score.xml	2/4 2/4 	N/A	
+
+../clementi_scores_v2.5/clementi_sonatina-36-5-1.score.xml	2/2 	N/A	
+
+../clementi_scores_v2.5/clementi_sonatina-36-5-2.score.xml	3/8 	N/A	
+
+../clementi_scores_v2.5/clementi_sonatina-36-5-3.score.xml	2/4 	N/A	
+
+../clementi_scores_v2.5/clementi_sonatina-36-6-1.score.xml	4/4 	N/A	
+
+../clementi_scores_v2.5/clementi_sonatina-36-6-2.score.xml	6/8 	N/A	
