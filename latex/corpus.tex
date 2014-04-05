@@ -7,7 +7,7 @@ A expressive performance corpus is a set of performance samples. Each sample con
 \section{Existing Corpora} 
 Unlike research fields like speech processing or natural language processing, there exist very few public accessable corpus for research. CrestMusePEDB\cite{crestmuse} (PEDB stands for "Performance Expression Database"), created by Japan Science and Technology Agency's CREST program, is a rare example. It claims to contain the following data: PEDB-SCR - score text information, PEDB-DEV - performance deviation data and PEDB-IDX - audio performance credit. The database is said to be free to use via email request, but until the time this this writing, we can't establish any contact with the database andministrators, so the quality and format of the data is unknown.
 
-Another example is the Magaloff Project\cite{magaloff}, which is a joint effort from a few universities in Austria.  Russian pianist Nikita Magaloff was invited to record all works for solo piano by Frederic Chopin on a Bösendorfer SE computer-controlled grand piano. This corpus became the material for many subsequent researches \cite{magaloff extendedi}. Flossmann et al., the leading researchers of the project, also won the 2008 RenCon contest with a expressive performance system call YQX\cite{yqx} based on this corpus. However, the corpus is not opened up in the public domain. 
+Another example is the Magaloff Project\cite{magaloff}, which is a joint effort from a few universities in Austria.  Russian pianist Nikita Magaloff was invited to record all works for solo piano by Frederic Chopin on a Bösendorfer SE computer-controlled grand piano. This corpus became the material for many subsequent researches \cite{Goebl2009, Grachten2011, Flossmann2009, Grachten2012, Flossmann2013, Flossman2011, Flossmann2010a}. Flossmann et al., the leading researchers of the project, also won the 2008 RenCon contest with a expressive performance system call YQX\cite{yqx} based on this corpus. However, the corpus is not opened up in the public domain. 
 
 \section{Corpus Specification}
 
@@ -160,10 +160,26 @@ Six graduate students (not majored in music) with a varying piano skill. Their p
 \end{table}
 \begin{figure*}[tp]
    \begin{center}
-      \includegraphics[width=\textwidth]{fig/TBDFigure}
+      \includegraphics[width=\textwidth]{fig/notes}
 
    \end{center}
-   \caption{Phrase Length Distribution}
+   \caption{Movements Length (in Notes) Distribution}
+   \label{fig:notes}
+\end{figure*}
+\begin{figure*}[tp]
+   \begin{center}
+      \includegraphics[width=\textwidth]{fig/phrases}
+
+   \end{center}
+   \caption{Movements Length (in Phrases) Distribution}
+   \label{fig:phrases}
+\end{figure*}
+\begin{figure*}[tp]
+   \begin{center}
+      \includegraphics[width=\textwidth]{fig/phrlength}
+
+   \end{center}
+   \caption{Phrase Length (in Notes) Distribution}
    \label{fig:phrlength}
 \end{figure*}
 
@@ -198,25 +214,30 @@ Six graduate students (not majored in music) with a varying piano skill. Their p
    \centering
    \caption{Total Recorded Phrases and Notes Count}
    \label{tab:corpuscount}
-   \begin{tabular}{lrr}
+   \begin{tabular}{lrrr}
       \hline
-      \textbf{TBD} & \textbf{TBD} & \textbf{TBD}\\
+      \bf Title&\bf Recordings&\bf Total Phrases&\bf Total Notes\\
+      &\bf Count&&\\
       \hline
-      \textbf{TBD} & \textbf{TBD} & \textbf{TBD}\\
+      No. 1 Mov. I&6&72&1332\\
+      No. 1 Mov. II&6&60&882\\
+      No. 1 Mov. III&6&102&1566\\
+      No. 2 Mov. I&6&108&1920\\
+      No. 2 Mov. II&6&36&750\\
+      No. 2 Mov. III&6&168&2484\\
+      No. 3 Mov. I&6&156&3156\\
+      No. 3 Mov. II&6&42&444\\
+      No. 3 Mov. III&6&120&2628\\
+      No. 4 Mov. I&5&80&2325\\
+      No. 4 Mov. II&6&78&1332\\
+      No. 4 Mov. III&5&85&1920\\
+      No. 5 Mov. I&5&85&3360\\
+      No. 5 Mov. II&5&70&1580\\
+      No. 5 Mov. III&6&144&3384\\
+      No. 6 Mov. I&5&145&4180\\
+      No. 6 Mov. II&6&78&2754\\
       \hline
-      \textbf{TBD} & \textbf{TBD} & \textbf{TBD}\\
-      \hline
-      \textbf{TBD} & \textbf{TBD} & \textbf{TBD}\\
-      \hline
-      \textbf{TBD} & \textbf{TBD} & \textbf{TBD}\\
-      \hline
-      \textbf{TBD} & \textbf{TBD} & \textbf{TBD}\\
-      \hline
-      \textbf{TBD} & \textbf{TBD} & \textbf{TBD}\\
-      \hline
-      \textbf{TBD} & \textbf{TBD} & \textbf{TBD}\\
-      \hline
-      \textbf{TBD} & \textbf{TBD} & \textbf{TBD}\\
+      Total&97&1629&35997\\
       \hline
    \end{tabular}
 \end{table}

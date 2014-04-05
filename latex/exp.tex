@@ -1,30 +1,49 @@
-\chapter{Experiments, Results and Discussion}
+\chapter{Experiments, Results and Discussions}
 \label{chap:exp}
 \framebox{TODO:general introduction to the experiments}
 \section{Parameter Selection}
 \subsection{Experiment Design}
-Structural Support Vector Machine has some parameters that needed to be adjusted. We will leave the others to the defaults and change the SVM C trad-off parameter in this experiment. Since three models are learned for three performance features, we have three parameters to adjust. 
+Since SVM-HMM is a combination of SVM and HMM, there are many parameters which needs adjustment from both model. The most important one is the C trade-off parameter in SVM. Therefore, we will leave the rest of the parameters to their default value, and try to find the best C parameter.
+
+We use the whole set of Clementi's Sonatinas Op.36 from a single performer, and split them into two sets: the training set includes pieces No. 2 to No. 6, and the testing set includes piece No. 1. We train a model with the training set, and use the learned model to generate expressive performance. A wide range of C's are tried: $10^{-3}, 10^{-2}, 10^{-1}, 1, 10, 100$, with other parameters set to default\footnote{The termination criterion (required accuracy) is 0.1; order of dependency of transitions in HMM is 1, order of dependency of emissions is 0.}.
+
+
+%Structural Support Vector Machine has some parameters that needed to be adjusted. We will leave the others to the defaults and change the SVM C trad-off parameter in this experiment. Since three models are learned for three performance features, we have three parameters to adjust. 
 %TODO default parameters
 
-[TODO: phrases count] phrases from [TODO:song counts] songs are used for training. Every first, fifth, and tenth phrases from each song is not included in the training sample, but used as testing samples. A three-by-three grid is layed out for three C parameters, each C takes the value of the powers of tenfrom [TODO: Cs] $10^{-5}$ to $10^4$, so [TODO: num of experiment] paramenters are tested. Then the result is validated
-\begin{enumerate}
-	\item Are all the output samples successfuly generated? (Generation may fail if the performance features are unreasonable, for example, negative onset timeing.)
-	\item Is the order of the notes preserved? Sometimes the first note is delayed too long and the second note is played too early, so the order is swaped.
-	\item Are there any extreme parameters that makes the expressive performance unnatural?
-\end{enumerate}
+%[TODO: phrases count] phrases from [TODO:song counts] songs are used for training. Every first, fifth, and tenth phrases from each song is not included in the training sample, but used as testing samples. A three-by-three grid is layed out for three C parameters, each C takes the value of the powers of tenfrom [TODO: Cs] $10^{-5}$ to $10^4$, so [TODO: num of experiment] paramenters are tested. Then the result is validated
+To measure the effectiveness of the C parameter choice, the generated performance is compared to the performance recorded by the performer. Ideally, the generated performance will be very similar (in expression) to the recording. So, for every pair of the generated and recorded performances, we calculate their distance, and take the median value of all the distances for every C. Note that each performance feature has its own model, so we will be looking at a single performance feature and its C parameter at a time.
 
-The first two criterias are checked by python scripts, the last one is done by manual inspection.
+First, the generated performance features sequence and the recorded one are normalized to a range from 0 to 1. The normalization is required because we want to tolerate linear scaling. Then the Euclidean distance of the two normalized sequence is calculated and divided by the length (in notes) of the phrase, since the phrase can have arbitrary length.
 
 
-\subsection{Results and Discussion}
-\framebox{TODO:experiment result}
+
+%\begin{enumerate}
+%	\item Are all the output samples successfully generated? (Generation may fail if the performance features are unreasonable, for example, negative onset timeing.)
+%	\item Is the order of the notes preserved? Sometimes the first note is delayed too long and the second note is played too early, so the order is swaped.
+%	\item Are there any extreme parameters that makes the expressive performance unnatural?
+%\end{enumerate}
+
+%The first two criterias are checked by python scripts, the last one is done by manual inspection.
+%
+%\framebox{TODO:train / gen corpus}
+%\framebox{TODO:how to define distance}
+%\framebox{TODO: range of Cs}
+%\framebox{TODO: }
+%
+\subsection{Results and Discussions}
+%\framebox{TODO:experiment result}
+%\framebox{TODO: similarity v Cs}
+%\framebox{TODO: }
+%\framebox{TODO: }
+%\framebox{TODO: }
 
 \section{Human-like Performance}
 \framebox{TODO:experiment result}
 \subsection{Experiment Design}
 \framebox{TODO:experiment result}
 
-\subsection{Results and Discussion}
+\subsection{Results and Discussions}
 \framebox{TODO:experiment result}
 
 \section{Performer Style Reproduction}
@@ -32,11 +51,11 @@ The first two criterias are checked by python scripts, the last one is done by m
 \subsection{Experiment Design}
 \framebox{TODO:experiment result}
 
-\subsection{Results and Discussion}
+\subsection{Results and Discussions}
 \framebox{TODO:experiment result}
 \section{Comparing with State-of-the-Art Works}
 \framebox{TODO:experiment result}
 \subsection{Experiment Design}
 \framebox{TODO:experiment result}
-\subsection{Results and Discussion}
+\subsection{Results and Discussions}
 \framebox{TODO:experiment result}

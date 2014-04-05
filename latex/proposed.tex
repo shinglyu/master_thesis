@@ -1,4 +1,5 @@
 \chapter{Proposed Method}
+\label{chap:proposed}
 %TODO: START COPY-PASTE
 \section{Overview}
    %input output only melodic constrins
@@ -207,7 +208,7 @@ Because sub-note-level expression is not the primary goal of this research, we c
 \begin{figure}[tp]
    \begin{center}
       %TODO:Fig.:Normalization Schemes
-      \includegraphics[width=\textwidth]{fig/TBDFigure}
+      \includegraphics[width=\textwidth]{fig/prob_onset_diff}
 
    \end{center}
    \caption{Problem with Onset Deviation }
@@ -216,7 +217,7 @@ Because sub-note-level expression is not the primary goal of this research, we c
 \begin{figure}[tp]
    \begin{center}
       %TODO:Fig.:Normalization Schemes
-      \includegraphics[width=\textwidth]{fig/TBDFigure}
+      \includegraphics[width=\textwidth]{fig/onsetdifffix}
 
    \end{center}
    \caption{Normalization Schemes}
@@ -237,7 +238,7 @@ In other words, the original definition of the onset deviation actually contains
    \end{enumerate}
     The incentive for not aligning the first note is that the performer may intend to use an early start or delayed start as an expression, if the first note is aligned by it's onset, the first note in every phrase will have a onset timing bias feature of value zero. In other words, the early/delayed start expression is lost. %But each normalization method are equally reasonable theoretically, so we need to use empirical data to verify them. The experiment is explained in section \ref{TODO:experiment}. The experiment result showed that [TODO: result]
 
-   But empirical data shows that none of these methods can fit all training samples. One method may produce good result when trained with part of the corpus, but may not be suitable for the rest of the corpus. So we switch to a more dynamic approach: let the program find the best ratio for normalization. To achieve this goal, we first have to define how "fit" two phrases are. If the onset time of all the notes in a phrase are concatenated into a vector, the $l^2$-norm of the tow vectors can be treated as the distance. Note that the two vectors must have the same size, because the recordings are required to match note-to-note with the score. So the problem becomes how to find a optimal scaling ratio such that the scaled recording has the minimum distance from the score. The Brent's Method\cite{TODO:brent1973} is used to find the optimal ratio. To speed up the optimization and prevent unreasonable value, a search range of $[initial_guess \times 0.5 , initial_guess \times 2]$ is imposed on the optimizer. The $initial_guess$ is used as a rough estimate of the ratio, calculated by aligning the first and last onset of the phrase. Than we assume the actual ratio will not be smaller than half of $initial_guess$ and not larger than twice of $initial_guess$. The two numbers 0.5 and 2 are arbitrary chosen, but most of the empirical data suggest is valid most of the time. 
+   But empirical data shows that none of these methods can fit all training samples. One method may produce good result when trained with part of the corpus, but may not be suitable for the rest of the corpus. So we switch to a more dynamic approach: let the program find the best ratio for normalization. To achieve this goal, we first have to define how "fit" two phrases are. If the onset time of all the notes in a phrase are concatenated into a vector, the $l^2$-norm of the tow vectors can be treated as the distance. Note that the two vectors must have the same size, because the recordings are required to match note-to-note with the score. So the problem becomes how to find a optimal scaling ratio such that the scaled recording has the minimum distance from the score. The Brent's Method\cite{brent1973} is used to find the optimal ratio. To speed up the optimization and prevent unreasonable value, a search range of $[initial_guess \times 0.5 , initial_guess \times 2]$ is imposed on the optimizer. The $initial_guess$ is used as a rough estimate of the ratio, calculated by aligning the first and last onset of the phrase. Than we assume the actual ratio will not be smaller than half of $initial_guess$ and not larger than twice of $initial_guess$. The two numbers 0.5 and 2 are arbitrary chosen, but most of the empirical data suggest is valid most of the time. 
 
    So we have defined a automatic method to dynamically adjust the normalization ratio to eliminate systematical error in the onset deviation feature. Comparing this method to not using any normalization (see Fig. \ref{fig:afternorm}), the method can produce vey low onset deviations, roughly centered around zero, while the result from not using any normalization will show a clear trend of increasing deviations.
 ]
