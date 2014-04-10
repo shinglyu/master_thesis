@@ -3,19 +3,20 @@
 \framebox{TODO:general introduction to the experiments}
 \section{Parameter Selection}
 \subsection{Experiment Design}
-Since SVM-HMM is a combination of SVM and HMM, there are many parameters which needs adjustment from both model. The most important one is the C trade-off parameter in SVM. Therefore, we will leave the rest of the parameters to their default value, and try to find the best C parameter.
+Since SVM-HMM is a combination of SVM and HMM, there are many parameters which needs adjustment from both model. Two parameters are tested to find their optimal value: the termination accuracy $\epsilon$ and the misclassification penalty factor C in SVM. Because the algorithm is an iterative one, the $\epsilon$ parameter defines the desired accuracy required for the algorithm to terminate. A smaller $\epsilon$ will result in higher accuracy, but increased execution time (because of more iterations run.) The C parameter determines how hard non-separable samples should be penalised. A large C will sacrifice larger margin for lower misclassification error, but it will make the execution longer.%Therefore, we will leave the rest of the parameters to their default value, and try to find the best C parameter.l
 
-We use the whole set of Clementi's Sonatinas Op.36 from a single performer, and split them into two sets: the training set includes pieces No. 2 to No. 6, and the testing set includes piece No. 1. We train a model with the training set, and use the learned model to generate expressive performance. A wide range of C's are tried: $10^{-3}, 10^{-2}, 10^{-1}, 1, 10, 100$, with other parameters set to default\footnote{The termination criterion (required accuracy) is 0.1; order of dependency of transitions in HMM is 1, order of dependency of emissions is 0.}.
+Because it is desirable to generate a performance in a style similar to the training examples, we use the whole set of Clementi's Sonatinas Op.36 from a single performer, and split them into two sets: the training set includes pieces No. 2 to No. 6, and the testing set includes piece No. 1. We train a model with the training set, and use the learned model to generate expressive performance. The computer generated expressive performance should have a similar expression to the testing set. 
 
 
 %Structural Support Vector Machine has some parameters that needed to be adjusted. We will leave the others to the defaults and change the SVM C trad-off parameter in this experiment. Since three models are learned for three performance features, we have three parameters to adjust. 
 %TODO default parameters
 
 %[TODO: phrases count] phrases from [TODO:song counts] songs are used for training. Every first, fifth, and tenth phrases from each song is not included in the training sample, but used as testing samples. A three-by-three grid is layed out for three C parameters, each C takes the value of the powers of tenfrom [TODO: Cs] $10^{-5}$ to $10^4$, so [TODO: num of experiment] paramenters are tested. Then the result is validated
-To measure the effectiveness of the C parameter choice, the generated performance is compared to the performance recorded by the performer. Ideally, the generated performance will be very similar (in expression) to the recording. So, for every pair of the generated and recorded performances, we calculate their distance, and take the median value of all the distances for every C. Note that each performance feature has its own model, so we will be looking at a single performance feature and its C parameter at a time.
-
+To measure the effectiveness of the $\epsilon$ and C parameters, the generated performance is compared to the performance recorded by the performer. Ideally, the generated performance will be very similar (in expression) to the recording. So, for every pair of the generated and recorded performances, we calculate their distance, and take the median value of all the distances for every C. Note that each performance feature has its own model, so we will be looking at a single performance feature and its C parameter at a time.  
 First, the generated performance features sequence and the recorded one are normalized to a range from 0 to 1. The normalization is required because we want to tolerate linear scaling. Then the Euclidean distance of the two normalized sequence is calculated and divided by the length (in notes) of the phrase, since the phrase can have arbitrary length.
 
+
+First we will fix C at 0.1 and test different $\epsilon$'s: 100, 10, 1, 0.75, 0.5 and 0.1. Then, we fix $\epsilon$ at the optimal value determined in the previous step and test 's: $10^{-3}, 10^{-2}, 10^{-1}, 0.5, 1, 5$, with other parameters set to default. And we will evaluate the optimal parameters and evaluate their execution time. For each $\epsilon$ or C, we calculate the distance between the generated pieces and recorded examples for all phrases in the testing set for each performer. And we take the median of all these distances for each $\epsilon$ or C.
 
 
 %\begin{enumerate}
@@ -37,6 +38,50 @@ First, the generated performance features sequence and the recorded one are norm
 %\framebox{TODO: }
 %\framebox{TODO: }
 %\framebox{TODO: }
+\framebox{TODO: median}
+The performance regeneration accuracy for various $\epsilon$'s are shown in Fig. \ref{fig:eps_accu}. And the time for various $\epsilon$'s are shown in Fig. \ref{fig:eps_time}. For $\epsilon$ value 100 and 10, the termination criteria is too generous, so the learning algorithm terminates almost immediately. Therefore, the model hardly learns anything, the output is a fixed value for any input. So we abandon the data points because the model had learned nothing. We can see that the accuracy drops slowly when $\epsilon$ becomes smaller. But after $\epsilon$ is smaller than 0.5, the accuracy doesn't drop anymore. So we will choose $\epsilon = 0.5 $ for the rest of the experiment to avoid unnecessary computations.
+
+\begin{figure*}[tp]
+   \begin{center}
+      %TODO:Fig.:Example JSON code
+      \includegraphics[width=\textwidth]{fig/TBDFigure}
+
+   \end{center}
+   \caption{Accuracy for Different $\epsilon$'s}
+   \label{fig:eps_accu}
+\end{figure*}
+\begin{figure*}[tp]
+   \begin{center}
+      %TODO:Fig.:Example JSON code
+      \includegraphics[width=\textwidth]{fig/TBDFigure}
+
+   \end{center}
+   \caption{Execution Time for Different $\epsilon$'s}
+   \label{fig:eps_time}
+\end{figure*}
+\framebox{TODO:Number of iterations}
+
+As for different C parameter, the accuracy and execution time are shown in Fig.\ref{fig:c_accu} and Fig. \ref{fig:c_time} respectively. The accuracy forms a U shape curve, with the valley near 0.1. But the execution time grows as C goes larger, so we should choose C = 0.1 as our optimal C.
+
+\begin{figure*}[tp]
+   \begin{center}
+      %TODO:Fig.:Example JSON code
+      \includegraphics[width=\textwidth]{fig/TBDFigure}
+
+   \end{center}
+   \caption{Accuracy for Different C's}
+   \label{fig:c_accu}
+\end{figure*}
+\begin{figure*}[tp]
+   \begin{center}
+      %TODO:Fig.:Example JSON code
+      \includegraphics[width=\textwidth]{fig/TBDFigure}
+
+   \end{center}
+   \caption{Execution Time for Different C's}
+   \label{fig:c_time}
+\end{figure*}
+\framebox{TODO:Number of iterations}
 
 \section{Human-like Performance}
 \framebox{TODO:experiment result}

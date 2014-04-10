@@ -1,2 +1,58 @@
-\chapter{Software Tools Used in This Research}
-\label{chap:sw}
+\chapter{Software Tools Used in This Research} \label{chap:sw} 
+This research won't come into reality without many open-source software tools and free resources, we will walk you through a brief introduction to the softwares we used in this research. Please note that Internet resources come and go very quickly, if the links listed below are no longer valid, you can try to search it using search engines.
+\section*{Linux Operating System}
+Most of the tools introduced below runs on modern Linux distributions. The distribution we are using is \textbf{Linux Mint Debian Edition (LMDE)}\footnote{\url{http://www.linuxmint.com/download_lmde.php}} (Linux kernel 3.10), which is a user-friendly Linux distribution based on Debian Testing. User who want to try music-related softwares without installing Linux on their harddrive can try \textbf{64 Studio}\footnote{\url{http://www.64studio.com/}} Linux, which is a live CD distribution with many of the following softwares pre-installed. It also has many kernel optimization for real-time music manipulation. \textbf{Ubuntu Studio}\footnote{\url{http://ubuntustudio.org/}} is also an option, which has many pre-installed music softwares and is based on the popular Ubuntu Linux.
+
+However, many Linux distribution uses PulseAudio audio server to manage audio device. But a badly configured PulseAudio server will introduce severe latency, which is not acceptable while doing MIDI recording. One workaround is to remove PulseAudio and use raw ALSA (Advanced Linux Sound Architecture) driver instead. But be careful, hardware volume key may fail without PulseAudio. 
+
+\section*{Programming Languages}
+   \section*{Python}
+   Many researcher will choose Matlab or Octave for research projects because they have many useful toolboxes included. However, we believe that research project doesn't exist in vacuum. Drawing insight from the famous 80-20 rule, only 20\% of the code are actually doing the core algorithm, the rest 80\% are doing file manipulation, configuration, user interaction, and result display and plotting. Therefore, choosing a powerful and easy to write general-purpose programming language is extreme crucial. \textbf{Python}\footnote{\url{https://www.python.org/}} construct most of the infrastructure code for this project. Python is super easy to code, and has almost every tool you need to construct a fully functional experiment environment. We will highlight some useful module:
+   \subsection*{\texttt{Music21}\footnote{\url{http://web.mit.edu/music21/}}}
+   We would like to give special thanks to the \texttt{music21} developemnt team. \texttt{Music21} is a python toolbox for music notation manipulation and analysis, developed by MIT. \texttt{Music21} can parse many score notations like MusicXML, MIDI\footnote{By default, \texttt{music21} will quantize MIDI input, so if you want to import MIDI recorded from human performance, you need to bypass the default parser and manually disable the quantizer} and more into a very convenient \texttt{music21} object data-structure. Researcher can easily filter, split, search, and transform music notations. There are also many music analysis methods and feature extractors included. If you want to do music research, \texttt{music21} is a god-sent resource. 
+   \subsection*{SciPy\footnote{\url{http://www.scipy.org/}}}
+   SciPy is a project that contains many useful toolboxes for scientific computation in Python. The SciPy core library and NumPy provides numerical and vector calculation for Python, with similar capability to Matlab. Matlibplot provides plotting tools also similar to Matlab. It's useful for small scale calculation. For heavy duty mathematical calculation, we suggest \texttt{R} programming language, which will be discussed in later section.
+
+   \subsection*{\texttt{Simplejson}}
+   JSON (JavaScript Object Notation) is a plaintext data-interchange format, similar to XML but much light-weight. JSON is useful in experiment code for two purpose: first, JSON can serve as configuration file, it easy to parse and easy to edit. Second, JSON can serve as intermediate data file between each experiment module. For example, we use JSON to send extracted features from feature extractors to the machine learning module. Although plaintext takes more storage than binary file, but it's much easier for debugging because it's human readable. And you can simply parse the intermediate values and plot it using other plotting program. Python provides build-in support for JSON format via \texttt{json} and \texttt{simplejson} packages.
+
+   \subsection*{\texttt{Argparse}}
+   \texttt{Argparse} provides command line argument parser for python scripts, using commandline arguments with configuration file, you can create very flexible, extendible and easy to automate scripts.
+
+   \subsection*{\texttt{Logging}}
+   The built in \texttt{logging} module can print logging information with predefined format, and supports log level. By using log level, you can print debug information during development, and shutdown all debug message during production simply by changing the log level flag.
+
+   \section*{\texttt{R}\footnote{\url{http://www.r-project.org/}}}
+   \texttt{R} is a programming language for statistical calculation, but it can also do general purpose math and plotting very well. \texttt{R} follows a functional programming design, so it may take some time to learn for people who only have experience in C/C++, Java or other imperative/Object-oriented programming language. But it is definitely a great tool for mathematical operations and plotting. We use R for experiment data analysis and for linear regression in early version of this research. \texttt{R} and Python can work seamlessly through the \texttt{rpy} package.
+
+\section*{Score Manipulation and Corpora}
+\subsection*{MusicXML and MuseScore}
+\textbf{MusicXML}\footnote{\url{http://www.musicxml.com/}} is a digital score notation format based on XML. It is well supported in most commercial music typesetting software. For other music typesetting format you may want to look at LilyPound. To view and edit musicXML score, we use the open-source software \textbf{MuseScore}\footnote{\url{http://musescore.org/}}, it provides basic editing capability, and can export score as PDF. However, MuseScore often crash while loading bad-formatted musicXML file, so sometimes you need to look into it log file and fix the ill-formated XML via a text editor.
+\subsection*{Corpora}
+\texttt{Music21} contains a corpus\footnote{\url{http://web.mit.edu/music21/doc/systemReference/referenceCorpus.html}}, which will be automatically installed if you accept the licence term during \texttt{music21} installation. It covers a wide range of composers from early music, classical music to folk songs, with various genre and musical style. Another public available corpus is called \textbf{KernScore}\footnote{\url{http://kern.ccarh.org/}}, which provides a better search engine. You can find works by composer, genre, form or other criteria. There are even a special section containing monophonic works. Scores from both corpus can be loaded and transformed in to desired format via \texttt{music21}.
+
+\section*{MIDI Recording}
+\textbf{Rosegarden}\footnote{\url{http://www.rosegardenmusic.com/}} is a digital audio workstation (DAW) software designed for MIDI. It can record, edit, mix and export MIDI tracks. To actually hear the music, you need a MIDI synthesizer to work with Rosegarden. \textbf{Timidity++}\footnote{\url{http://timidity.sourceforge.net/}} is built-in in many Linux distribution, and it provides a commandline interface to synthesize MIDI directly into a WAV file. However, the default sound quality from Timidity++ is not very satisfying, so we suggest using the qSynth, which is a QT front end for \textbf{FluidSynth}\footnote{\url{http://sourceforge.net/projects/fluidsynth/}}. The default soundfont that comes with FludiSynth has very good sound quality.
+
+With all these music softwares, it will soon be very hard to control the interconnection between software modules. This is when \textbf{JACK}\footnote{\url{http://jackaudio.org/}} comes to help. JACK is like a virtual \enquote{plug-board} for software that implements the JACK interface. It provides a central place in which you can control how the music data flow interconnects between software and hardware.
+
+\section*{Audio Manipulation}
+
+When MIDI files are synthesized into WAV format, there are many tools that can help editing them. The most easy to use software with GUI is \textbf{Audacity}\footnote{\url{http://audacity.sourceforge.net/}}, it can edit and mix audio tracks.For commandline tools (in case you need scripting), \textbf{lame}\footnote{\url{http://lame.sourceforge.net/}}(MP3 encoder), \textbf{oggenc}\footnote{\url{http://www.vorbis.com/}}(ogg vorbis encoder) and \textbf{FFmpeg}\footnote{\url{http://www.ffmpeg.org/}} are very helpful for file format transformation. To cut and combine audio tracks from commandline, use \textbf{SoX}\footnote{\url{http://sox.sourceforge.net/}}.
+
+\section*{Data Visualization}
+As mentioned before, \texttt{R} and \texttt{Matlibplot} are good candidate for visualizing experiment data. But if you don't want to learn the syntax of R or Python, you can try \textbf{gnuplot}\footnote{\url{http://www.gnuplot.info/}}. Gnuplot is a interactive (and scriptting) environment for generating various types of plot like line plots or bar charts. It works particularly well if you use \texttt{grep} to extract datas for many files, say, extracting execution time information from logs.
+
+\section*{SVM\textsuperscript{hmm}}
+SVM\textsuperscript{hmm}\footnote{\url{http://www.cs.cornell.edu/people/tj/svm_light/svm_hmm.html}} is an implementation for Structural Support Vector Machine with Hidden Markov Model output. It's developed by Thorsten Joachims from Cornell University. It is based on SVM\textsuperscript{struct}, a more general framework for Structural Support Vector Machine. There are many other SVM\textsuperscript{struct} extensions such as Python or Matlab API.
+   
+
+\section*{Other}
+Sometimes the machine learning algorithm will run for a very long time. Then it's better if you can find a server that runs 24-7 in your home or laboratory. You can install a \textbf{ssh} server on that machine, and controls the experiment execution remotely. However, the experiment program will be terminated once you log out the \texttt{ssh} session. You can run your experiment program in \textbf{tmux}\footnote{\url{http://tmux.sourceforge.net/}}, a terminal multiplexer, instead. It will keep your program running even if you log out.
+
+Modern machines often have multi-core CPUs. But if your program only runs in one core, you waste the CPU resources and also your time. \textbf{Gnu-parallel}\footnote{\url{http://www.gnu.org/software/parallel/}} can dispatch multiple instances of your script or program to each core. It will automatically find new job to run when the previous one is finished, so the CPU will always run on its full capacity. 
+
+We use \textbf{git}\footnote{\url{http://git-scm.com/}} for source control. \LaTeX\footnote{\url{http://latex-project.org/}} is used to typeset this document.
+
+\section*{Conclusion}
+We have reviewed many software tools used to construct this research. We want to emphasize that it is totally possible to use \textit{only} free and open-source software to do all these heavy lifiting. We encourge the reader to try these tools out, spread the words and even contribute to these projects. By doing so we can create a more friendly academia ecosystem and make the world a better place.
