@@ -1,0 +1,8 @@
+corpus.tex:ref{tab:cleminfo}
+corpus.tex:label{tab:cleminfo}
+corpus.tex:ref{tab:clemcount}. The length distibution of the phrases in six pieces are shown in Fig. \ref{fig:phrlength}
+corpus.tex:ref{tab:performer}. Five of them finished Clementi's entire Op. 36, the last one only recorded part of the work. The total number of recordings and the corresponding phrases/notes counts are shown in Table \ref{tab:corpuscount}
+corpus.tex:label{tab:clemcount}
+corpus.tex:label{tab:performer}
+corpus.tex:label{tab:corpuscount}
+previousworks.tex:label{tab:prevworks}

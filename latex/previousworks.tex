@@ -1,11 +1,11 @@
 \chapter{Previous Works}
 \label{chap:prev}
+Researches on computer expressive music performance lags computer composition by almost a quarter of a century, starting around the end of the 1980s \cite{THEBOOK}. Early work includes the KTH system \cite{THEBOOK} and other rule-based works. Reviewing computer expressive performance systems is a hard task, because the goals each research wants to achieve has very large differences, which makes evaluation and comparison difficult. To make things worse, there is no training and benchmarking corpus available. Although there is a contest called RenCon\cite{RenCon}, which is a music contest for expressive performance systems, they only provide very few audio clips and no shared corpus. So if a system has never entered the contest and doesn't make its source code available, there is no fair way to compare them.
+
+In this chapter, we will first discuss the various goals of computer expressive performance systems, and the difficulties for comparing them.  Second, various systems will be briefly introduced by their core algorithm or method used. We will follow the categories proposed by \cite{THEBOOK}. Readers are suggest to refer to \cite{THEBOOK} for more detail. Finally, we will highlight some systems featuring special features like special instrument models.
+
 \framebox{REVIEW1}
-Researches on computer expressive music performance lags computer composition by almost a quarter of a century, starting around the end of the 1980s \cite{THEBOOK}. Early work includes the KTH system \cite{THEBOOK}. Reviewing computer expressive performance systems is a hard task, because there are exists large difference in the goals they wants to achieve, which makes evaluation and comparison difficult. To make things worse, although there is a contest called RenCon \cite{RenCon} in which researches compete their performances, there is no training and benchmarking corpus available, so if a system has never entered the contest and doesn't make its source code available, there is no way to compare them.
-
-In this chapter, we will follow the categories summarized in \cite{THEBOOK}. Readers are suggest to refer to \cite{THEBOOK} because it gives very detailed discussion on all the systems. First we will discuss the various goals of computer expressive performance. Second, systems will be reviewed by their methods used. Finally, we will highlight some systems with special features.
-
-\section{Various Goals and Evaulation}
+\section{Various Goals and Evaluation}
 The general goal of a computer expressive performance system is to generate expressive music, as opposed to the robotic and nu-human sound of rendered MIDI or other digital score format. But the definition of "expressive" is ambiguous. The following are the most popular goals a computer expressive performance system wants to achieve:
 \begin{enumerate}
    \item Reproduce human performance.
@@ -30,6 +30,8 @@ The goals discussed above imply different level of musical creativity. Huamn per
 
 \framebox{TODO: Discuss works that focus on timber only, e.g. Prof. Su's violin work}
 
+\framebox{TODO: RENCON detail}
+
 \section{Researches Classified by Methods Used}
 \begin{table}
    \centering
@@ -42,7 +44,7 @@ The goals discussed above imply different level of musical creativity. Huamn per
 \end{table}
 Dispite the difference between goals of different expressive performance systems. All of them needs some way to create and apply performance knowledge on unexpressive music. The performance can come from predefined rules or being learned. 
 
-Using rules to generate expressive music is the earliest approach tried. Director Musices \cite{17} being one of the early works that is still a living project now.  Most of the above systems focus on expressive attributes like note onset, note duration and loudness. But Hermode Tuning System \cite{29} focus more on intonation, thus it can generate expressions that requires string instruments techniques. Pop-E \cite {28} is also a rule-based system which can generate polyphonic music, using its syncronization algorithm to syncronize voices. Computational Music Emotion Rule System \cite{31} pust more emphasis on rules that express human emotions.  Other systmes like Hierarchical Parabola System \cite{17}\cite{18}\cite{19}\cite{20}, Composer Pulse System\cite{21,22}, Bach Fugue System\cite{23}, Trumpet Synthesis System \cite{24, 25} and Rubato \cite{26, 27} are also some systems that use rules to generate expressive performance. Rule-based systems are effective and don't require a long training period before use. But some of the performance nuance may be hard to describe in rules, so there is a natural limit on how complex the rule-based system can be. Lack of creativity is also a problem for rule-based approach.
+Using rules to generate expressive music is the earliest approach tried. Director Musices \cite{17} being one of the early works that is still a living project now.  Most of the above systems focus on expressive attributes like note onset, note duration and loudness. But Hermode Tuning System \cite{29} focus more on intonation, thus it can generate expressions that requires string instruments techniques. Pop-E \cite{28} is also a rule-based system which can generate polyphonic music, using its syncronization algorithm to syncronize voices. Computational Music Emotion Rule System \cite{31} pust more emphasis on rules that express human emotions.  Other systmes like Hierarchical Parabola System \cite{17}\cite{18}\cite{19}\cite{20}, Composer Pulse System\cite{21,22}, Bach Fugue System\cite{23}, Trumpet Synthesis System \cite{24, 25} and Rubato \cite{26, 27} are also some systems that use rules to generate expressive performance. Rule-based systems are effective and don't require a long training period before use. But some of the performance nuance may be hard to describe in rules, so there is a natural limit on how complex the rule-based system can be. Lack of creativity is also a problem for rule-based approach.
 
 Another approach is to acquire performance knowledge by learning. Many machine learning methods have been applied to expressive performance problem. One of the easiest form is to use linear regression, systems like Music Interpretation System \cite{32,33,34} and CaRo \cite{35,36,37} both uses linear regression to learn performance knowledge. But assuming the expressive performance as a linear system is clearly not true. So Music Interpretation System use try to solve it by using AND operations on linear regression results to achieve non-linearity. But still linear regression is too simple for this highly non-linear problem.
 

@@ -1,0 +1,56 @@
+corpus.tex:ref{fig:expxml}
+corpus.tex:label{fig:expxml}
+corpus.tex:ref{fig:phrlength}
+corpus.tex:label{fig:notes}
+corpus.tex:label{fig:phrases}
+corpus.tex:label{fig:phrlength}
+corpus.tex:ref{fig:exprecording}}
+corpus.tex:label{fig:exprecording}
+EndFigTab.tex:label{fig:bulk}Longitudinal collective oscillations of the conduction electrons of a metal (Volume plasmons)}
+EndFigTab.tex:label{fig:SPPdisp}Dispersion relation of SPPs at the interface between a Drude metal with negligible collision frequency and air (blue curves) and silica (red curves).}
+EndFigTab.tex:label{fig:afm1}Schematic of atomic force microscopy.}
+EndFigTab.tex:label{fig:afm3}Sketch of tip-sample forces.}
+EndFigTab.tex:label{fig:bulk}Longitudinal collective oscillations of the conduction electrons of a metal (Volume plasmons)}
+EndFigTab.tex:label{fig:SPPdisp}Dispersion relation of SPPs at the interface between a Drude metal with negligible collision frequency and air (blue curves) and silica (red curves).}
+EndFigTab.tex:label{fig:afm1}Schematic of atomic force microscopy.}
+EndFigTab.tex:label{fig:afm3}Sketch of tip-sample forces.}
+exp.tex:ref{fig:eps_accu}. And the time for various $\epsilon$'s are shown in Fig. \ref{fig:eps_time}
+exp.tex:label{fig:eps_accu}
+exp.tex:label{fig:eps_time}
+exp.tex:ref{fig:c_accu} and Fig. \ref{fig:c_time}
+exp.tex:label{fig:c_accu}
+exp.tex:label{fig:c_time}
+introduction.tex:label{fig:concept}
+proposed.tex:label{fig:flow}
+proposed.tex:ref{fig:flow}
+proposed.tex:label{fig:learnflow}
+proposed.tex:ref{fig:learnflow}
+proposed.tex:ref{fig:expinput}
+proposed.tex:label{fig:expinput}
+proposed.tex:label{fig:perfflow}
+proposed.tex:ref{fig:interval}
+proposed.tex:ref{fig:interval}
+proposed.tex:label{fig:interval}
+proposed.tex:ref{fig:duration}
+proposed.tex:ref{fig:duration}
+proposed.tex:label{fig:duration}
+proposed.tex:ref{fig:metrical}
+proposed.tex:label{fig:metrical}
+proposed.tex:label{fig:expScoreFeat}
+proposed.tex:label{fig:expPerfFeat}
+proposed.tex:label{fig:normalizationprob}
+proposed.tex:label{fig:normalization}
+proposed.tex:ref{fig:normalizationprob}
+proposed.tex:ref{fig:afternorm}
+proposed.tex:label{fig:afternorm}
+start.tex:label{fig:tiger}A picture of a tiger.}
+start.tex:ref{fig:tiger}
+svm_hmm.tex:label{fig:hmm}
+svm_hmm.tex:label{fig:expinput}
+theoraticalbg.tex:label{fig:hmm}
+THM.tex:ref{fig:bulk}
+THM.tex:label{fig:bulk}Longitudinal collective oscillations of the conduction electrons of a metal (Volume plasmons)}
+THM.tex:ref{fig:SPPdisp} shows the dispersion curve~\ref{eq:sppsdisp}
+THM.tex:label{fig:SPPdisp}Dispersion relation of SPPs at the interface between a Drude metal with negligible collision frequency and air (blue curves) and silica (red curves).}
+THM.tex:ref{fig:grating}
+THM.tex:label{fig:grating}Phase-matching of light to SPPs the grating coupling configuration.}
