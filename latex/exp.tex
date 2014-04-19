@@ -2,8 +2,13 @@
 \label{chap:exp}
 \framebox{REVIEW1}
 \framebox{TODO:general introduction to the experiments}
+\section{Onset Deviation Normalization}
+\framebox{TODO:onset diviation problem review}
+\framebox{TODO:onset diviation features plot}
+\framebox{TODO:failed is excluded}
+
 \section{Parameter Selection}
-\subsection{Experiment Design}
+\subsection{SVM-related Parameters}
 Since SVM-HMM is a combination of SVM and HMM, there are many parameters which needs adjustment from both model. Two parameters are tested to find their optimal value: the termination accuracy $\epsilon$ and the misclassification penalty factor C in SVM. Because the algorithm is an iterative one, the $\epsilon$ parameter defines the desired accuracy required for the algorithm to terminate. A smaller $\epsilon$ will result in higher accuracy, but increased execution time (because of more iterations run.) The C parameter determines how hard non-separable samples should be penalised. A large C will sacrifice larger margin for lower misclassification error, but it will make the execution longer.%Therefore, we will leave the rest of the parameters to their default value, and try to find the best C parameter.l
 
 Because it is desirable to generate a performance in a style similar to the training examples, we use the whole set of Clementi's Sonatinas Op.36 from a single performer, and split them into two sets: the training set includes pieces No. 2 to No. 6, and the testing set includes piece No. 1. We train a model with the training set, and use the learned model to generate expressive performance. The computer generated expressive performance should have a similar expression to the testing set. 
@@ -33,7 +38,6 @@ First we will fix C at 0.1 and test different $\epsilon$'s: 100, 10, 1, 0.75, 0.
 %\framebox{TODO: range of Cs}
 %\framebox{TODO: }
 %
-\subsection{Results and Discussions}
 %\framebox{TODO:experiment result}
 %\framebox{TODO: similarity v Cs}
 %\framebox{TODO: }
@@ -83,30 +87,29 @@ As for different C parameter, the accuracy and execution time are shown in Fig.\
    \label{fig:c_time}
 \end{figure*}
 \framebox{TODO:Number of iterations}
+\subsection{Quantization Parameter}
+\framebox{Quantization parameter time plot}
 
 \section{Human-like Performance}
-\subsection{Experiment Design}
 The most general purpose purpose of our expressive performance system is to create expressive, non-robotic music as oppose to vanilla MIDI. Therefore, we would like to perform a Turing-test-style survey to find out how people think about the generated expressive music.
 
 In this survey, a computer generated expressive phrase will be compared to a human-recorded version of the same phrase. The test subject will be asked to identify which one is the computer generated one. Ideally, the computer generated phrase will be expressive enough that the subject can't effectively distinguish the generated one from the recorded one.
 
-To generate expressive 
+To generate the expressive performance phrase. We follow a six-fold cross validation pattern. For each performer in the corpus, we use all his/her recorded phrase from Clementi's Op.36 No. 2 to No. 6 to train a model. Then the model is used to generate all phrases from Clementi's Op.36 No. 1. The generate phrases are compared to the performer's recording of piece No. 1. \framebox{Maybe we should compare to other people's recording?} The process is repeated, but this time we use pieces No. 1, 3, 4, 5, 6 to train a model, and generate piece No. 2, and so on. So all six pieces will have a computer generated version and recorded version for each player's corpus.
 
-\framebox{TODO:experiment result}
+With these music material ready, we built a survey web page to let the test subjects vote. A test subject was first asked to report their music proficiency (No music training at all, amateur or professional musician/scholar/student) and musical instrument skill. Then he/she will be asked to identify the computer generated phrase from a generated/recorded pair. Five pairs will be randomly selected from all the available pairs, and the order of appearance of the generated and recorded one will be randomized.
 
-\subsection{Results and Discussions}
-\framebox{TODO:experiment result}
+\framebox{All corpus vs single person}
+\framebox{Turing test result}
 
-\section{Performer Style Reproduction}
-\framebox{TODO:experiment result}
-\subsection{Experiment Design}
-\framebox{TODO:experiment result}
-
-\subsection{Results and Discussions}
-\framebox{TODO:experiment result}
 \section{Comparing with State-of-the-Art Works}
-\framebox{TODO:experiment result}
-\subsection{Experiment Design}
-\framebox{TODO:experiment result}
-\subsection{Results and Discussions}
-\framebox{TODO:experiment result}
+\framebox{Discuss why state of are is not comparable}
+Although we wish to compare our work with state-of-the-art works, there are some practical limitations that makes this comparison infeasible. The only place we can get formal evaluations of expressive performance systems is the RenCon contest\cite{rencon}. The most recent RenCon contest is held in 2013. The 2013 event is splitted into two main category: automatic and semi-automatic. Although the score, expressive performance audio output and votes are available, we still can't fairly compare our work with the champion of either category. First, the mandatory scores: Sonata K.466 by Domenico Scarlatti and Prelude No. 3 by Nino Rota are both polyphonic. Our system can not handle polyphonic input automatically. If we split the pieces into monophonic tracks and combine them manually, the synchronization between tracks will be totally determined by human decision, which contradicts the incentive of a automatic expressive performance system. Second, the level of automation of our work falls between the champions of the two categories, which will result in an unfair competition. The semi-automatic champion: VirtualPhilharmony by Takashi Baba et al.\cite{virtualphil}, is actually a conducting system, in which the user uses a theremin to control the musical expression. However, our system only requires the user to assign phrasing. Thus, comparing their human-controlled performance with our semi-automatic output is not fair. In the fully automatic side, however, the champion: A stochastic model of artistic deviation and its musical score for the
+elucidation of performance expression by Kenta Okumura et al., doesn't require manually labeled phrasing. Therefore, our system is not on the same ground with both systems, so we decide not to compare with these systems.
+
+There are some improvements we can make to make our work comparable to the RenCon contest results. We can loosen the semi-automatic assumption, by providing more room for human intervention. However, if we make our system more like a auxiliary system for human performance, the key evaluation criteria should not be the expressiveness of the output audio. The key performance indicator of this kind of system should be the user friendliness and the power to create highly skilled performance by unskilled amateur, which are not the goal we have in mind.
+
+The other way is to improve our work to make it a fully automatic system. We need to implement the following capability: automatic phrasing an support polyphonic input. The first can be achieve if we employ some theories for music structures like GTTM (Generative Theory of Tonal Music)\cite{gttm}. The second can be achieved if we explicitly handles the synchronization between voices, either by machine learning or rule-based approach.
+
+
+

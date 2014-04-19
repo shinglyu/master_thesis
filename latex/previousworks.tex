@@ -4,27 +4,46 @@ Researches on computer expressive music performance lags computer composition by
 
 In this chapter, we will first discuss the various goals of computer expressive performance systems, and the difficulties for comparing them.  Second, various systems will be briefly introduced by their core algorithm or method used. We will follow the categories proposed by \cite{THEBOOK}. Readers are suggest to refer to \cite{THEBOOK} for more detail. Finally, we will highlight some systems featuring special features like special instrument models.
 
-\framebox{REVIEW1}
 \section{Various Goals and Evaluation}
-The general goal of a computer expressive performance system is to generate expressive music, as opposed to the robotic and nu-human sound of rendered MIDI or other digital score format. But the definition of "expressive" is ambiguous. The following are the most popular goals a computer expressive performance system wants to achieve:
+The general goal of a computer expressive performance system is to generate expressive music, as opposed to the robotic and dull expression of rendered MIDI. But the definition of "expressive" is very vagues and ambiguous, so each research will need to define a more precise and measurable goal. The following are the most popular goals a computer expressive performance system wants to achieve:
 \begin{enumerate}
-   \item Reproduce human performance.
-   \item Perform music notations in a non-robotic way.
+   \item Perform music notations in a non-robotic way, regardless of the style.
+   \item Reproduce a human performance or a musican's style.
    \item Accompany a human performer.
-   \item Validate musicological models of expressive performance.
+   \item Validate a musicological theory of expressive performance.
    \item Directly render computer composed music works.
 \end{enumerate}
 
+Some systems try to perform music notations in a non-robotic way in a general sense, without a certain style in mind. These systems has been employed in music typesetting softwares, like Sibelius \cite{sibelius}, to play the typesetted notation. Most systems will implicitly achieve this goal.
 %TODO:discuss the goals
-Systems that are designed to reproduce human performance usually has a certain performer in mind, like the Zenph re-performance CD \cite{zenph} which will reproduce the performance style of Rachimaninov, it can even use Rachimaninov's style to perform pieces the musician never played in his lifetime. 
 
-Some systems try to perform music notations in a non-robotic way, without a certain style in mind. These systems has been employed in music typesetting softwares, like Sibelius \cite{sibelius}, to play the typesetted notation. 
+Systems that are designed to reproduce certain human performance or style are usually designed or trained using a particular performer's recording as reference. One commercial example is the Zenph re-performance CD\cite{zenph}, which reproduced the performance style of Rachimaninov, it can perform pieces that Rachimaninov never played in his lifetime in his style. 
 
-Accompaniment systems try to render expressive music that act as an accompaniment for human performer. This kind of systems has great value in music education. The challenge is that the system must be able to track the progress of a huamn performance, which is itself another established topic called score following. And the rendering must be done in real-time, which is uncommon in the field of computer expressive music performance.
 
-The next goal is to validate musicological models. Musicologist may develop theories on music performance expressivity, and wants to validate them by experiments. These system focus more on the specific features that the theory tries to explain, so may not cover every aspect of performance.
+Accompaniment systems try to render expressive music that act as an accompaniment for a human performer. The challenge is that the system must be able to track the progress of a human performance and render the accompaniment in real-time. One commercial example is Cadenza\cite{cadenza}, using the technology created by Christopher Raphel\cite{chris}. It claims that it can help music student practice concertos with ease.
 
-Finally, some systems combines computer composition with performance. The benefit of this approach is that the performance module can understand the intention of the composition without the need to interpret them from the notation. These systems usually has their own data structure to represent music, which can contain more information than traditional music notation, but the resulting performance system is not backward compatible.
+Another goal is to validate musicological theories. Musicologist may propose theories on expressive music performance, some of them may want to build a generative model to validate their assumptions. These systems may focus more on the specific phenomenon that the theory tries to explain instead of generating music that is pleasant to human. 
+
+Finally, some systems combines computer composition with expressive performance. These systems have a great advantage because the intention of the composition can be shared with the performance module. Other systems that performs past compositions can only guess the composer's intention by analyzing the score notation. These systems usually has their own data structure to represent music, which can contain more information than traditional music notation, but the resulting performance system is not backward compatible with past compositions.
+
+Because of the high diversity in the goals they want to achieve, the capability of these systems also differs a lot. The capability of a expressive performance system can be broadly categorized into the following three key indicators\cite{THEBOOK}:
+\begin{enumerate}
+   \item Expressive Expression Capability
+   \item Polyphonic Capability
+   \item Performance Creativity
+\end{enumerate}
+
+Expressive expression capability can range from very high level structural expression (e.g. tempo contrast between sections) to note level expression (e.g. onset, loudness, duration) or even sub-note expression (e.g. loudness envelop, timbre). Most systems can generate note-level expression, but higher or lower level expressions are much rare.
+
+Polyphonic capability indicates if the system can perform polyphonic input. Polyphonic systems are more challenging than monophonic ones because they requires synchronization between voices. 
+
+Performance creativity measures the ability of the system to create novel expression. The desired level of creativity varies from goal to goal. A system aiming to recreate human performance may want it to produce fixed expression based on the learning material, while a system that is combined with a composition system may want to create highly novel performance. 
+
+%Each system
+\framebox{REVIEW1}
+Each system will design different experiment and metrics to verify their goals. The self-reported results are thus impossible to compare. The only 
+
+
 
 The goals discussed above imply different level of musical creativity. Huamn performance reproduction requires mimicry over creativity, on the other hand, system that plays its own composition can have a large range of creativity to explore. The methods employed also limits the ability of creativity, which will be discussed in the next section.
 
