@@ -2,17 +2,14 @@
 \label{chap:exp}
 \framebox{REVIEW1}
 \framebox{TODO:general introduction to the experiments}
-In this chapter, we will use some experiment results to demonstrate the effectiveness of our method. Section \ref{sec:onsetnormexp} deals with the onset deviation problem highlighted in Section \ref{sec:normalize}. Section \ref{sec:paramselect} discusses how the various parameters in our system is decided, and their effect on the model and computing resource required. Section \ref{sec:turing} describes a Turing test to see if audience can or can't identify the difference between generated and human performances.
-
-
 \section{Onset Deviation Normalization}
-\label{sec:onsetnormexp}
-\framebox{TODO:onset deviation problem review}
+\framebox{TODO:onset diviation problem review}
 As mentioned in Section \ref{sec:normalize}, a bad normalization method will usually result in unreasonable high onset deviation, which will make the expressive performance sound very unnatural. To overcome this challenge, we proposed a automatic way to select the normalization parameter. In this section, we will evaluate the effectiveness of the method. 
 
-We extract the onset deviation feature from a single performer's recording, using the four types of normalization method mentioned before and the automatic normalization method. The extracted onset deviations are shown in Fig. \ref{fig:normauto} to Fig.\ref{fig:norm3}. Each dotted line from left to right represents a phrase in the corpus. Each dot represents the onset deviation value of a note. The notes are spread uniformly  on the horizontal axis, which only shows the order of appearance, not the real time scale. First note that aligning the end of the last notes results in very large deviation in a few phrases. This is because performers tend to extend the last note in certain phrases to emphasize the end of a phrase or section. This kind of extension will cause the last notes onset to be far apart. So clearly this method is not a good way. Fig. \ref{fig:normauto} and Fig. \ref{fig:norm1} looks much similar, but the maximum and minimum value in Fig. \ref{fig:norm1} is more dramatic than those in Fig. \ref{fig:normauto}, which shows that the automatic normalization method can indeed find a better fit between the recorded phrase and the score. Another benefit of the automatic normalization is that the last note onset is not force aligned, which allows more free expression on the last note. In Fig. \ref{fig:norm1}, the end of a line, i.e. the last note, always goes back to zero; however in Fig. \ref{fig:normauto}, the end of a line can end in a wide range of values.
+We extract the onset deviation feature from a single performer's recording, using the four types of normalization method mentioned before and the automatic normalization method. The extracted onset deviations are shown in Fig. \ref{fig:normauto} to Fig.\ref{fig:norm3}. Each dotted line from left to right represents a phrase in the corpus. Each dot represents the onset deviation value of a note. The notes are spread uniformly  on the horizontal axis, which only shows the order of appearance, not the real time scale. First note that aligning the end of the last notes resuls in very large deivation in a few phrases. This is bacuase performers tend to extend the last note in certain phrases to emphasize the end of a phrase or section. This kind of extension will cause the last notes onset to be far apart. So clearly this method is not a good way. Fig. \ref{fig:normauto} and Fig. \ref{fig:norm1} looks much similar, but the maximum and minimum value in Fig. \ref{fig:norm1} is more dramatic than those in Fig. \ref{fig:normauto}, which shows that the automatic normalization method can indeed find a better fit between the recorded phrase and the score. Another benefit of the automatic normalization is that the last note onset is not force aligned, which allows more free expression on the last note. In Fig. \ref{fig:norm1}, the end of a line, i.e the last note, always goes back to zero; however in Fig. \ref{fig:normauto}, the end of a line can end in a wide range of values.
 
 %\framebox{TODO:remove (quarter note) unit in figures} 
+\framebox{TODO:debug method 2 and 4?} 
 \begin{figure}[tp]
    \begin{center}
       %TODO:Fig.:Normalization Schemes
@@ -58,11 +55,12 @@ We extract the onset deviation feature from a single performer's recording, usin
 %   \label{fig:norm4}
 %\end{figure}
 
+\framebox{TODO:onset diviation features plot}
+\framebox{TODO:failed is excluded}
 
 \section{Parameter Selection}
-\label{sec:paramselect}
 \subsection{SVM-related Parameters}
-Since SVM-HMM is a combination of SVM and HMM, there are many parameters which needs adjustment from both model. Two parameters are tested to find their optimal value: the termination accuracy $\varepsilon$ and the misclassification penalty factor C in SVM. Because the algorithm is an iterative one, the $\varepsilon$ parameter defines the desired accuracy required for the algorithm to terminate. A smaller $\varepsilon$ will result in higher accuracy, but increased execution time (because of more iterations run.) The C parameter determines how hard non-separable samples should be penalised. A large C will sacrifice larger margin for lower misclassification error, but it will make the execution longer.%Therefore, we will leave the rest of the parameters to their default value, and try to find the best C parameter.l
+Since SVM-HMM is a combination of SVM and HMM, there are many parameters which needs adjustment from both model. Two parameters are tested to find their optimal value: the termination accuracy $\epsilon$ and the misclassification penalty factor C in SVM. Because the algorithm is an iterative one, the $\epsilon$ parameter defines the desired accuracy required for the algorithm to terminate. A smaller $\epsilon$ will result in higher accuracy, but increased execution time (because of more iterations run.) The C parameter determines how hard non-separable samples should be penalised. A large C will sacrifice larger margin for lower misclassification error, but it will make the execution longer.%Therefore, we will leave the rest of the parameters to their default value, and try to find the best C parameter.l
 
 Because it is desirable to generate a performance in a style similar to the training examples, we use the whole set of Clementi's Sonatinas Op.36 from a single performer, and split them into two sets: the training set includes pieces No. 2 to No. 6, and the testing set includes piece No. 1. We train a model with the training set, and use the learned model to generate expressive performance. The computer generated expressive performance should have a similar expression to the testing set. 
 
@@ -71,11 +69,11 @@ Because it is desirable to generate a performance in a style similar to the trai
 %TODO default parameters
 
 %[TODO: phrases count] phrases from [TODO:song counts] songs are used for training. Every first, fifth, and tenth phrases from each song is not included in the training sample, but used as testing samples. A three-by-three grid is layed out for three C parameters, each C takes the value of the powers of tenfrom [TODO: Cs] $10^{-5}$ to $10^4$, so [TODO: num of experiment] paramenters are tested. Then the result is validated
-To measure the effectiveness of the $\varepsilon$ and C parameters, the generated performance is compared to the performance recorded by the performer. Ideally, the generated performance will be very similar (in expression) to the recording. So, for every pair of the generated and recorded performances, we calculate their distance, and take the median value of all the distances for every C. Note that each performance feature has its own model, so we will be looking at a single performance feature and its C parameter at a time.  
+To measure the effectiveness of the $\epsilon$ and C parameters, the generated performance is compared to the performance recorded by the performer. Ideally, the generated performance will be very similar (in expression) to the recording. So, for every pair of the generated and recorded performances, we calculate their distance, and take the median value of all the distances for every C. Note that each performance feature has its own model, so we will be looking at a single performance feature and its C parameter at a time.  
 First, the generated performance features sequence and the recorded one are normalized to a range from 0 to 1. The normalization is required because we want to tolerate linear scaling. Then the Euclidean distance of the two normalized sequence is calculated and divided by the length (in notes) of the phrase, since the phrase can have arbitrary length.
 
 
-First we will fix C at 0.1 and test different $\varepsilon$'s: 100, 10, 1, 0.75, 0.5 and 0.1. Then, we fix $\varepsilon$ at the optimal value determined in the previous step and test 's: $10^{-3}, 10^{-2}, 10^{-1}, 0.5, 1, 5$, with other parameters set to default. And we will evaluate the optimal parameters and evaluate their execution time. For each $\varepsilon$ or C, we calculate the distance between the generated pieces and recorded examples for all phrases in the testing set for each performer. And we take the median of all these distances for each $\varepsilon$ or C.
+First we will fix C at 0.1 and test different $\epsilon$'s: 100, 10, 1, 0.75, 0.5 and 0.1. Then, we fix $\epsilon$ at the optimal value determined in the previous step and test 's: $10^{-3}, 10^{-2}, 10^{-1}, 0.5, 1, 5$, with other parameters set to default. And we will evaluate the optimal parameters and evaluate their execution time. For each $\epsilon$ or C, we calculate the distance between the generated pieces and recorded examples for all phrases in the testing set for each performer. And we take the median of all these distances for each $\epsilon$ or C.
 
 
 %\begin{enumerate}
@@ -97,7 +95,7 @@ First we will fix C at 0.1 and test different $\varepsilon$'s: 100, 10, 1, 0.75,
 %\framebox{TODO: }
 %\framebox{TODO: }
 \framebox{TODO: median}
-The performance regeneration accuracy for various $\varepsilon$'s are shown in Fig. \ref{fig:eps_accu}. And the time for various $\varepsilon$'s are shown in Fig. \ref{fig:eps_time}. For $\varepsilon$ value 100 and 10, the termination criteria is too generous, so the learning algorithm terminates almost immediately. Therefore, the model hardly learns anything, the output is a fixed value for any input. So we abandon the data points because the model had learned nothing. We can see that the accuracy drops slowly when $\varepsilon$ becomes smaller. But after $\varepsilon$ is smaller than 0.5, the accuracy doesn't drop anymore. So we will choose $\varepsilon = 0.5 $ for the rest of the experiment to avoid unnecessary computations.
+The performance regeneration accuracy for various $\epsilon$'s are shown in Fig. \ref{fig:eps_accu}. And the time for various $\epsilon$'s are shown in Fig. \ref{fig:eps_time}. For $\epsilon$ value 100 and 10, the termination criteria is too generous, so the learning algorithm terminates almost immediately. Therefore, the model hardly learns anything, the output is a fixed value for any input. So we abandon the data points because the model had learned nothing. We can see that the accuracy drops slowly when $\epsilon$ becomes smaller. But after $\epsilon$ is smaller than 0.5, the accuracy doesn't drop anymore. So we will choose $\epsilon = 0.5 $ for the rest of the experiment to avoid unnecessary computations.
 
 \begin{figure*}[tp]
    \begin{center}
@@ -105,7 +103,7 @@ The performance regeneration accuracy for various $\varepsilon$'s are shown in F
       \includegraphics[width=\textwidth]{fig/eps_accu.eps}
 
    \end{center}
-   \caption{Accuracy for Different $\varepsilon$'s}
+   \caption{Accuracy for Different $\epsilon$'s}
    \label{fig:eps_accu}
 \end{figure*}
 \begin{figure*}[tp]
@@ -114,9 +112,10 @@ The performance regeneration accuracy for various $\varepsilon$'s are shown in F
       \includegraphics[width=\textwidth]{fig/eps_time.eps}
 
    \end{center}
-   \caption{Execution Time for Different $\varepsilon$'s}
+   \caption{Execution Time for Different $\epsilon$'s}
    \label{fig:eps_time}
 \end{figure*}
+\framebox{TODO:Number of iterations}
 
 As for different C parameter, the accuracy and execution time are shown in Fig.\ref{fig:c_accu} and Fig. \ref{fig:c_time} respectively. The accuracy forms a U shape curve, with the valley near 0.1. But the execution time grows as C goes larger, so we should choose C = 0.1 as our optimal C.
 
@@ -138,12 +137,13 @@ As for different C parameter, the accuracy and execution time are shown in Fig.\
    \caption{Execution Time for Different C's}
    \label{fig:c_time}
 \end{figure*}
+\framebox{TODO:Number of iterations}
 \subsection{Quantization Parameter}
-Besides $\varepsilon$ and C, the number of quantization levels for SVM-HMM input is also has some impact on the execution time. If the performance features are quantized into more fine-grained levels, the quantization errors can be reduced, but the execution time and memory usage will grow dramatically. Also, larger number of intervals doesn't imply more accurate or robust model. Because SVM-HMM is originally used in part-of-speech tagging problem, if we use divide the performance features into more intervals, than there will be fewer samples for each interval. But it is more desirable that similar phrases will be quantized to the same bin, instead of split them into more fine-grain bins. For example, if a three note segment is played once in the following MIDI velocity: (60, 70, 80), and the same phrase is played again in (60.1, 69.9, 80.1). If we have a quantization interval width of, say, 0.05, then 60 and 60.1 may be quantized into different bins, and 70 and 69.9 may also be quantized to different bins, so the two phrases will be considered as two different case. However, if the quantization interval width is 1, both phrases may be the same after quantization, which is more desirable because the SVM-HMM algorithm can capture the similarity in the two samples. 
+Besides $\epsilon$ and C, the number of quantization levels for SVM-HMM input is also has some impact on the execution time. If the performance features are quantized into more fine-grained levels, the quantization errors can be reduced, but the execution time and memory usage will grow dramatically. Also, larger number of intervals doesn't imply more accurate or robust model. Because SVM-HMM is originally used in part-of-speech tagging problem, if we use divide the performance features into more intervals, than there will be fewer samples for each interval. But it is more desirable that similar phrases will be quantized to the same bin, instead of split them into more fine-grain bins. For example, if a three note segment is played once in the following MIDI velocity: (60, 70, 80), and the same phrase is played again in (60.1, 69.9, 80.1). If we have a quantization interval width of, say, 0.05, then 60 and 60.1 may be quantized into different bins, and 70 and 69.9 may also be quantized to different bins, so the two phrases will be considered as two different case. However, if the quantization interval width is 1, both phrases may be the same after quantization, which is more desirable because the SVM-HMM algorithm can capture the similarity in the two samples. 
 
 Initially, we tried to quantized the values into 1025 uniform width bins, wishing to minimize quantization error. But it take very long time to learn a model. So we switch to a more reasonable value: 128. From empirical data, onset deviation feature rarely exceeds $\pm 1$, so the quantization interval is around $\frac{1-(-1)}{128} = 0.015625$. Most duration ratios falls between zero and three, so the interval is $\frac{3-0}{128} = 0.0234375$. And MIDI velocity is around 30 to 90, so the interval is about $\frac{90-30}{128} = 0.46875$. This level of granularity is good enough for our performance system, and can dramatically reduce the execution time without sacrificing the expressiveness of the models. 
 
-We repeat the $\varepsilon$ selection experiment in the previous section for quantization level of 1025 and 128. The execution time (in CPU second) is shown in Fig. \ref{fig:quant_comp}. The time required for 1025 is larger than 128 by orders of magnitudes. The outcome, however, is still expressive, as can be heard in the Section \ref{sec:turing}.
+We repeat the $\epsilon$ selection experiment in the previous section for quantization level of 1025 and 128. The execution time (in CPU second) is shown in Fig. \ref{fig:quant_comp}. The time required for 1025 is larger than 128 by orders of magnitudes. The outcome, however, is still expressive, as can be heard in the Section \ref{sec:turing}.
 
 \begin{figure}[tp]
    \begin{center}
@@ -177,31 +177,7 @@ To generate the expressive performance phrase. We follow a six-fold cross valida
 
 %With these music material ready, we built a survey web page to let the test subjects vote. A test subject was first asked to report their music proficiency (No music training at all, amateur or professional musician/scholar/student) and musical instrument skill. Then he/she will be asked to identify the computer generated phrase from a generated/recorded pair. Five pairs will be randomly selected from all the available pairs, and the order of appearance of the generated and recorded one will be randomized.
 
-We have also tried to use all performer's recording instead of just one person's corpus to generate models. However, the expressive variation from the model is much smaller than a single performer's model. This is because the expression from different performer may cancel out each other. The distribution of each performance features are presented in Fig. \ref{fig:distonset} to Fig. \ref{fig:distvel}. For each performance feature, the frequency of occurrence of different feature values are counted and plotted as histograms. The features generated from the full corpus are more concentrated, which results in less dramatic expression.
+\framebox{All corpus vs single person}
+We have also tried to use all performer's recording instead of just one person's corpus to generate models. However, the expressive variation from the model is much smaller than a single performer's model.
+\framebox{Turing test result}
 
-\framebox{TODO:Turing test result and discussion}
-
-\begin{figure}[tp]
-   \begin{center}
-      %TODO:Fig.:Normalization Schemes
-      \includegraphics[width=0.6\textwidth]{fig/all_01_onset}
-   \end{center}
-   \caption{Distribution of Onset Deviation Values from Full Corpus versus Single Performer's Corpus}
-   \label{fig:distonset}
-\end{figure}
-\begin{figure}[tp]
-   \begin{center}
-      %TODO:Fig.:Normalization Schemes
-      \includegraphics[width=0.6\textwidth]{fig/all_01_duration}
-   \end{center}
-   \caption{Distribution of Duration Ratio Values from Full Corpus versus Single Performer's Corpus}
-   \label{fig:distdur}
-\end{figure}
-\begin{figure}[tp]
-   \begin{center}
-      %TODO:Fig.:Normalization Schemes
-      \includegraphics[width=0.6\textwidth]{fig/all_01_velocity}
-   \end{center}
-   \caption{Distribution of MIDI Velocity Values from Full Corpus versus Single Performer's Corpus}
-   \label{fig:distvel}
-\end{figure}

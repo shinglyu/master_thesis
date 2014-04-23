@@ -3,7 +3,7 @@
 \framebox{REVIEW1}
 %TODO: START COPY-PASTE
 \section{Overview}
-   %input output only melodic constrins
+   %input output only melodic constrains
    %flow chart
       \begin{figure*}[tp]
          \begin{center}
@@ -12,12 +12,12 @@
          \caption{High Level System Architecture} 
          \label{fig:flow}
       \end{figure*}
-The high-level architecture of the purposed system is shown in figure \ref{fig:flow}. The system has two phases, the upper half of the figure is the learning phase, while the lower half is the performing phase.  In the training phase, score and expressive performance recording pairs are feed in, they will serve as training examples for the machine learning algorithm, namely structural support vector machine with hidden markov model output (a.k.a SVM-HMM). The learning algorithm will produce a performance knowledge model, which can be used to generate expressive performance hereafter. In the performing phase, a score will be given to the system for expressive performance. The SVM-HMM generation module will use the performance knowledge learned in the previous phase to produce expressive performance. The SVM-HMM output then go through a MIDI generator and MIDI synthsizer to produce audible performance.
+The high-level architecture of the purposed system is shown in Fig. \ref{fig:flow}. The system has two phases, the upper half of the figure is the learning phase, while the lower half is the performing phase.  In the training phase, score and expressive performance recording pairs are feed in, they will serve as training examples for the machine learning algorithm, namely structural support vector machine with hidden Markov model output (a.k.a SVM-HMM). The learning algorithm will produce a performance knowledge model, which can be used to generate expressive performance hereafter. In the performing phase, a score will be given to the system for expressive performance. The SVM-HMM generation module will use the performance knowledge learned in the previous phase to produce expressive performance. The SVM-HMM output then go through a MIDI generator and MIDI synthesizer to produce audible performance.
 %TODO: refer to feature exction and corpus chapter
 
 The system is not intend to add fixed expression to all pieces. Rather it is intended to perform music according to the style which the user wants. This kind of user interactivity can be achieved in two ways: first, the user can choose the training corpus. A user can select a subset of training sample to produce unique models. For example, if the corpus contains only one performer's recordings, the learned model will very likely have a unique style of the performer. Second, the phrasing of a song is given by the user. Since phrasing controls the overall structural interpretation of a music piece, and form a breathing feeling in music, user is given direct control over the performance.
 
-There are still some constrains for the system now. The scores must be monophonic and contains only one musical phrase. One has to manually label the phrasing for any scores used. The learning algorithm, namely SVM-HMM, can only perform offline learning, so the learning phase can only work in a non-realtime scenario. The generating phase can work much faster though, it can produce expressive music almost instantaneously after loading the score. All the scores are loaded in batch, the system currently don't accept streaming input.
+There are still some constrains for the system now. The scores must be monophonic and contains only one musical phrase. One has to manually label the phrasing for any scores used. The learning algorithm, namely SVM-HMM, can only perform off-line learning, so the learning phase can only work in a non-realtime scenario. The generating phase can work much faster though, it can produce expressive music almost instantaneously after loading the score. All the scores are loaded in batch, the system currently don't accept streaming input.
 
 In the following sections, we will discuss the detail steps in the learning and performing phases, and some implementation detail used in each step. Since SVM-HMM learning requires features to be extracted from samples, we will discuss the features used in the end of this chapter.
 
@@ -74,13 +74,13 @@ The theoretical background of SVM-HMM is already described in Section \ref{sec:s
    \label{fig:expinput}
 \end{figure*}
 
-There are some key parameters need to be specified for the training process. First the $C$ parameter in SVM, which controls the trade-off between low training error and large margin. Larger C will result in lower training error, but the margin may be smaller. Second, the $\epsilon$ parameter controls the required precision for the constrains. The smaller the $\epsilon$, the precision will be higher, but may require more computation. Finally, for the HMM part, we need to specify the order of dependencies of transition states and emission states. In our case, transition dependency is set to one, which stands for first-order Markov property, and emission dependency is set to zero. Since we train separate models for each performance feature, each model can have their own set of parameters. The parameter selection process is done by experiment, which will be presented in Chapter \ref{chap:exp}
+There are some key parameters need to be specified for the training process. First the $C$ parameter in SVM, which controls the trade-off between low training error and large margin. Larger C will result in lower training error, but the margin may be smaller. Second, the $\varepsilon$ parameter controls the required precision for the constrains. The smaller the $\varepsilon$, the precision will be higher, but may require more computation. Finally, for the HMM part, we need to specify the order of dependencies of transition states and emission states. In our case, transition dependency is set to one, which stands for first-order Markov property, and emission dependency is set to zero. Since we train separate models for each performance feature, each model can have their own set of parameters. The parameter selection process is done by experiment, which will be presented in Chapter \ref{chap:exp}
 
-Finally, the training program will output three model files (because we use three performance features). In the model file are binary representation of the SVM-HMM model parameters, such as the support vectors and other informations, which represents the performance knowledge learned.  Since it takes considerable time to train a model (depending on the amount of training samples and the power of the computer running the system), the system can only support offline learning. But the learning process only need to be run once. The performance knowledge model can be reused over and over again in the performing phase.
+Finally, the training program will output three model files (because we use three performance features). In the model file are binary representation of the SVM-HMM model parameters, such as the support vectors and other informations, which represents the performance knowledge learned.  Since it takes considerable time to train a model (depending on the amount of training samples and the power of the computer running the system), the system can only support off-line learning. But the learning process only need to be run once. The performance knowledge model can be reused over and over again in the performing phase.
 
 
 
-   \section{Expressive Performance}
+   \section{Performing Expressively}
    \begin{figure*}[tp]
       \begin{center}
          \includegraphics[width=\textwidth]{fig/perf_arch}
@@ -88,13 +88,12 @@ Finally, the training program will output three model files (because we use thre
       \caption{Performing Phase Flow Chart} 
       \label{fig:perfflow}
    \end{figure*}
-With the performance knowledge learned, we can start to perform music expressively. The performing pharse share the same sample loader and feature extractor module with the learning phase. But in the performing phase, the input is only a score file (musicXML containing a single phrase), which is loaded and has its score features extracted. The extracted score features are also stored into a JSON file for the SVM-HMM generation module to load. The performance knowledge model is also an input in this phase. The SVM-HMM generation module will use the learned model and the quantized score features to determine the performance features for the given score. An MIDI generation module will apply those performance features onto the musicXML score to produce a expressive MIDI file. The MIDI file itself is already a expressive performance, in order to listen to the sound, an software synthesizer is used to render the MIDI file into WAV or MP3 format.
+With the performance knowledge learned, we can start to perform music expressively. The performing phrase share the same sample loader and feature extractor module with the learning phase. But in the performing phase, the input is only a score file (musicXML containing a single phrase), which is loaded and has its score features extracted. The extracted score features are also stored into a JSON file for the SVM-HMM generation module to load. The performance knowledge model is also an input in this phase. The SVM-HMM generation module will use the learned model and the quantized score features to determine the performance features for the given score. An MIDI generation module will apply those performance features onto the musicXML score to produce a expressive MIDI file. The MIDI file itself is already a expressive performance, in order to listen to the sound, an software synthesizer is used to render the MIDI file into WAV or MP3 format.
 \subsection{SVM-HMM Generation}
 As in the learning phase, the score features are stored in a JSON file. The SVM-HMM generation module first load this JSON file, and preform the same quantization as the learning phase. The quantized score features are then transformed into the same format as the training file, but the \texttt{PERF} fields are all set to zero, meaning that we don't know its value and wish the algorithm to predict it. The \texttt{svm\_hmm\_classify} program will take these inputs with the learned model file and predict the quantized labels of the performance features. If we already know the real performance feature value, say, we use part of the corpus as training set and the rest as testing set, the \texttt{PERF} can be set to the \enquote{answer} of the testing set, so the \texttt{svm\_hmm\_classify} program will calculate the accuracy of the prediction. 
 
       
 \subsection{MIDI Generation}
-      \framebox{de-quantize}
   Since the output of the SVM-HMM learner is the quantized label for the performance feature, dequantization is required to turn those values back to real-valued performance features. The dequantizer will load the quantization parameters from the learning stage to understand the range and intervals used in the quantizer. Each quantization label is dequantized into the mean value of the interval it belongs.
 
   The performance features are than applied onto the input score. For example, if a performance feature represents the note's duration should last for 1.2 times of its nominal value, the duration in the score is multiplied by 1.2. After all the performance features are applied, the expressive version of the score is stored in MIDI format using the \texttt{music21} library.
@@ -119,7 +118,7 @@ Because sub-note-level expression is not the primary goal of this research, we c
             The pitch of a note relative to the pitch range of the phrase, denoted by MIDI pitch number (resolution is down to semitone). For a phrase of $n$ notes with pitch $P_1, P_2, \dots, P_n$, $$RP = \frac{P_i -min(P_1, P_2, \dots, P_n) }{max(P_1, P_2, \dots, P_n)-min(P_1, P_2, \dots, P_n) }$$  Where $P_i$ is the pitch of note at position $t$
 
          \item [Interval from the previous note:] The interval between the current note and its previous note, in semitone. This represents the direction of the melodic line. $$IP = P_{i} - P_{i-1} $$ See Fig. \ref{fig:interval} for example.
-         \item [Interval to the next note:] The interval between the current note and its previous note, in semitone. $$IN = P_{i+1} - P_i$$ See figure \ref{fig:interval} for example.
+         \item [Interval to the next note:] The interval between the current note and its previous note, in semitone. $$IN = P_{i+1} - P_i$$ See Fig. \ref{fig:interval} for example.
          
       \begin{figure}[tp]
          \begin{center}
@@ -133,9 +132,9 @@ Because sub-note-level expression is not the primary goal of this research, we c
          \item [Note duration:] The duration of a note counted in number of quarter notes. 
             
             Although this feature may seem an obvious one, there are still a caveat: Grace notes, which represents ornaments, have zero duration in musicXML specification. The reason for this is that grace notes are considered very short ornaments that does not occupy solid beat position. But zero duration will easily cause divide-by-zero exception in the program, and it's hard to handle in math formulation. So we assigned a duration of 0.0625 quarter note to all grace notes, which is equivalent to the length of a sixty-fourth note. Sixty-fourth note is chosen because it's far shorter than all the notes in our corpus.
-         \item [Relative Duration with the previous note:] The duration of a note divided by the duration of its previous note. For a phrase of $n$ notes with duration $D_1, D_2, \dots, D_n$, $$RDP = \frac{D_i}{D_{i-1}} $$ See figure \ref{fig:duration} for example.
-            This feature is intended to locate local change in temop, such as a series of rapid consecutive notes followed by a long note.
-         \item [Relative duration with the next note:] The duration of a note divided by duration of its next note. $$RDN = \frac{D_i}{D_{i+1}} $$ See figure \ref{fig:duration} for example.
+         \item [Relative Duration with the previous note:] The duration of a note divided by the duration of its previous note. For a phrase of $n$ notes with duration $D_1, D_2, \dots, D_n$, $$RDP = \frac{D_i}{D_{i-1}} $$ See Fig. \ref{fig:duration} for example.
+            This feature is intended to locate local change in tempo, such as a series of rapid consecutive notes followed by a long note.
+         \item [Relative duration with the next note:] The duration of a note divided by duration of its next note. $$RDN = \frac{D_i}{D_{i+1}} $$ See Fig. \ref{fig:duration} for example.
 
       \begin{figure}[tp]
          \begin{center}
@@ -215,15 +214,15 @@ Because sub-note-level expression is not the primary goal of this research, we c
    \caption{Problem with Onset Deviation }
    \label{fig:normalizationprob}
 \end{figure}
-\begin{figure}[tp]
-   \begin{center}
-      %TODO:Fig.:Normalization Schemes
-      \includegraphics[width=\textwidth]{fig/onsetdifffix}
-
-   \end{center}
-   \caption{Normalization Schemes}
-   \label{fig:normalization}
-\end{figure}
+%\begin{figure}[tp]
+%\begin{center}
+%%TODO:Fig.:Normalization Schemes
+%\includegraphics[width=\textwidth]{fig/onsetdifffix}
+%
+%\end{center}
+%\caption{Normalization Schemes}
+%\label{fig:normalization}
+%\end{figure}
 In previous section, we mentioned that the onset deviation feature has problems when performance is not exactly the same length as the score. Illustrated in Fig. \ref{fig:normalizationprob}, if the performance is played faster than expected, the deviation will grow larger and larger over time. For a long phrase, the onset deviation of the last notes may be over a dozen quarter notes. These kind of extreme values will cause erroneous predictions in the model: a note may be delayed for a very large deviation, causing it to be played after the next note, the swapped notes will destroy the melody.o
  
 In other words, the original definition of the onset deviation actually contains two type of deviation: a global deviation cause by difference in the tempo, and a local deviation cause by note-level expression. Since the intention of the onset deviation features is to catch the note-level expression, the performance must be linearly scaled to cancel the global deviation.
@@ -234,15 +233,14 @@ In other words, the original definition of the onset deviation actually contains
    \begin{enumerate}
       \item Align the onset of the first notes, align the onset of the last notes
       \item Align the onset of the first notes, align the end of the last notes
-      \item Don't align the onset of the first notes, align the onset of the last notes
-      \item Don't align the onset of the first notes, align the end of the last notes
+      %\item Don't align the onset of the first notes, align the onset of the last notes
+      %\item Don't align the onset of the first notes, align the end of the last notes
    \end{enumerate}
-    The incentive for not aligning the first note is that the performer may intend to use an early start or delayed start as an expression, if the first note is aligned by it's onset, the first note in every phrase will have a onset timing bias feature of value zero. In other words, the early/delayed start expression is lost. %But each normalization method are equally reasonable theoretically, so we need to use empirical data to verify them. The experiment is explained in section \ref{TODO:experiment}. The experiment result showed that [TODO: result]
+    %The incentive for not aligning the first note is that the performer may intend to use an early start or delayed start as an expression, if the first note is aligned by it's onset, the first note in every phrase will have a onset timing bias feature of value zero. In other words, the early/delayed start expression is lost. %But each normalization method are equally reasonable theoretically, so we need to use empirical data to verify them. The experiment is explained in section \ref{TODO:experiment}. The experiment result showed that [TODO: result]
 
-   But empirical data shows that none of these methods can fit all training samples. One method may produce good result when trained with part of the corpus, but may not be suitable for the rest of the corpus. So we switch to a more dynamic approach: let the program find the best ratio for normalization. To achieve this goal, we first have to define how "fit" two phrases are. If the onset time of all the notes in a phrase are concatenated into a vector, the $l^2$-norm of the tow vectors can be treated as the distance. Note that the two vectors must have the same size, because the recordings are required to match note-to-note with the score. So the problem becomes how to find a optimal scaling ratio such that the scaled recording has the minimum distance from the score. The Brent's Method\cite{brent1973} is used to find the optimal ratio. To speed up the optimization and prevent unreasonable value, a search range of $[initial_guess \times 0.5 , initial_guess \times 2]$ is imposed on the optimizer. The $initial_guess$ is used as a rough estimate of the ratio, calculated by aligning the first and last onset of the phrase. Than we assume the actual ratio will not be smaller than half of $initial_guess$ and not larger than twice of $initial_guess$. The two numbers 0.5 and 2 are arbitrary chosen, but most of the empirical data suggest is valid most of the time. 
+   But empirical data shows that nither methods can fit all training samples. One method may produce good result when trained with part of the corpus, but may not be suitable for the rest of the corpus. So we switch to a more dynamic approach: let the program find the best ratio for normalization. To achieve this goal, we first have to define how "fit" two phrases are. If the onset time of all the notes in a phrase are concatenated into a vector, the $l^2$-norm of the tow vectors can be treated as the distance. Note that the two vectors must have the same size, because the recordings are required to match note-to-note with the score. So the problem becomes how to find a optimal scaling ratio such that the scaled recording has the minimum distance from the score. The Brent's Method\cite{brent1973} is used to find the optimal ratio. To speed up the optimization and prevent unreasonable value, a search range of $[initial_guess \times 0.5 , initial_guess \times 2]$ is imposed on the optimizer. The $initial_guess$ is used as a rough estimate of the ratio, calculated by aligning the first and last onset of the phrase. Than we assume the actual ratio will not be smaller than half of $initial_guess$ and not larger than twice of $initial_guess$. The two numbers 0.5 and 2 are arbitrary chosen, but most of the empirical data suggest is valid most of the time. 
 
-   So we have defined a automatic method to dynamically adjust the normalization ratio to eliminate systematical error in the onset deviation feature. Comparing this method to not using any normalization (see Fig. \ref{fig:afternorm}), the method can produce vey low onset deviations, roughly centered around zero, while the result from not using any normalization will show a clear trend of increasing deviations.
-]
+   So we have defined a automatic method to dynamically adjust the normalization ratio to eliminate systematical error in the onset deviation feature. Comparing this method to not using any normalization (see Fig. \ref{fig:afternorm}), the method can produce very low onset deviations, roughly centered around zero, while the result from not using any normalization will show a clear trend of increasing deviations.
 \begin{figure}[tp]
    \begin{center}
       %TODO:Fig.:Normalization Schemes
