@@ -39,28 +39,28 @@ Polyphonic capability indicates if the system can perform polyphonic input. Poly
 
 Performance creativity measures the ability of the system to create novel expression. The desired level of creativity varies from goal to goal. A system aiming to recreate human performance may want it to produce fixed expression based on the learning material, while a system that is combined with a composition system may want to create highly novel performance. 
 
+%The goals discussed above imply different level of musical creativity. Huamn performance reproduction requires mimicry over creativity, on the other hand, system that plays its own composition can have a large range of creativity to explore. The methods employed also limits the ability of creativity, which will be discussed in the next section.
 %Each system
 \framebox{REVIEW1}
-Each system will design different experiment and metrics to verify their goals. The self-reported results are thus impossible to compare. The only 
+Each system will design different experiment and metrics to verify their goals. Thus, the self-reported results are can't be compared. The only public contest that evaluates expressive performance systems is called RenCon (Performance Rendering Contest)\cite{rencon}. RenCon is held biannually. Two scores (MIDI) will be given to participants one hour before the competition starts. The participants must generate the expressive MIDIs in the given time, and then the MIDIs will be played live on a Yamaha Disklavier piano. The audience and a jury cosists of professional musicians will give ratings for each performance. The performances are played in random order, so the audience and jury won't know the participant behind each performance, except semi-automatic ones. 
+
+The RenCon is divided into fully automatic and semi-automatic categories. But the degree of human intervention in the semi-automatic category varies widely between systems. So it's not very fair to compare them.
 
 
-
-The goals discussed above imply different level of musical creativity. Huamn performance reproduction requires mimicry over creativity, on the other hand, system that plays its own composition can have a large range of creativity to explore. The methods employed also limits the ability of creativity, which will be discussed in the next section.
 
 \framebox{TODO: Discuss works that focus on timber only, e.g. Prof. Su's violin work}
 
-\framebox{TODO: RENCON detail}
 
 \section{Researches Classified by Methods Used}
-\begin{table}
-   \centering
-   \begin{tabular}{|c|c|}
-      TBD & TBD\\
-      TBD & TBD\\
-   \end{tabular}
-   \caption{List of Reviewed Systems}
-   \label{tab:prevworks}
-\end{table}
+%\begin{table}
+%   \centering
+%   \begin{tabular}{|c|c|}
+%      TBD & TBD\\
+%      TBD & TBD\\
+%   \end{tabular}
+%   \caption{List of Reviewed Systems}
+%   \label{tab:prevworks}
+%\end{table}
 Despite the difference between goals of different expressive performance systems. All of them needs some way to create and apply performance knowledge on inexpressive music. The performance can come from predefined rules or being learned. 
 
 Using rules to generate expressive music is the earliest approach tried. Director Musices \cite{17} being one of the early works that is still a living project now.  Most of the above systems focus on expressive attributes like note onset, note duration and loudness. But Hermode Tuning System \cite{29} focus more on intonation, thus it can generate expressions that requires string instruments techniques. Pop-E \cite{28} is also a rule-based system which can generate polyphonic music, using its synchronization algorithm to synchronize voices. Computational Music Emotion Rule System \cite{31} put more emphasis on rules that express human emotions.  Other systems like Hierarchical Parabola System \cite{17}\cite{18}\cite{19}\cite{20}, Composer Pulse System\cite{21,22}, Bach Fugue System\cite{23}, Trumpet Synthesis System \cite{24, 25} and Rubato \cite{26, 27} are also some systems that use rules to generate expressive performance. Rule-based systems are effective and don't require a long training period before use. But some of the performance nuance may be hard to describe in rules, so there is a natural limit on how complex the rule-based system can be. Lack of creativity is also a problem for rule-based approach.
