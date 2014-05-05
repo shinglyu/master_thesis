@@ -2,44 +2,44 @@
 \framebox{REVIEW1}
 \section{A Brief Introduction to SVM-HMM}
 \label{sec:svm-hmm}
-In this thesis, we use structural support vector machine(structural SVM) as the learning algorithm. Unlike traditional SVM algorithm, which can only produce univariate prediction, structural SVM can produce strctural predictions like tree, sequence and hidden Markov model. Structural SVM with hidden Markov model output (SVM-HMM) is applied to part-of-speech problem with success. This fining lead us to the idea to use SVM-HMM for the expressive performance problem. The part-of-speech tagging problem shares the same concept with expressive performance problem. In part-of-speech tagging, one tries to identify the role by which the word plays in the sentence; while in expressive performance,  one tries to determine how a note should be played, accroding to it's role in the musical phrase. To illustrate this, consider a note which is the end of the phrase, which is noramlly forms a cadence, and a note which is only a embalishment. The first note will probably be played louder and sustain longer than the second note. With this similarity in mind, we believe SVM-HMM will be a good candidate for expressive performance.
+In this thesis, we use structural support vector machine to learn performance knowledge from expressive performance samples. Unlike traditional SVM algorithm, which can only produce univariate prediction, structural SVM can produce structural predictions like tree, sequence and hidden Markov model. Structural SVM with hidden Markov model output (SVM-HMM) has been successfully applied to part-of-speech problem. The part-of-speech tagging problem shares the same concept with expressive performance problem. In part-of-speech tagging, one tries to identify the role by which the word plays in the sentence, while in expressive performance, one tries to determine how a note should be played, according to it's role in the musical phrase. For example, a cadence at the end of a phrase is usually played louder and stronger than a embellishment note in the middle of a phrase. Thus, we believe SVM-HMM will be a good candidate for expressive performance. The following introduction and formulas relies heavily on \cite{svm2009, svm2005, svm2003}.
 
 %Ref: 20130420 slides
 
 %TODO:discuss traditional SVM here?
-The prediction problem in SVM can be described  as finding a function 
-$$h: \mathcal{X \rightarrow Y}$$ with lowest prediction error. $\mathcal{X}$ is the input features space, and $\mathcal{Y}$ is the prediction space. In traditional SVM, elements in $\mathcal{Y}$ are labels (classfication) or real values (regression). But structural SVM extends the framework to generate structural output, such as tree, sequence, or hidden markov model, in this case.
-To extend SVM to support structured output, the problem is modified to find a discriminant function $f: \mathcal{X} \times \mathcal{Y} \rightarrow \mathcal{R}$, in which the input/output paris are mapped to a real number score. To predict an output $y$ for an input $x$, one try to maximize $f$ over all $y \in \mathcal{Y}$. 
+Traditional SVM prediction problem can be described as finding a function 
+$$h: \mathcal{X \rightarrow Y}$$ with lowest prediction error. $\mathcal{X}$ is the input features space, and $\mathcal{Y}$ is the prediction space. In traditional SVM, elements in $\mathcal{Y}$ are labels (classification) or real values (regression). But structural SVM extends the framework to generate structural output, such as tree, sequence, or hidden Markov model.
+To extend SVM to support structured output, the problem is modified to find a discriminant function $f: \mathcal{X} \times \mathcal{Y} \rightarrow \mathcal{R}$, in which the input/output pairs are mapped to a real number score. To predict an output $y$ for an input $x$, one try to maximize $f$ over all $y \in \mathcal{Y}$. 
 
 $h_{\mathbf{w}}(x) = \argmax_{y\in\mathcal{Y}} f_{\mathbf{w}}(x,y)$
 
 Let $f_{\mathbf{w}}$ be a linear function of the form:
 
-$$ f_{\mathbf{w}} = \mathbf{w}^{T}\Psi(x,y)$$
-where $\mathbf{w}$ is the parameter vector, and $\Psi(x,y)$ is the kernel function relating input $x$ to output $y$. $\Psi$ can be defined to accomidate various kind of structures. 
+$$ f_{\mathbf{w}} = \mathbf{w}^{T}\Psi(x,y)$$, 
+where $\mathbf{w}$ is the parameter vector, and $\Psi(x,y)$ is the kernel function relating input $x$ to output $y$. $\Psi$ can be defined to accommodate various kind of structures. 
 
 %emprical risk
-In order to apply SVM, we need a way to measure the accuracy of of a prediction, in other words, we have to define a loss function $\Delta:\mathcal{Y}\times\mathcal{Y}\rightarrow R$. A loss function has the following property:
+For each structure we want to predict, a loss function that measures the accuracy of of a prediction is required. A loss function $\Delta:\mathcal{Y}\times\mathcal{Y}\rightarrow R$ need to satisfy the following property:
 
 $$\Delta(y, y') \geq for y \neq y'$$
 $$\Delta(y, y) = 0 $$
 
-Also, the loss function is assumed to be bounded. Let's assume the input-output pair $(x,y)$ is drawn from a join distrution P(x,y), the prediction problem is to minimize the total loss:
+The loss function is assumed to be bounded. Let's assume the input-output pair $(x,y)$ is drawn from a join distribution P(x,y), the prediction problem is to minimize the total loss:
 
 %TODO: total loss formula 2005 sec 2.1
 $$R_p^\Delta = \int_{\mathcal{X} \times \mathcal{Y}} \Delta (y, f(x))dP(x,y)$$
 
-Since we can't directly find the distribution $P$, we need to replace this total loss with a empirical loss, calculted from the observed training set of $(x_i, y_i)$ pairs.
+Since we can't directly find the distribution $P$, we need to replace this total loss with a empirical loss, which can be calculated from the observed training set of $(x_i, y_i)$ pairs.
 %TODO: emprical loss
 $$R_s^\Delta(f) = \frac{1}{n}\sum^n_{i=1}\Delta(y_i, f(x_i))$$
 
-With the definition of the loss function ready, we will demonstrate how to extend SVM to structural output, starting with a linear separable, and then extend it to soft-margin formulation. 
+With the definition of the loss function ready, we will demonstrate how to extend SVM to structural output, starting with a linear separable case, and then extend it to soft-margin formulation. 
 
 A linear separable case can be expressed by a set of linear constrains
 %TODO: 2005 formula 4
 $$\forall i \in \{1,\cdots,n\}, \forall \hat{y_i}\in\mathcal{Y}: \mathbf{w}^T [\Psi(x_i, y_i) - \Psi(x_i, \hat{y_i})]\leq 0$$
 
-However, in the SVM context, we not only want a solution, but we want the solution to have the largest margin possible. So the above linear constrains will become this optimization problem
+However, in the SVM context, we want the solution to have the largest margin possible. So the above linear constrains will become this optimization problem:
 %TODO: 2005 formula 4+
 $$
 \begin{aligned}
@@ -48,7 +48,7 @@ $$
 \end{aligned}
 $$
 
-, which is equivalent to the convex quadratic programming problem
+, which is equivalent to the convex quadratic programming problem:
 %TODO: 2005 formula 5,k 6
 $$
 \begin{aligned}
@@ -57,7 +57,7 @@ $$
 \end{aligned}
 $$
 
-To address possible non-separable problems, slack variables can be introduced to penalize errors, and result in a soft-margin formalization.
+To address possible non-separable problems, slack variables can be introduced to penalize prediction errors, and result in a soft-margin formalization:
 %TODO: 2005 formula SVM1
 $$
 \begin{aligned}
@@ -68,7 +68,7 @@ $$
 
 $C$ is the parameter for trade-off between low training error and large margin. The optimal $C$ varies between different problems, so experiment should be conducted to find the optimal $C$ for our problem.
 
-Intuitively, a constrain violation with larger loss should be penalize more than the one with smaller loss. So \cite{svm2005} proposed two possible way to take the loss function into account. The first way is to re-scale the slack variable by the inverse of the loss, so a high loss leads to smaller re-scaled slack variable. 
+Intuitively, a constrain violation with larger loss should be penalize more than the one with smaller loss. So \cite{svm2005} proposed two possible way to take the loss function into account. The first way is to re-scale the slack variable by the inverse of the loss, so a high loss leads to smaller re-scaled slack variable:
 %slack rescaling
 
 $$
@@ -88,9 +88,9 @@ $$
 \end{aligned}
 $$
 
-But the above quadratic programming problem has a extreme large number ($O(n|\mathcal{Y}|)$) of constrains , which will take considerable time to solve. So \cite{svm2005} proposed a greedy algorithm to reduce the number of constrains. Initially, the solver starts with an empty working set with no constrains. Than the solver iteratively scans the training set to find the most violated constrains under the current solution. If a constrain violates by more than the desired precision, the constrain is added to the working set. And the solver re-calculate the solution under the new working set. The algorithm will terminate once no more constrain can be added under the desired precision.
+But the above quadratic programming problem has a extreme large number ($O(n|\mathcal{Y}|)$) of constrains , which will take considerable time to solve. \cite{svm2005} proposed a greedy algorithm to reduce the number of constrains. Initially, the solver starts with an empty working set with no constrains. Than the solver iteratively scans the training set to find the most violated constrains under the current solution. If a constrain is violated by more than the desired precision, the constrain is added to the working set. Then the solver re-calculate the solution under the new working set. The algorithm will terminate once no more constrain can be added under the desired precision.
 
-In a later work by Joachims et al.\cite{svm2009}, they created a new formulation and algorithm to further speed up the algorithm. Instead of using one slack variables each training sample, which results in a total of $n$ slack variables, they use a single slack variable for the $n$ training samples. The follwing formula is the 1-slack version of slack-rescaling structural SVM:
+In a later work by Joachims et al.\cite{svm2009}, they created a new formulation and algorithm to further speed up the algorithm. Instead of using one slack variables each training sample, which results in a total of $n$ slack variables, they use a single slack variable for the $n$ training samples. The following formula is the 1-slack version of slack-rescaling structural SVM:
 %1-slack
 $$
 \begin{aligned}
