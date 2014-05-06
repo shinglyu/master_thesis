@@ -64,16 +64,16 @@ We choose Clementi's Sonatina Op. 36 for our corpus, because it is a must-learn 
 
 
  %we choose  for score to choose from, such as MusicXML\cite{Good2001}, LilyPond\cite{LilyPond}, Finale, Sibelius, ABC, MuseData, and Humdrum. The book \cite{Selfridge-Field1997} has a comprehensive review on this issue. %For research purpose, proprietary format like Finale and Sibelius is abandoned because of their limited support from open source tools. 
-To represent Clemetni's work in digital format, we choose MusicXML. MusicXML is a digital score notation using XML (eXtensible Markup Language) , it can express most traditional music notations and metadata. Most music notation software and software tool supports musicXML format. An example snippet of a musicXML score is shown in Fig. \ref{fig:expxml}%LilyPond is a \LaTeX-like language for music typesetting. %ABC, MuseData and Humdrum are based on ASCII codes and each defines their unique representation for music score. 
-\begin{figure*}[tp]
-   \begin{center}
-      %TODO:Fig.:Example JSON code
-      \includegraphics[width=\textwidth]{fig/TBDFigure}
-
-   \end{center}
-   \caption{Example MusicXML score}
-   \label{fig:expxml}
-\end{figure*}
+To represent Clemetni's work in digital format, we choose MusicXML. MusicXML is a digital score notation using XML (eXtensible Markup Language) , it can express most traditional music notations and metadata. Most music notation software and software tool supports musicXML format. %An example snippet of a musicXML score is shown in Fig. \ref{fig:expxml}%LilyPond is a \LaTeX-like language for music typesetting. %ABC, MuseData and Humdrum are based on ASCII codes and each defines their unique representation for music score. 
+%\begin{figure*}[tp]
+%   \begin{center}
+%      %TODO:Fig.:Example JSON code
+%      \includegraphics[width=\textwidth]{fig/TBDFigure}
+%
+%   \end{center}
+%   \caption{Example MusicXML score}
+%   \label{fig:expxml}
+%\end{figure*}
 %TODO: guitar pro?
 Although MIDI is also a popular candidate for score representation in computer music research, it is designed to hold instrument control signal rather than notation. Some music symbols may not be available in MIDI. Furthermore, MIDI represents music as a series of note-on and note-off events, which requires additional effort to transform into traditional notation.
 
@@ -209,15 +209,16 @@ The number of phrases (according to our phrasing) and notes are shown in Table \
       \includegraphics[width=\textwidth]{fig/notes}
 
    \end{center}
-   \caption{Movements Length (in Notes) Distribution}
+   \caption{Movement length (notes) distribution}
    \label{fig:notes}
 \end{figure*}
+
 \begin{figure*}[tp]
    \begin{center}
       \includegraphics[width=\textwidth]{fig/phrases}
 
    \end{center}
-   \caption{Movements Length (in Phrases) Distribution}
+   \caption{Movement length (phrases) distribution}
    \label{fig:phrases}
 \end{figure*}
 
@@ -226,7 +227,7 @@ The number of phrases (according to our phrasing) and notes are shown in Table \
       \includegraphics[width=\textwidth]{fig/phrlength}
 
    \end{center}
-   \caption{Phrase Length (in Notes) Distribution}
+   \caption{Phrase length (notes) distribution}
    \label{fig:phrlength}
 \end{figure*}
 
@@ -236,16 +237,16 @@ The number of phrases (according to our phrasing) and notes are shown in Table \
 
 
  %TODO:recording example pic
-\framebox{TODO:mention Fig. \ref{fig:exprecording}}
-\begin{figure*}[tp]
-   \begin{center}
-      %TODO:Fig.:Example JSON code
-      \includegraphics[width=\textwidth]{fig/TBDFigure}
+%\framebox{TODO:mention Fig. \ref{fig:exprecording}}
+%\begin{figure*}[tp]
+%   \begin{center}
+%      %TODO:Fig.:Example JSON code
+%      \includegraphics[width=\textwidth]{fig/TBDFigure}
+%
+%   \end{center}
+%   \caption{Example Recording Compared to Score (Pianoroll)}
+%   \label{fig:exprecording}
+%\end{figure*}
+%\framebox{TODO:error count}
 
-   \end{center}
-   \caption{Example Recording Compared to Score (Pianoroll)}
-   \label{fig:exprecording}
-\end{figure*}
-\framebox{TODO:error count}
-
-\framebox{REVIEW1}
+%\framebox{REVIEW1}

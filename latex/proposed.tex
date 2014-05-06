@@ -7,7 +7,7 @@
          \begin{center}
             \includegraphics[width=\textwidth]{fig/high_lev_arch}
          \end{center}
-         \caption{High Level System Architecture} 
+         \caption{High-level system architecture} 
          \label{fig:flow}
       \end{figure*}
 The high-level architecture of the purposed system is shown in Fig. \ref{fig:flow}. The system has two phases, the upper half of the figure is the learning phase, the lower half is the performing phase.  In the training phase, score and expressive performance recording pairs, split into phrases by human, are used as training examples for structural support vector machine with hidden Markov model output (SVM-HMM) algorithm to learn performance knowledge model. In the performing phase, a score will be given to the system for expressive performance. The SVM-HMM generation module will use the performance knowledge learned in the previous phase to produce expressive performance. The SVM-HMM output then go through a MIDI generator and MIDI synthesizer to produce audible performance.
@@ -29,7 +29,7 @@ In the following sections, we will walk through the detail steps in the learning
    \begin{center}
       \includegraphics[width=\textwidth]{fig/learn_arch}
    \end{center}
-   \caption{Learning Phase Flow Chart} 
+   \caption{Learning phase flow chart} 
    \label{fig:learnflow}
 \end{figure*}
 The main goal in the learning phase is to extract performance knowledge from training samples. Fig. \ref{fig:learnflow} shows the internal structure of the learning phase.
@@ -84,7 +84,7 @@ Finally, the training program will output three model files (because we use thre
       \begin{center}
          \includegraphics[width=\textwidth]{fig/perf_arch}
       \end{center}
-      \caption{Performing Phase Flow Chart} 
+      \caption{Performing phase flow chart} 
       \label{fig:perfflow}
    \end{figure*}
 The performing phase uses the performance knowledge model learned in the previous phase to generate expressive performances. The input is a score file, which should not be used during training to prevent overfitting. Score features will be extracted from it using the same code as in the learning phase. The SVM-HMM generation module will use the learned model and the score features to predict the performance features. These features will than be de-quantized back to real values using the method described previously. An MIDI generation module will apply those performance features onto the score to produce a expressive MIDI file. The MIDI file itself is already a expressive performance, in order to listen to the sound, an software synthesizer can be used to render the MIDI file into WAV or MP3 format.
@@ -143,7 +143,7 @@ Because sub-note-level expression is not the primary goal of this research, we c
          \begin{center}
             \includegraphics[width=0.4\textwidth]{fig/duration}
          \end{center}
-         \caption{Relative Duration with the previous/next note}
+         \caption{Relative duration with the previous/next note}
          \label{fig:duration}
       \end{figure}
    \item [Metric position:] The position (beat) of a note in a measure. For example, a $^4_4$ time signature will have a beat unit of a quarter note. So if the measure consists of four quarter notes, each of them will have metric position of 1, 2, 3 and 4. Please refer to Fig. \ref{fig:metrical} for example.
@@ -214,7 +214,7 @@ Because sub-note-level expression is not the primary goal of this research, we c
       \includegraphics[width=\textwidth]{fig/prob_onset_diff}
 
    \end{center}
-   \caption{Systematic Bias in Onset Deviation }
+   \caption{Systematic bias in onset deviation }
    \label{fig:normalizationprob}
 \end{figure}
 %\begin{figure}[tp]
