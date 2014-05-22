@@ -51,7 +51,7 @@ In order to keep the system architecture simple, feature extractors are designed
 
    The extracted features are aggregated and stored into a JavaScript Object Notation (JSON) file for the SVM-HMM module to load. By saving the features in a human-readable intermediate file, we can debug potential problems easily.%the learning module can then load this file as inpu.t. The learning algorithm can then do any pre-processing on the features, such as aggregation or quantization. The output of this module is the algorithm specific model description. For example, a linear regression algorithm will output the regression parameters. The algorithm is required to produce a model file containing the model description, but the system doesn't care about the internal format of the model description file, it will simply feed this model file to the generation module in the generation stage. So the developer of the learning module has to implement methods to write and read the model file themselves.
 
-   %In the early stage of this research, linear regression is used. The results of linear regression is shown in \cite{Lyu2012}. In this thesis, Structural Support Vector Machin \cite{Joachims2009} is used instead. The detail of Structural SVM will be in the next Chapter.
+   %In the early stage of this research, linear regression is used. The results of linear regression is shown in \cite{Lyu2012}. In this thesis, Structural Support Vector Machin \cite{svm2009} is used instead. The detail of Structural SVM will be in the next Chapter.
 
 \subsection{SVM-HMM Learning}
 After all features are extracted, the next step is to learn performance knowledge from the features. In the early stage of this research, we have successfully applied linear regressio \cite{Lyu2012}. However, assuming this problem to be linear is clearly an oversimplification, so we switch to structural support vector machine with hidden Markov model output (SVM-HMM)\cite{svm2009, svm2005, svm2003} as our supervised learning algorithm. 
@@ -137,7 +137,7 @@ Because sub-note level expression is not the primary goal of this research, we c
          
          \item [Note duration:] The duration of a note (quarter notes). 
 
-            Grace notes have no duration in musicXML specification \cite{midispec}. The reason for this is that grace notes are considered very short ornaments that does not occupy real beat position. But zero duration is hard to handle in math formulation. So we assigned a duration of a sixty-fourth note, because it's far shorter than all the notes in our corpus.
+            Grace notes have no duration in musicXML specification \cite{musicxml}. The reason for this is that grace notes are considered very short ornaments that does not occupy real beat position. But zero duration is hard to handle in math formulation. So we assigned a duration of a sixty-fourth note, because it's far shorter than all the notes in our corpus.
 %REVISE DONE TO HERE
          \item [Relative Duration with the previous note:] The duration of a note divided by the duration of its previous note. See Fig. \ref{fig:duration} for example.
 For a phrase of $n$ notes with duration $D_1, D_2, \dots, D_n$, $$RD^- = \frac{D_i}{D_{i-1}} $$             This feature is intended to locate local changes in tempo, such as a series of rapid consecutive notes followed by a long note, which will cause a discontinuity in this feature.
