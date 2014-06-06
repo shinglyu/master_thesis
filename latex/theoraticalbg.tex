@@ -9,13 +9,13 @@ In this thesis, we use structural support vector machine to learn performance kn
 %TODO:discuss traditional SVM here?
 Traditional SVM prediction problem can be described as finding a function 
 $$h: \mathcal{X \rightarrow Y}$$ with lowest prediction error. $\mathcal{X}$ is the input features space, and $\mathcal{Y}$ is the prediction space. In traditional SVM, elements in $\mathcal{Y}$ are labels (classification) or real values (regression). But structural SVM extends the framework to generate structural output, such as tree, sequence, or hidden Markov model.
-To extend SVM to support structured output, the problem is modified as finding a discriminant function $f: \mathcal{X} \times \mathcal{Y} \rightarrow \mathcal{R}$, in which the input/output pairs are mapped to a real number score. To predict an output $y$ for an input $x$, one try to maximize $f$ over all $y \in \mathcal{Y}$. 
+To extend SVM to support structured output, the problem is modified as finding a discriminant function $F: \mathcal{X} \times \mathcal{Y} \rightarrow \mathcal{R}$, in which the input/output pairs are mapped to a real number score. To predict an output $y$ for an input $x$, one try to maximize $F$ over all $y \in \mathcal{Y}$. 
 
-$$h_{\mathbf{w}}(x) = \argmax_{y\in\mathcal{Y}} f_{\mathbf{w}}(x,y)$$
+$$f(x) = \argmax_{y\in\mathcal{Y}} F(w,x,y)$$
 
-Let $f_{\mathbf{w}}$ be a linear function of the form:
+Let $F$ be a linear function of the form:
 
-$$ f_{\mathbf{w}} = \mathbf{w}^{T}\Psi(x,y)$$, 
+$$ F = \mathbf{w}^{T}\Psi(x,y)$$, 
 where $\mathbf{w}$ is the parameter vector, and $\Psi(x,y)$ is the kernel function relating input $x$ to output $y$. $\Psi$ can be defined to accommodate various kind of structures. 
 
 %emprical risk
@@ -37,14 +37,16 @@ Now we are ready to extend SVM to structural output, starting with a linear sepa
 
 A linear separable case can be expressed by a set of linear constrains
 %TODO: 2005 formula 4
-$$\forall i \in \{1,\cdots,n\}, \forall \hat{y_i}\in\mathcal{Y}: \mathbf{w}^T [\Psi(x_i, y_i) - \Psi(x_i, \hat{y_i})]\leq 0$$
+$$\forall i \in \{1,\cdots,n\}, \forall \hat{y_i}\in\mathcal{Y}: \mathbf{w}^T [\Psi(x_i, y_i) - \Psi(x_i, \hat{y_i})]\geq 0$$
 
-However, in the SVM context, we want the solution to have the largest margin possible. So the above linear constrains will become this optimization problem:
+The constrains imply that the groundtruth $y_i$ for $x_i$ has the minimum $F$ value than any other $\hat{y}_i \neq {y_i}$.
+
+However, in the SVM context, we want the solution to have the largest margin possible. So we want to maximize the margin between the groundtruth and the second best $\hat{y}_i$, the above linear constrains will become this optimization problem:
 %TODO: 2005 formula 4+
 $$
 \begin{aligned}
 & \max_{\gamma, \mathbf{w}:\|\mathbf{w}\| = 1} \gamma \\
-& s.t \; \forall i \in \{1,\cdots,n\}, \forall \hat{y_i} \in\mathcal{Y}: \mathbf{w}^T [\Psi(x_i, y_i) - \Psi(x_i, \hat{y_i})] \leq \gamma\\
+& s.t \; \forall i \in \{1,\cdots,n\}, \forall \hat{y_i} \in\mathcal{Y}: \mathbf{w}^T [\Psi(x_i, y_i) - \Psi(x_i, \hat{y_i})] \geq \gamma\\
 \end{aligned}
 $$
 
@@ -52,7 +54,7 @@ $$
 %TODO: 2005 formula 5,k 6
 $$
 \begin{aligned}
-   & \min_{\mathbf{w}, \xi_i \geq 0} \frac{1}{2}\mathbf{w}^T\mathbf{w} \\\
+   & \min_{\mathbf{w}, \xi_i \geq 0} \frac{1}{2}\|\mathbf{w}\|^2 \\\
     &s.t.\; \forall i \in \{1,\cdots,n\},\hat{y_i} \in \mathcal{Y}: \mathbf{w}^T[\Psi(x_i,y_i) - \Psi(x_i,\hat{y_i})] \geq 1\\
 \end{aligned}
 $$
@@ -61,7 +63,7 @@ To extend the linear-separable case to non-separable case, slack variables $\var
 %TODO: 2005 formula SVM1
 $$
 \begin{aligned}
-   & \min_{\mathbf{w}, \xi_i \geq 0} \frac{1}{2}\mathbf{w}^T\mathbf{w} + \frac{C}{n}\sum^n_{i=1}\xi_i\\
+   & \min_{\mathbf{w}, \xi_i \geq 0} \frac{1}{2}\|\mathbf{w}\|^2 + \frac{C}{n}\sum^n_{i=1}\xi_i\\
     &s.t.\; \forall i \in \{1,\cdots,n\},\hat{y_i} \in \mathcal{Y}: \mathbf{w}^T[\Psi(x_i,y_i) - \Psi(x_i,\hat{y_i})] \geq 1 - \xi_i \\
 \end{aligned}
 $$
@@ -73,7 +75,7 @@ Intuitively, a constrain violation with larger loss should be penalize more than
 
 $$
 \begin{aligned}
-   & \min_{\mathbf{w}, \xi_i \geq 0} \frac{1}{2}\mathbf{w}^T\mathbf{w} + \frac{C}{n} \sum^n_{i=1}\xi_i\\
+   & \min_{\mathbf{w}, \xi_i \geq 0} \frac{1}{2}\|\mathbf{w}\|^2 + \frac{C}{n} \sum^n_{i=1}\xi_i\\
     &s.t.\; \forall i \in \{1,\cdots,n\},\hat{y_i} \in \mathcal{Y}: \mathbf{w}^T[\Psi(x_i,y_i) - \Psi(x_i,\hat{y_i})] \geq 1 - \frac{\xi_i}{\Delta(y_i, \hat{y_i})} \\
 \end{aligned}
 $$
@@ -82,19 +84,20 @@ The second way is to re-scale the margin, which yields
 %margin-rescaling
 $$
 \begin{aligned}
-   & \min_{\mathbf{w}, \xi_i \geq 0} \frac{1}{2}\mathbf{w}^T\mathbf{w} + \frac{C}{n} \sum^n_{i=1}\xi_i\\
+   & \min_{\mathbf{w}, \xi_i \geq 0} \frac{1}{2}\|\mathbf{w}\|^2  + \frac{C}{n} \sum^n_{i=1}\xi_i\\
     &s.t.\; \forall i \in \{1,\cdots,n\},\hat{y_i} \in \mathcal{Y}: \mathbf{w}^T[\Psi(x_i,y_i) - \Psi(x_i,\hat{y_i})] \geq \Delta(y_i, \hat{y_i}) - \xi_i\\
 %
 \end{aligned}
 $$
+In the implementaion we use, we use margin re-scaling.
 
-But the above quadratic programming problem has a very large number ($O(n|\mathcal{Y}|)$) of constrains , which will take considerable time to solve. I. Tsochantaridis et al. \cite{svm2005} proposed a greedy algorithm to speed up the process by selecting only part of the constrains that contributes the most to finding the solution. Initially, the solver starts with an empty working set containing no constrains. Than the solver iteratively scans the training set to find the most violated constrains under the current solution. If a constrain is violated more times than a desired threshold, the constrain is added to the working set of constrains. Then the solver re-calculate the solution under the new working set. The algorithm will terminate once no more constrain can be added under the desired precision.
+But the above quadratic programming problem has a very large number ($O(n|\mathcal{Y}|)$) of constrains, which will take considerable time to solve. I. Tsochantaridis et al. \cite{svm2005} proposed a greedy algorithm to speed up the process by selecting only part of the constrains that contributes the most to finding the solution. Initially, the solver starts with an empty working set containing no constrains. Than the solver iteratively scans the training set to find the most violated constrains under the current solution. If a constrain is violated more times than a desired threshold, the constrain is added to the working set of constrains. Then the solver re-calculate the solution under the new working set. The algorithm will terminate once no more constrain can be added under the desired precision.
 
 In a later work by Joachims et al.\cite{svm2009}, they created a new formulation and algorithm to further speed up the algorithm. Instead of using one slack variables for each training sample, which results in a total of $n$ slack variables, they use a single slack variable for all $n$ training samples. The following formula is the 1-slack version of slack-rescaling structural SVM:
 %1-slack
 $$
 \begin{aligned}
-    & \min_{\mathbf{w}, \xi_i \geq 0} \frac{1}{2}\mathbf{w}^T\mathbf{w} + C \xi\\
+    & \min_{\mathbf{w}, \xi_i \geq 0} \frac{1}{2}\|\mathbf{w}\|^2  + C \xi\\
     &s.t.\; \forall i \in \{1,\cdots,n\},\hat{y_i} \in \mathcal{Y}: \mathbf{w}^T[\Psi(x_i,y_i) - \Psi(x_i,\hat{y_i})] \geq \frac{1}{n}\sum^n_{i=1}1 - \frac{\xi}{\Delta(y_i, \hat{y_i})} \\
 \end{aligned}
 $$
@@ -103,7 +106,7 @@ And margin-rescaling structural SVM:
 
 $$
 \begin{aligned}
-    & \min_{\mathbf{w}, \xi_i \geq 0} \frac{1}{2}\mathbf{w}^T\mathbf{w} + C \xi\\
+    & \min_{\mathbf{w}, \xi_i \geq 0} \frac{1}{2}\|\mathbf{w}\|^2  + C \xi\\
     & s.t.\; \forall i \in \{1,\cdots,n\},\hat{y_i} \in \mathcal{Y}: \mathbf{w}^T[\Psi(x_i,y_i) - \Psi(x_i,\hat{y_i})] \geq \frac{1}{n}\sum^n_{i=1}\Delta(y_i, \hat{y_i}) - \xi \\
 \end{aligned}
 $$
@@ -114,33 +117,33 @@ $$
 %                $$\forall \hat{y_i} \in \mathcal{Y}: \mathbf{w}^T[\Psi(x_i,y_i) - \Psi(x_i,\hat{y_i})] \geq 1 - \frac{\xi+i}{\Delta(y_i, \hat{y_i})}$$
 Detailed proof on how the new formulation is equally general as the old one is given in the paper \cite{svm2009}.
 
-With the framework described above, the only problem left is how to define the general loss function for hidden Markov model (HMM)? In \cite{svm2003}, Y. Altun et al. proposed two types of features for a equal-length observation/label sequence pair $(x,y)$. The first is the interaction of a observation with a label, the other is the interaction between neighboring labels. 
+With the framework described above, the only problem left is how to define the general loss function and $\Psi$ for hidden Markov model (HMM)? In \cite{svm2003}, Y. Altun et al. proposed two types of features for a equal-length observation/label sequence pair $(x,y)$. The first is the interaction of a observation with a label, the other is the interaction between neighboring labels. 
 
 %   \begin{figure*}[tp]
 %      \begin{center}
-%         \includegraphics[width=0.8\textwidth]{fig/TBDFigure}
+%         \includegrapsics[width=0.8\textwidth]{fig/TBDFigure}
 %      \end{center}
 %      \caption{Hidden Markov Model}
 %      \label{fig:hmm}
 %   \end{figure*}
 
-To illustrate the method, we use a example from music: for some observed features $\Phi_r(x^s)$ of a note $x$ located in $s$th position of the phrase, and assume $\left[ \left[ y^t = \tau \right] \right]$ denotes the $t$th note is played at a velocity of $\tau$, the interaction of the two predicate can be written as 
+To illustrate the method, we use a example from music: for some observed features $\Psi_r(x^s)$ of a note $x$ located in $s$th position of the phrase, and assume $\left[ \left[ y^t = \tau \right] \right]$ denotes the $t$th note is played at a velocity of $\tau$, the interaction of the observed feature and the label can be written as:
 %TODO hmm 3 formula 4
-$$\phi^{st}_{r\sigma}(\mathbf{x}, \mathbf{y}) = \left[\left[y^t = \tau \right] \right]\Psi_r(x^s),\; 1\leq\gamma\leq d,\; \tau \in \Sigma $$
+$$\psi^{st}_{r\sigma}(\mathbf{x}, \mathbf{y}) = \left[\left[y^t = \tau \right] \right]\Psi_r(x^s),\; 1\leq\gamma\leq d,\; \tau \in \Sigma $$
 
-And for interaction between labels, the feature can be written as
+And the interaction between labels can be written as:
 %TODO hmm 3 formula 5
-$$\hat{\phi}^{st}_{r\sigma}(\mathbf{x}, \mathbf{y}) = \left[\left[y^s = \sigma \wedge y^t = \tau \right] \right],\; \sigma, \tau \in \Sigma $$
+$$\hat{\psi}^{st}_{r\sigma}(\mathbf{x}, \mathbf{y}) = \left[\left[y^s = \sigma \wedge y^t = \tau \right] \right],\; \sigma, \tau \in \Sigma $$
 
 By selecting a order of dependency for the HMM model, we can further restrict $s$'s and $t$'s. For example, for a first-order HMM, $s = t$ for the first feature, and $s = t-1$ for the second feature. The two features on the same time $t$ is then stacked into a vector $\Psi(x,y;t)$. The feature map for the whole sequence is simply the sum of all the feature vectors 
 
 %TODO hmm 3 formula 6
-$$\Phi(\mathbf{x}, \mathbf{y}) = \sum^T_{t=1}\Phi(\mathbf{x}, \mathbf{y};t)$$
+$$\Psi(\mathbf{x}, \mathbf{y}) = \sum^T_{t=1}\Psi(\mathbf{x}, \mathbf{y};t)$$
 
 Finally, the distance between two feature maps depends on the number of common label segments and the inner product between the input features sequence with common labels.
 
 
-$$\langle\Phi(\mathbf{x}, \mathbf{y}), \Phi(\mathbf{\hat{x}}, \mathbf{\hat{y}})\rangle = \sum_{s,t}\left[\left[y^{s-1} = \hat{y}^{t-1}\wedge y^s = \hat{y}^t\right] \right] + \sum_{s,t}\left[\left[y^{s} = \hat{y}^{t}\right] \right]k(x^s, \hat{x}^t)$$
+$$\Delta(\Psi(\mathbf{x}, \mathbf{y}), \Psi(\mathbf{\hat{x}}, \mathbf{\hat{y}})) = \sum_{s,t}\left[\left[y^{s-1} = \hat{y}^{t-1}\wedge y^s = \hat{y}^t\right] \right] + \sum_{s,t}\left[\left[y^{s} = \hat{y}^{t}\right] \right]k(x^s, \hat{x}^t)$$
 
 
 A Viterbi-like decoding algorithm is used to speed up the computation of $F$ for HMM.
@@ -288,4 +291,3 @@ A Viterbi-like decoding algorithm is used to speed up the computation of $F$ for
 
 %\section{Brent's Method}
 %\section{diff}
-

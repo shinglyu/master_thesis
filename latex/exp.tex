@@ -213,17 +213,16 @@ We received 119 valid samples for the survey. Fifty of them are from people with
 
 \begin{table}
    \centering
-   \caption{Average rating for generated performance and human recording}
-   \label{tab:avg_rating}
+   \caption{Average rating for generated performance and human recording} \label{tab:avg_rating}
    \begin{tabular}{r|rr}
       \hline
       &Computer &Human \\
       \hline
-      No experience&3.243&3.391\\
-      Amateur&2.798&3.289\\
-      Professional&2.430&3.010\\
+      No experience&3.243 (1.036)&3.391 (0.986)\\
+      Amateur&2.798 (1.075)&3.289 (1.062)\\
+      Professional&2.430 (1.191)&3.010 (1.068)\\
       \hline
-      Total&2.952&3.306\\
+      Total&2.952 (1.102)&3.306 (1.035)\\
       \hline
    \end{tabular}
 \end{table}
@@ -286,4 +285,64 @@ Total Result&7&6&27&20&5&54&119\\
    \end{tabular}
 \end{table}
 
+\begin{table}
+   \centering
+   \caption{Average ratings for inexpressive MIDI and human performance}
+   \label{tab:ctrl_good-bad_count}
+   \begin{tabular}{r|rr}
+      \hline
+      &Human& MIDI \\
+      \hline
+      No experience&3.464 (1.011)&3.455 (1.089)\\
+      Amateur&3.046 (0.995)&3.369 (1.313)\\
+      Professional&2.633 (0.999)&2.333 (0.994)\\
+      \hline
+      Total&3.170 (1.035)&3.289 (1.237)\\
+\hline
+   \end{tabular}
+\end{table}
+\begin{table}
+   \centering
+   \caption{Number of participants who gives higher rating to inexpressive MIDI, human recordings or equal rating}
+   \label{tab:ctrl_avg_count}
+   \begin{tabular}{r|rrr|r}
+      \hline
+      &MIDI&Equal&Human&Total\\
+      \hline
+      No experience&8&0&3&11\\
+      Amateur&9&0&4&13\\
+      Professional&1&0&2&3\\
+      \hline
+      Total&18&0&9&27\\
+      \hline
+   \end{tabular}
+\end{table}
 
+\begin{table}
+   \centering
+   \caption{Average (normalized) distance between generated performance and human recording, and between inexpressive MIDi and human performance}
+   \label{tab:corr}
+   \begin{tabular}{rr|rrr|r}
+\hline
+Performer&&Duration&\ \ \ Onset&Loudness&Total\\
+\hline
+A&Generated-human&0.095&0.086&0.094&0.092\\
+&MIDI-human&0.233&0.234&0.233&0.233\\
+\hline
+B&Generated-human&0.089&0.090&0.090&0.089\\
+&MIDI-human&0.233&0.233&0.234&0.233\\
+\hline
+C&Generated-human&0.088&0.092&0.101&0.094\\
+&MIDI-human&0.234&0.233&0.232&0.233\\
+\hline
+D&Generated-human&0.088&0.086&0.082&0.085\\
+&MIDI-human&0.233&0.234&0.232&0.233\\
+\hline
+E&Generated-human&0.093&0.120&0.080&0.095\\
+&MIDI-human&0.233&0.218&0.232&0.228\\
+\hline
+Total&Generated-human&0.091&0.097&0.088&0.092\\
+&MIDI-human&0.233&0.228&0.233&0.231\\
+\hline
+   \end{tabular}
+\end{table}
