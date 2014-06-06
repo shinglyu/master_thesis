@@ -2,14 +2,14 @@
 %\framebox{REVIEW1}
 \section{A Brief Introduction to SVM-HMM}
 \label{sec:svm-hmm}
-In this thesis, we use structural support vector machine to learn performance knowledge from expressive performance samples. Unlike traditional SVM algorithm, which can only produce univariate prediction, structural SVM can produce structural predictions like tree, sequence and hidden Markov model. Structural SVM with hidden Markov model output (SVM-HMM) has been successfully applied to part-of-speech tagging problem\cite{svm2009}. The part-of-speech tagging problem has some similarity with expressive performance problem. In part-of-speech tagging, one tries to identify the role by which the word plays in the sentence, while in expressive performance, one tries to determine how a note should be played, usually based on it's role in the musical phrase. For example, an authentic cadence at the end of a phrase is usually played louder and stronger than a embellishment note in the middle of a phrase. Thus, we believe SVM-HMM will be a good candidate for expressive performance. The following introduction and formulas relies heavily on \cite{svm2009, svm2005, svm2003}.
+In this thesis, we use structural support vector machine to learn performance knowledge from expressive performance samples. Unlike traditional SVM algorithm, which can only produce univariate prediction, structural SVM can produce structural predictions like tree, graph or sequence. Structural SVM with hidden Markov model output (SVM-HMM) has been successfully applied to part-of-speech tagging problem\cite{svm2009}. The part-of-speech tagging problem has some similarity with expressive performance problem. In part-of-speech tagging, one tries to identify the role by which the word plays in the sentence, while in expressive performance, one tries to determine how a note should be played, usually based on it's role in the musical phrase. For example, an authentic cadence at the end of a phrase is usually played louder and stronger than a embellishment note in the middle of a phrase. Thus, we believe SVM-HMM will be a good candidate for expressive performance. The following introduction and formulas relies heavily on \cite{svm2009, svm2005, svm2003}.
 
 %Ref: 20130420 slides
 
 %TODO:discuss traditional SVM here?
 Traditional SVM prediction problem can be described as finding a function 
-$$h: \mathcal{X \rightarrow Y}$$ with lowest prediction error. $\mathcal{X}$ is the input features space, and $\mathcal{Y}$ is the prediction space. In traditional SVM, elements in $\mathcal{Y}$ are labels (classification) or real values (regression). But structural SVM extends the framework to generate structural output, such as tree, sequence, or hidden Markov model.
-To extend SVM to support structured output, the problem is modified as finding a discriminant function $F: \mathcal{X} \times \mathcal{Y} \rightarrow \mathcal{R}$, in which the input/output pairs are mapped to a real number score. To predict an output $y$ for an input $x$, one try to maximize $F$ over all $y \in \mathcal{Y}$. 
+$$h: \mathcal{X \rightarrow Y}$$ with lowest prediction error. $\mathcal{X}$ is the input features space, and $\mathcal{Y}$ is the prediction space. In traditional SVM, elements in $\mathcal{Y}$ are labels (classification) or real values (regression). But structural SVM extends the framework to generate structural output, such as tree, graph or sequence.
+To extend SVM to support structured output, the problem is modified as finding a discriminant function $$F: \mathcal{X} \times \mathcal{Y} \rightarrow \mathcal{R}$$, in which the input/output pairs are mapped to a real number score. To predict an output $y$ for an input $x$, one try to maximize $F$ over all $y \in \mathcal{Y}$. 
 
 $$f(x) = \argmax_{y\in\mathcal{Y}} F(w,x,y)$$
 
@@ -41,7 +41,7 @@ $$\forall i \in \{1,\cdots,n\}, \forall \hat{y_i}\in\mathcal{Y}: \mathbf{w}^T [\
 
 The constrains imply that the groundtruth $y_i$ for $x_i$ has the minimum $F$ value than any other $\hat{y}_i \neq {y_i}$.
 
-However, in the SVM context, we want the solution to have the largest margin possible. So we want to maximize the margin between the groundtruth and the second best $\hat{y}_i$, the above linear constrains will become this optimization problem:
+The key concept of SVM is the large margin principle. We not only want to find a solution that statisfies the constrains, but also we want to maximize the margin between the groundtruth and the second best $\hat{y}_i$:
 %TODO: 2005 formula 4+
 $$
 \begin{aligned}
@@ -59,7 +59,7 @@ $$
 \end{aligned}
 $$
 
-To extend the linear-separable case to non-separable case, slack variables $\varepsilon_i$ can be introduced to penalize prediction errors, results in a soft-margin formalization:
+To extend the linear-separable case to non-separable case, slack variables $\xi_i$ can be introduced to penalize prediction errors, results in a soft-margin formalization:
 %TODO: 2005 formula SVM1
 $$
 \begin{aligned}
@@ -117,7 +117,7 @@ $$
 %                $$\forall \hat{y_i} \in \mathcal{Y}: \mathbf{w}^T[\Psi(x_i,y_i) - \Psi(x_i,\hat{y_i})] \geq 1 - \frac{\xi+i}{\Delta(y_i, \hat{y_i})}$$
 Detailed proof on how the new formulation is equally general as the old one is given in the paper \cite{svm2009}.
 
-With the framework described above, the only problem left is how to define the general loss function and $\Psi$ for hidden Markov model (HMM)? In \cite{svm2003}, Y. Altun et al. proposed two types of features for a equal-length observation/label sequence pair $(x,y)$. The first is the interaction of a observation with a label, the other is the interaction between neighboring labels. 
+With the framework described above, the only problem left is how to define the general loss function and $\Psi$ for our problem? Drawing the inter-state dependencies and time dependencies concept from hidden Markov model, Y. Altun et al.\cite{svm2003} proposed two types of features for a equal-length observation/label sequence pair $(x,y)$. The first is the interaction of a observed feature $x^s$ with a label $y^t$, the other is the interaction between neighboring labels $y^s$ and $y^t$. 
 
 %   \begin{figure*}[tp]
 %      \begin{center}
@@ -127,7 +127,7 @@ With the framework described above, the only problem left is how to define the g
 %      \label{fig:hmm}
 %   \end{figure*}
 
-To illustrate the method, we use a example from music: for some observed features $\Psi_r(x^s)$ of a note $x$ located in $s$th position of the phrase, and assume $\left[ \left[ y^t = \tau \right] \right]$ denotes the $t$th note is played at a velocity of $\tau$, the interaction of the observed feature and the label can be written as:
+To illustrate the method, we use a example from music: for some observed features $\Psi_r(x^s)$ of a note $x$ located in $s$-th position of the phrase, and assume $\left[ \left[ y^t = \tau \right] \right]$ denotes the $t$-th note is played at a velocity of $\tau$, the interaction of the observed feature and the label can be written as:
 %TODO hmm 3 formula 4
 $$\psi^{st}_{r\sigma}(\mathbf{x}, \mathbf{y}) = \left[\left[y^t = \tau \right] \right]\Psi_r(x^s),\; 1\leq\gamma\leq d,\; \tau \in \Sigma $$
 
@@ -140,13 +140,12 @@ By selecting a order of dependency for the HMM model, we can further restrict $s
 %TODO hmm 3 formula 6
 $$\Psi(\mathbf{x}, \mathbf{y}) = \sum^T_{t=1}\Psi(\mathbf{x}, \mathbf{y};t)$$
 
-Finally, the distance between two feature maps depends on the number of common label segments and the inner product between the input features sequence with common labels.
+The distance, i.e. the general loss function, between two feature maps depends on the number of common label segments and the inner product between the input features sequence with common labels.
 
 
 $$\Delta(\Psi(\mathbf{x}, \mathbf{y}), \Psi(\mathbf{\hat{x}}, \mathbf{\hat{y}})) = \sum_{s,t}\left[\left[y^{s-1} = \hat{y}^{t-1}\wedge y^s = \hat{y}^t\right] \right] + \sum_{s,t}\left[\left[y^{s} = \hat{y}^{t}\right] \right]k(x^s, \hat{x}^t)$$
 
-
-A Viterbi-like decoding algorithm is used to speed up the computation of $F$ for HMM.
+Finally, during the prediction process, a Viterbi-like decoding algorithm is used to effeciently find a $y$ that maximize $F$.
 
 
 %TODO: how to define loss function for HMM?
