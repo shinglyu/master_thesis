@@ -10,15 +10,15 @@
          \caption{High-level system architecture} 
          \label{fig:flow}
       \end{figure*}
-The high-level architecture of the purposed system is shown in Fig. \ref{fig:flow}. The system has two phases, the upper half of the figure is the learning phase, the lower half is the performing phase. In the learning phase, score and expressive human recording pairs, split into phrases by human, are used as training examples for structural support vector machine with hidden Markov model output (SVM-HMM) algorithm to learn performance knowledge model. In the performing phase, a score will be given to the system for expressive performance. The SVM-HMM generation module will use the performance knowledge learned in the previous phase to produce expressive performance. The SVM-HMM output then go through a MIDI generator and MIDI synthesizer to produce audible performance.
+The high-level architecture of the purposed system is shown in Fig. \ref{fig:flow}. The system has two phases: the upper half of the figure is the learning phase, the lower half is the performing phase. In the learning phase, the score and expressive human recording pairs, split into phrases by human, are used as training examples for the structural support vector machine with hidden Markov model output (SVM-HMM) algorithm to learn the performance knowledge model. In the performing phase, a score will be given to the system for expressive performance. The SVM-HMM generation module will use the performance knowledge learned in the previous phase to produce expressive performance. The SVM-HMM output then goes through a MIDI generator and MIDI synthesizer to produce audible performance.
 %TODO: refer to feature exction and corpus chapter
 
-All the scores and recordings are monophonic and contains only one musical phrase. The phrasing is done by human, thus the system is semi-automatic. The learning algorithm, namely SVM-HMM, can only perform off-line learning, so the learning phase can only work in a non-realtime scenario. The generating phase can work much faster, expressive music can be generated almost instantaneously. 
+All scores and recordings are monophonic and contain only one musical phrase. The phrasing is done by human, thus the system is semi-automatic. The learning algorithm, namely SVM-HMM, only performs off-line learning, so the learning phase can only work in a non-realtime scenario. The generating phase works much faster, that expressive music can be generated almost instantaneously. 
 
-There are many ways the user can control the performance style of the final output: first, the user can choose the training corpus. Theoratically, a model of a particular style can be learned from a set of samples with that particular style. Second, the user can control the structural expression by assigning the phrasing.
+There are many ways the user can control the performance style of the final output: first, the user can choose the training corpus. Theoretically, a model of a particular style can be learned from a set of samples with that particular style. Second, the user can control the structural expression by assigning the phrasings.
 
 
-In the following sections, we will give an overview of the theroratical background behind SVM-HMM, and then walk through the detail steps in the learning and performing phases, and some implementation detail. The features used will be presented in the end of this chapter.
+In the following sections, we will give an overview of the theoretical background behind SVM-HMM, and then walk through the detailed steps in the learning and performing phases, and other implementation details. The features used will be presented at the end of this chapter.
 
 
 %TODO: START COPY-PASTE
