@@ -1,38 +1,38 @@
 \chapter{Corpus Preparation}
 \label{chap:corpus}
-  An expressive performance corpus is a set of performance samples. Since this research is based on a supervised learning algorithm, a high-quality corpus is essential to our success. Each sample consists of a score and its corresponding human recording. Some metadata such as phrasing, structure analysis, or harmonic analysis. may also be included. In this chapter, we will review some the existing corpora, specifications and formats of our corpus, and how we actually construct it.
+  An expressive performance corpus is a set of performance samples. Since this research is based on a supervised learning algorithm, a high-quality corpus is essential to our success. Each sample consists of a score and its corresponding human recording. Some metadata such as phrasing, structure analysis, or harmonic analysis may also be included. In this chapter, we will review some of the existing corpora, specifications and formats of our corpus, and how we actually construct it.
 
 \section{Existing Corpora} 
-Unlike other research fields like speech processing or natural language processing, there exist virtually no public accessible corpus for computer expressive performance research. CrestMusePEDB \cite{crestmuse} (PEDB stands for "Performance Expression Database") is a corpus created by Japan Science and Technology Agency's CREST program. However, until the time of this writing, we can't establish any contact with the database administrators to gain access to it. They claims to have a GUI tool for annotate the expressive performance parameters from audio recordings. Their repertoire covers many piano works from well-known classical composers like Bach, Mozart, and Chopin, and are recorded by world famous pianists. From their website \cite{crestmuse} they claim to contain the following data: PEDB-SCR - score text information, PEDB-DEV - performance deviation data and PEDB-IDX - audio performance credit. But the quality of the data is unknown.
+Unlike other research fields like speech processing or natural language processing, there exists virtually no publicly accessible corpus for computer expressive performance research. CrestMusePEDB \cite{crestmuse} (PEDB stands for "Performance Expression Database") is a corpus created by Japan Science and Technology Agency's CREST program. However, until the time of this writing, we cannot establish any contact with the database administrators to gain access to it. They claim to have a GUI tool for annotating the expressive performance parameters from audio recordings. Their repertoire covers many piano works from well-known classical composers like Bach, Mozart, and Chopin, and is recorded by world famous pianists. On their website \cite{crestmuse} they claim to contain the following data: PEDB-SCR - score text information, PEDB-DEV - performance deviation data and PEDB-IDX - audio performance credit. But the quality of the data is unknown.
 
-Another example is the Magaloff Project \cite{magaloff}, which is created by some universities in Austria. They invited Russian pianist Nikita Magaloff to record all solo works for piano by Frederic Chopin on a Bösendorfer SE computer-controlled grand piano. This corpus became the material for many subsequent researches \cite{Goebl2009, Grachten2011, Flossmann2009, Grachten2012, Flossmann2013, Flossman2011, Flossmann2010a}. Flossmann et al., one of the leading researchers of the project, also won the 2008 RenCon contest with a system based on this corpus called YQX \cite{yqx}. However, the corpus is not opened up to the public. 
+Another example is the Magaloff Project \cite{magaloff}, which is created by some universities in Austria. They invited the Russian pianist Nikita Magaloff to record all solo works for piano by Frederic Chopin on a Bösendorfer SE computer-controlled grand piano. This corpus became the material for many subsequent researches \cite{Goebl2009, Grachten2011, Flossmann2009, Grachten2012, Flossmann2013, Flossman2011, Flossmann2010a}. Flossmann et al., one of the leading researchers of the project, also won the 2008 RenCon contest with a system based on this corpus called YQX \cite{yqx}. However, the corpus is not open up to the public. 
 
-Since both corpora are not available, we need to implement our own . We will start by defining the specification.
+Since both corpora are not available, we need to implement our own. We will start by defining the specification.
 
 \section{Corpus Specification}
 
-The corpus we need must fulfill the following criterias:
+The corpus we need must fulfill the following criteria:
 \begin{enumerate}
    \item All the samples are monophonic, containing only a single melody without chords.
-   \item No human error, such as insertion, deletion, or wrong pitch exist in the recording; the score and recording are matched note-to-note.
-   \item Phrasing is annotated by human. 
-   \item The scores, recordings and phrasing data are in machine-readable format.
+   \item No human errors, such as insertion, deletion, or wrong pitch exist in the recording; the score and recording are matched note-to-note.
+   \item The phrasings are annotated by human. 
+   \item The scores, recordings and phrasing data are in a machine-readable format.
 
    %\item The tempo label in MIDI recordings are the tempo by which the musician played. 
 \end{enumerate}
 
-Some potentially useful information are not included because they are less relevant to our goal. Examples are:
+Certain potentially useful information is not included because it is less relevant to our goal. Examples are:
 
 \begin{enumerate}
    \item Advanced structural analysis, such as GTTM (Generative Theory of Tonal Music)\cite{GTTM}
    \item Harmonic analysis
-   \item Piano paddle usage
-   \item Piano fingering
-   \item Other instrument specific techniques, such as violin pizzicato, tapping, or bow techniques.
+   \item Piano pedal usage
+   \item Piano fingerings
+   \item Techniques of other musical instruments, such as violin pizzicato, tapping, or bow techniques.
    %\item Other instrument specific instructions, such as piano fingering, violin bow techniques etc.
 \end{enumerate}
 
-We choose Clementi's Sonatina Op.36 for our corpus, because it is a must-learn repertoire for piano students, so it's easy to find performers with a wide range of skill level to record the corpus. These sonatinas are in classical style, so the learned model can potentially be extended to other classical era works like Mozart and Haydn. There are six sonatinas included in Op.36, the first five have three movements each, and the last one has two movements. The titles and time signatures of all the pieces are listed in Table \ref{tab:cleminfo}
+We choose Clementi's Sonatina Op.36 for our corpus. It is a must-learn repertoire for the piano students, so it is easy to find performers with a wide range of skill level to record the corpus. These sonatinas are in the Classical style, so the learned model can potentially be extended to other works from composers of the Classical era like Mozart and Haydn. There are six sonatinas included in Op.36. The first five have three movements each, and the last one has two movements. The movement titles and time signatures of all the pieces are listed in Table \ref{tab:cleminfo}
 
 
 \begin{table}
@@ -68,7 +68,7 @@ We choose Clementi's Sonatina Op.36 for our corpus, because it is a must-learn r
  %we choose  for score to choose from, such as MusicXM \cite{Good2001}, LilyPon \cite{LilyPond}, Finale, Sibelius, ABC, MuseData, and Humdrum. The book \cite{Selfridge-Field1997} has a comprehensive review on this issue. %For research purpose, proprietary format like Finale and Sibelius is abandoned because of their limited support from open source tools. 
 %To represent Clemetni's work in digital format, we choose MusicXML.
 MusicXML is used to represent Clementi's work in digital format.
-MusicXML is a digital score notation using XML (eXtensible Markup Language), it can express most traditional music notations and metadata. Most music notation software and software tool supports musicXML format. %An example snippet of a musicXML score is shown in Fig. \ref{fig:expxml}%LilyPond is a \LaTeX-like language for music typesetting. %ABC, MuseData and Humdrum are based on ASCII codes and each defines their unique representation for music score. 
+MusicXML is a digital score notation using XML (eXtensible Markup Language); it can express most traditional music notations and metadata. Most music notation softwares and software tools support the musicXML format. %An example snippet of a musicXML score is shown in Fig. \ref{fig:expxml}%LilyPond is a \LaTeX-like language for music typesetting. %ABC, MuseData and Humdrum are based on ASCII codes and each defines their unique representation for music score. 
 %\begin{figure*}[tp]
 %   \begin{center}
 %      %TODO:Fig.:Example JSON code
@@ -79,27 +79,27 @@ MusicXML is a digital score notation using XML (eXtensible Markup Language), it 
 %   \label{fig:expxml}
 %\end{figure*}
 %TODO: guitar pro?
-Although MIDI is also a possible candidate for representing score, it is designed to hold instrument control signal rather than notation, so some music symbols may not be available in MIDI. Furthermore, MIDI represents music as a series of note-on and note-off events, which requires additional effort to transform into traditional notation.
+Although MIDI is also a possible candidate for representing score, it is designed to hold instrument control signal rather than notation. Some music symbols may not be available in MIDI. Furthermore, MIDI represents music as a series of note-on and note-off events, which requires additional effort to transform them into the traditional notation.
 
-But for representing performance, MIDI is the most suitable format. Using a key-pressure-sensitive digital piano, pianist can record in a natural way. The recordings will have high precision in time, pitch and loudness (key pressure), and polyphonic tracks can easily be recorded separately. Although WAV (Waveform Audio Format) audio recording has higher fidelity than MIDI, but they are harder to parse by computers. Without robust onset detection, pitch detection, and source separation technology, the information is extremely difficult to extract. Manually annotate each WAV recording takes unrealistic effort, and the accuracy across different annotators may not be consistent. 
+But for representing the performance, MIDI is the most suitable format. Using a key-pressure-sensitive digital piano, the pianist can record in a natural way. The recordings will have a high precision in time, pitch and loudness (key pressure), and polyphonic tracks can easily be recorded separately. Although a WAV (Waveform Audio Format) audio recording has a higher fidelity than MIDI, it is harder to parse by computers. Without robust onset detection, pitch detection, and source separation technology, it is extremely difficult to extract the information. It takes unrealistic effor to manually annotate each WAV recordings, and the accuracy across different annotators may not be consistent. 
 
-There is a way to keep both the score and the recording in one single MIDI file. Instead of recording the actual note-on and note-off timing, we keep the nominal note-on and note-off the same as in the score. Then, MIDI tempo-change events are inserted before each note to shift the performed timing of the recorded notes. Thus, the nominal time of each note represents the score, and the rendered time represents the performance. But since MIDI is so limited as a score format, and it requires complex calculations to recover the performance, this method is not used in the research.
+There is a way to keep both the score and the recording in one single MIDI file. Instead of recording the actual note-on and note-off timing, we keep the nominal note-on and note-off the same as in the score. Then, MIDI tempo-change events are inserted before each note to shift the performed timing of the recorded notes. Thus, the nominal time of each note represents the score, and the rendered time represents the performance. But since MIDI is so limited as a score format and it requires complex calculations to recover the performance, this method is not used in the research.
 %A human musician can't play every note exactly on the beat, even if playing along with a metronome. There are two ways to record this behavior: first, record the exact note-on and note-off time, while keeping the tempo fixed; second, keep the notes on the beat, so the MIDI looks the same as the score. Then insert tempo-change event between each notes, so notes of the same length can be rendered differently because they have different tempo marker. The second method may look smart, because the score and performance can be stored in one MIDI file instead of two, but it would involve complex calculation when linearly scaling the tempo. Since tempos from different samples need to be normalized during feature extraction, the first method is superior  than the second.
 %Other formats such as image files (scanned or typesetted by computer) or PDF files are an alternative, but they are not an option for direct computer analysis. 
 
 %In this research, we use MusicXML as the main vehicle for music score, because of the following reasons: first, it covers most music notations and metadata need for this research. Second, it is supported in most music notation software, including the one used in this research -- MuseScore. Finally, the music21 toolbox can convert many other formats into MusicXML without problem.
 
-Finally, we store the phrasing, which is the only metadata we used, in a plaintext file, each line in the phrasing file is the starting point of each phrase. The starting point is defined as the onset timing (in quarter notes) counted from the beginning of the piece\footnote{For a phrase that start at a point which is a circulating decimal, for example $2\frac{1}{3}=2.333\cdots$, the starting point can be alternatively defined as any finite decimal between the end of the last phrase and the start of the current phrase. For example, if the last phrase stops at beat 1, the second phrase start at $2\frac{1}{3}=2.333\cdots$ beat, the start point of the second phrase can be written as 2.3 or 2.0, etc.}. The phrasing is decided by the us using the following principles: 
+Finally, we store the phrasing, which is the only metadata we used, in a plaintext file; each line in the phrasing file is the starting point of each phrase. The starting point is defined as the onset timing (in quarter notes) counted from the beginning of the piece\footnote{For a phrase that starts at a point which is a circulating decimal, for example $2\frac{1}{3}=2.333\cdots$, the starting point can be alternatively defined as any finite decimal between the end of the last phrase and the start of the current phrase. For example, if the last phrase stops at beat 1 and the second phrase start at $2\frac{1}{3}=2.333\cdots$ beat, the start point of the second phrase can be written as 2.3 or 2.0, etc.}. The phrasing is decided by the following principles: 
 \begin{enumerate}
-   \item Phrase may be separated by a salient pause.
-   \item Phrase may end with a cadence.
-   \item Phrase may be separated by dramatic change in tempo, key or loudness.
-   \item Repeated structures in tempo or pitch may be a repeated phrase.
+   \item Phrases may be separated by a salient pause.
+   \item A phrase may end with a cadence.
+   \item Phrases may be separated by dramatic change in tempo, key or loudness.
+   \item Repeated structures may be repeated phrases.
 \end{enumerate}
 %The above criteria are just general principles, not strict rules, the phrasing is still decided subjectively.
 
 %An automatic phrasing algorithm may be achieved in the future, either by fuzzy rules or by machine learning. With the automatic phrasing capability, the system can become fully automatic. But phrasing controls the structural expression of a piece, we left the phrasing decision to the user. Because we intend to leave some degree of freedom for users to expressive themselves. But note-level expression is too trivial to be assigned by hand, but deciding phrase-level expression is less demanding for an ordinary user. 
-Since phrasing controls the structural interpretation of a piece, we would like to leave this freedom for expression to the user. However, if there exist any good automatic phrasing algorithm, it can be easily integrated into the current system to make it full-automatic.
+Since the phrasing controls the structural interpretation of a piece, we would like to leave this freedom for expression to the user. However, if there exists any good automatic phrasing algorithm, it can be easily integrated into the current system to make it full-automatic.
 
  
 %\section{File Format}
@@ -107,26 +107,26 @@ Since phrasing controls the structural interpretation of a piece, we would like 
 
 \subsection{Score Preparation}
 
-The digital scores are downloaded from KernScore website \cite{KernScores}. The  scores are transformed into MusicXML from the original Hundrum file format (.krn) using the  music21 toolkit \cite{music21}. Because this research focus on monophonic melody only, the accompaniments are remove and the chords are reduced to their highest-pitched note, which is usually the most salient melody. The reduced scores are doubled-checked against a printed version publish by Durand \& Cie., Paris \cite{Clementi1915} to eliminate all errors. %We use MuseScore notation editor to view and edit MusicXML; some metadata errors are corrected by editing the MusicXML with text editors .
+The digital scores are downloaded from KernScore website \cite{KernScores}. The  scores are transformed into MusicXML from the original Hundrum file format (.krn) using the  music21 toolkit \cite{music21}. Because this research focuses on monophonic melodies only, the accompaniments are removed and the chords are reduced to their highest-pitched note, which is usually the most salient melody. The reduced scores are doubled-checked against a printed version publish by Durand \& Cie., Paris \cite{Clementi1915} to eliminate all errors. %We use MuseScore notation editor to view and edit MusicXML; some metadata errors are corrected by editing the MusicXML with text editors .
 
 \subsection{MIDI Recording}
-We have implemented two methods for recording: First, using a Yamaha digital piano to record MIDI. Second, by tapping on a touch-sensitive device to express tempo, duration and loudness. Due to accuracy consideration, only the recordings from Yamaha digital piano are used in the expreiments.
+We have implemented two methods for recording: first, using a Yamaha digital piano to record MIDI; second, by tapping on a touch-sensitive device to express tempo, duration and loudness. Due to the accuracy consideration, only the recordings from the Yamaha digital piano are used in the expreiments.
 
 
-We used a Yamaha P80 88-key graded hammer effect\footnote{Graded Hammer Effect feature provides realistic key pressure response similar to a traditional acoustic piano.}digital piano for recording. Through a MIDI-to-USB converter, the keyboard was connected to Rosegarden Digital Audio Workstation (DAW) software on a Linux computer. The Rosegarden DAW also generated the metronome sound to help the performer maintain a steady speed. Metronome is mandatory because if the performer plays freely, the tempo information written in the MIDI file will be invalid, which makes subsequent parsing and linear scaling very difficult. So the performers were asked to follow the speed of the metronome, but they can adjust the metronome speed as they like, and apply any level of rubato as long as the overall tempo is steady. 
+We used a Yamaha P80 88-key graded hammer effect\footnote{Graded Hammer Effect feature provides a realistic key pressure response similar to a traditional acoustic piano.}digital piano for recording. Through a MIDI-to-USB converter, the keyboard was connected to Rosegarden Digital Audio Workstation (DAW) software on a Linux computer. The Rosegarden DAW also generated the metronome sound to help the performer maintain a steady speed. The metronome is mandatory because if the tempo is not assigned during the recording, the tempo information written in the MIDI file will be invalid, which makes subsequent parsing and linear scaling very difficult. So the performers were asked to follow the speed of the metronome, but they can adjust the metronome speed as they like, and apply any level of rubato as long as the overall tempo is steady. 
 
-The second method, which is not used in the experiments, is to utilize touch-enabled input device like smartphone touchscreen or laptop touchpad. We have implemented an prototype using a Synaptics Touchpad on a Lenovo ThinkPad X200i laptop. When the user taps the touchpad once, one note from the score will be played, the duration and loudness will be controlled by the duration and pressure of the tapping action. So the user can \enquote{play} the touchpad like a musical instrument. This idea has already be used in musical games and toys. This method is more user-friendly to general public because it requires minimal instrument skill and utilize widely available hardware. But most touchpad estimates pressure by finger contact area, so the accuracy in pressure is not very satisfying. But it is indeed a low cost alternative to MIDI digital piano.
+The second method, which is not used in the experiments, is to utilize touch-enabled input devices like a smartphone touchscreen or laptop touchpad. We have implemented an prototype using a Synaptics Touchpad on a Lenovo ThinkPad X200i laptop. When the user taps the touchpad once, one note from the score will be played, the duration and loudness will be controlled by the duration and pressure of the tapping action. The user can \enquote{play} the touchpad like a musical instrument. This idea has already been used in musical games and toys. This method is more user-friendly to general public because it requires minimal instrument skills and utilizes widely available hardwares. But most touchpad estimates pressure by finger contact area, so the accuracy in pressure is not very satisfying. But it is indeed a low-cost alternative to the MIDI digital piano.
 
 \subsection{MIDI Cleaning and Phrase Splitting}
   After MIDIs are recorded, we use Python scripts to check if each recording is matched note-to-note with its corresponding score. If not, the mistakes are manually corrected. %For example, if the pitch was played wrongly, we will correct the pitch but keep the onset, duration  and intensity as is. 
-  If there are a small segments that are totally messed up, they will be reconstruct using repeated or similar segments from the same piece. The matched score and MIDI pairs are then split into phrases according to the corresponding phrasing file. The split phrases are checked once again for note-to-note match before they are put into experiment.
+  If there are small segments that are totally messed up, they will be reconstructed using repeated or similar segments from the same piece. The matched score and MIDI pairs are then split into phrases according to the corresponding phrasing file. The split phrases are checked once again for note-to-note match before they are put into experiments.
 
 \section{Results}
-Six graduate students (not majored in music) were invited to record the samples. The number of mistakes they made are listed in Table \ref{tab:mistakes}.\footnote{The performers are allowed to re-record as many time as they want, so the actual number of mistakes may be higher.} These mistakes are identified using the unix \texttt{diff}\cite{diff} tool. Five of them (A to E) finished Clementi's entire Op.36, while performer F only recorded part of the work. The total number of recordings and the corresponding phrases/notes counts are shown in Table \ref{tab:corpuscount}. 
+Six graduate students (not majored in music) were invited to record the samples. The number of mistakes they made are listed in Table \ref{tab:mistakes}.\footnote{The performers are allowed to re-record as many time as they want, so the actual number of mistakes may be higher.} These mistakes are identified using the unix \texttt{diff}\cite{diff} tool. Five of them (A to E) finished Clementi's entire Op.36, while performer F only recorded part of the work. The total number of recordings and the corresponding phrase/note counts are shown in Table \ref{tab:corpuscount}. 
 
 \begin{sidewaystable}[bp]
    \centering
-   \caption{Number of mistakes in the corpus, blank cell means the performer didn't record the piece}
+   \caption{Number of mistakes in the corpus, blank cell means the performer did not record the piece}
    \label{tab:mistakes}
    \begin{tabular}{c|rrrrrrrrrrrrrrrrr|r}
       \hline
@@ -174,7 +174,7 @@ Six graduate students (not majored in music) were invited to record the samples.
    \end{tabular}
 \end{table}
 
-The number of phrases (according to our phrasing annotation) and notes are shown in Table \ref{tab:clemcount}. Fig. \ref{fig:notes} shows the length distribution of each movement, most movements have around a few hundred notes, except the long No.6 and some short second movements. Fig. \ref{fig:phrases} shows the length distribution in numbers of phrases, most movements are around 20 phrases. The length distribution of the phrases in all six pieces are shown in Fig. \ref{fig:phrlength}, most phrases are shorter than 30 notes. Some very long phrases are usually virtuoso segments with very fast note sequences, so it's hard to further split them.
+The number of phrases (according to our phrasing annotation) and notes are shown in Table \ref{tab:clemcount}. Fig. \ref{fig:notes} shows the length distribution of each movement; most movements have around a few hundred notes, except the long No.6 and some short second movements. Fig. \ref{fig:phrases} shows the length distribution in numbers of phrases; most movements are of around 20 phrases. The length distribution of the phrases in all six pieces are shown in Fig. \ref{fig:phrlength}: most phrases are shorter than 30 notes. Some very long phrases are usually virtuoso segments of very fast note passages, so it is hard to further split them.
 
 \begin{table}[bp]
    \centering
