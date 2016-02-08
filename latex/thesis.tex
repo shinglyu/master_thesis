@@ -137,6 +137,7 @@
 %\floatstyle{plaintop}
 %\restylefloat{table}
 \usepackage[tableposition=top]{caption}
+\usepackage{tocloft}%for tocaddtitleline
 
 \begin{document}
 
@@ -159,8 +160,9 @@
 %----------- generate the certification page by LaTeX -----------
 %\makecertification
 %----------- includepdf by using package pdfpages -----------
-\addcontentsline{toc}{chapter}{口試委員會審定書}
-\includepdf[pages={1}]{cert.pdf}
+%\addcontentsline{toc}{chapter}{口試委員會審定書}
+\cftaddtitleline{toc}{chapter}{口試委員會審定書}{}
+%\includepdf[pages={1}]{cert.pdf}
 %TODO: NTUEE Certification Document
 
 \onehalfspacing

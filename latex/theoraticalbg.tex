@@ -3,14 +3,14 @@
 \section{A Brief Introduction to SVM-HMM}
 \label{sec:svm-hmm}
 In this thesis, we use the structural support vector machine to learn performance knowledge from expressive performance samples. Unlike the traditional SVM algorithm, which only produce univariate prediction, the structural SVM can produce structural predictions like trees, graphs or sequences. The structural SVM with hidden Markov model output (SVM-HMM) has been successfully applied to part-of-speech tagging problem\cite{svm2009}. There are some similarities between the part-of-speech tagging problem and the expressive performance problem. In the part-of-speech tagging, one tries to identify the role in which the word plays in the sentence, while in the expressive performance, one tries to determine how a note should be played, usually based on its role in the musical phrase. %For example, an authentic cadence at the end of a phrase is usually played louder and stronger than a embellishment note in the middle of a phrase. 
-Thus, we believe the SVM-HMM will be a good candidate for expressive performance. The following introduction and formulas rely heavily on \cite{svm2009, svm2005, svm2003}.
+Thus, we believe that SVM-HMM is also a good candidate for expressive performance. The following introduction and formulas are summaries of \cite{svm2009, svm2005, svm2003}.
 
 %Ref: 20130420 slides
 
 %TODO:discuss traditional SVM here?
 The traditional SVM prediction problem can be described as finding a function 
 $$h: \mathcal{X \rightarrow Y}$$ with lowest prediction error. $\mathcal{X}$ is the input features space, and $\mathcal{Y}$ is the prediction space. In a traditional SVM, elements in $\mathcal{Y}$ are labels (classification) or real values (regression). However, a structural SVM extends the framework to generate structural output, such as trees, graphs or sequences.
-To extend SVM to support structured outputs, the problem is modified as finding a discriminant function $$F: \mathcal{X} \times \mathcal{Y} \rightarrow \mathcal{R}$$, in which the input/output pairs are mapped to a real number score. To predict an output $y$ for an input $x$, one try to maximize $F$ over all $y \in \mathcal{Y}$. 
+To extend SVM to support structured outputs, the problem is modified as finding a discriminant function $$F: \mathcal{X} \times \mathcal{Y} \rightarrow \mathcal{R}$$, in which the input/output pairs are mapped to a real number score. To predict an output $y$ for an input $x$, one tries to maximize $F$ over all $y \in \mathcal{Y}$. 
 
 $$f(x) = \argmax_{y\in\mathcal{Y}} F(w,x,y)$$
 
@@ -20,12 +20,12 @@ $$ F = \mathbf{w}^{T}\Psi(x,y)$$,
 where $\mathbf{w}$ is the parameter vector, and $\Psi(x,y)$ is the kernel function relating input $x$ to output $y$. $\Psi$ can be defined to accommodate various kinds of structure. 
 
 %emprical risk
-For each structure we want to predict, a loss function that measures the accuracy of of a prediction is required. A loss function $\Delta:\mathcal{Y}\times\mathcal{Y}\rightarrow R$ needs to satisfy the following property:
+For each structure we want to predict, a loss function that measures the accuracy of of a prediction is required. A loss function $\Delta:\mathcal{Y}\times\mathcal{Y}\rightarrow R$ needs to satisfy the following properties:
 
 $$\Delta(y, y') \geq 0 \ for\ y \neq y'$$
 $$\Delta(y, y) = 0 $$
 
-The loss function is assumed to be bounded. Let's assume the input-output pair $(x,y)$ is drawn from a join distribution P(x,y), the prediction problem is to minimize the total loss:
+The loss function is assumed to be bounded. Let's assume that the input-output pair $(x,y)$ is drawn from a join distribution P(x,y), the prediction problem is to minimize the total loss:
 
 %TODO: total loss formula 2005 sec 2.1
 $$R_p^\Delta = \int_{\mathcal{X} \times \mathcal{Y}} \Delta (y, f(x))dP(x,y)$$
@@ -60,7 +60,7 @@ $$
 \end{aligned}
 $$
 
-To extend the linear-separable case to a non-separable case, slack variables $\xi_i$ can be introduced to penalize prediction errors, results in a soft-margin formalization:
+To extend the linear-separable case to a non-separable case, slack variables $\xi_i$ are introduced to penalize prediction errors, which results in a soft-margin formalization:
 %TODO: 2005 formula SVM1
 $$
 \begin{aligned}
@@ -90,9 +90,9 @@ $$
 %
 \end{aligned}
 $$
-But the above quadratic programming problem has a very large number ($O(n|\mathcal{Y}|)$) of constrains, which will take considerable time to solve. I. Tsochantaridis et al. \cite{svm2005} proposed a greedy algorithm to speed up the process by selecting only part of the constrains that contributes the most to finding the solution. Initially, the solver starts with an empty working set containing no constrains. Than the solver iteratively scans the training set to find the most violated constrains under the current solution. If a constrain is violated more times than a desired threshold, the constrain is added to the working set of constrains. Then the solver re-calculates the solution under the new working set. The algorithm will terminate once no more constrain can be added under the desired precision.
+But the above quadratic programming problem has a very large number ($O(n|\mathcal{Y}|)$) of constrains, which will take considerable time to solve. I. Tsochantaridis et al. \cite{svm2005} proposed a greedy algorithm to speed up the process by selecting only part of the constrains that contributes the most to finding the solution. Initially, the solver starts with an empty working set containing no constrains. Then the solver iteratively scans the training set to find the most violated constrains under the current solution. If a constrain is violated more times than a desired threshold, the constrain is added to the working set of constrains. Then the solver re-calculates the solution under the new working set. The algorithm will terminate once no more constrain can be added under the desired precision.
 
-In a later work by Joachims et al.\cite{svm2009}, they created a new formulation and algorithm to further speed up the algorithm. Instead of using one slack variable for each training sample, which resulting in a total of $n$ slack variables, they use a single slack variable for all $n$ training samples. The following formula is the 1-slack version of slack-rescaling structural SVM:
+In a later work by Joachims et al.\cite{svm2009}, they created a new formulation and an algorithm to further speed up the algorithm. Instead of using one slack variable for each training sample, which resulting in a total of $n$ slack variables, they use a single slack variable for all $n$ training samples. The following formula is the 1-slack version of slack-rescaling structural SVM:
 %1-slack
 $$
 \begin{aligned}
@@ -116,7 +116,7 @@ $$
 %                $$\forall \hat{y_i} \in \mathcal{Y}: \mathbf{w}^T[\Psi(x_i,y_i) - \Psi(x_i,\hat{y_i})] \geq 1 - \frac{\xi+i}{\Delta(y_i, \hat{y_i})}$$
 Detailed proofs on how the new formulation is equally general as the old one is given in the paper \cite{svm2009}.
 
-With the framework described above, the only problem left is how to define the general loss function and $\Psi$.  Drawing the inter-state dependencies and time dependencies concept from hidden Markov model, Y. Altun et al.\cite{svm2003} proposed two types of features for an equal-length observation/label sequence pair $(x,y)$. The first is the interaction of a observed feature $x^s$ with a label $y^t$, the other is the interaction between neighboring labels $y^s$ and $y^t$. 
+With the framework described above, the only problem left is how to define the general loss function and $\Psi$.  Drawing the inter-state dependencies and time dependencies concept from hidden Markov model, Y. Altun et al.\cite{svm2003} proposed two types of features for an equal-length observation/label sequence pair $(x,y)$. The first is the interaction of an observed feature $x^s$ with a label $y^t$, the other is the interaction between neighboring labels $y^s$ and $y^t$. 
 
 %   \begin{figure*}[tp]
 %      \begin{center}
@@ -126,7 +126,7 @@ With the framework described above, the only problem left is how to define the g
 %      \label{fig:hmm}
 %   \end{figure*}
 
-To illustrate the method, we use an example from music: for some observed features $\Psi_r(x^s)$ of a note $x$ located in $s$-th position of the phrase, and assume $\left[ \left[ y^t = \tau \right] \right]$ denotes the $t$-th note is played at a velocity of $\tau$, the interaction of the observed feature and the label can be written as:
+To illustrate the method, we use an example from music: for some observed features $\Psi_r(x^s)$ of a note $x$ located in $s$-th position of the phrase, and assume that $\left[ \left[ y^t = \tau \right] \right]$ denotes the $t$-th note is played at a velocity of $\tau$, the interaction of the observed feature and the label can be written as:
 %TODO hmm 3 formula 4
 $$\psi^{st}_{r\sigma}(\mathbf{x}, \mathbf{y}) = \left[\left[y^t = \tau \right] \right]\Psi_r(x^s),\; 1\leq\gamma\leq d,\; \tau \in \Sigma $$
 

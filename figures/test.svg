@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/PR-SVG-20010719/DTD/svg10.dtd">
+<svg width="50cm" height="40cm" viewBox="44 -268 986 788" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="88.6154" y1="481.318" x2="916.713" y2="481.318"/>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="908.949,486.318 918.949,481.318 908.949,476.318 "/>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="502.931" y1="519.038" x2="502.931" y2="-260.489"/>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="507.931,-252.726 502.931,-262.726 497.931,-252.726 "/>
+  </g>
+  <image x="45.8198" y="-90.5876" width="983.003" height="491.501" xlink:href="file:///home/a108210/Dropbox/0.work/0.project/0.docs/thesis/latex/fig/Standard_deviation_diagram_micro.svg"/>
+</svg>
